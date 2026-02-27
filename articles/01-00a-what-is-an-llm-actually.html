@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What Is an LLM, Actually?</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">782 words</div><h1>What Is an LLM, Actually?</h1><div class="article-subtitle">Part 0a of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=XiIBjz-BxPdkb9xeBq19t,plAnuw00rtUen2Qo6VRxQw">View diagram: How an LLM Works</a>
+<figcaption aria-hidden="true">How an LLM Works</figcaption>
+</figure>
+<p>When you type a message into ChatGPT or Claude &amp; get a surprisingly coherent answer back, it feels like talking to something that understands you. It doesn’t. What you’re talking to is a program that got extraordinarily good at one narrow task: predicting the next word. That’s the entire trick. Everything these tools do — summarizing documents, writing emails, explaining quantum physics, generating code — flows from this single mechanism. The program is called a large language model, &amp; understanding what those three words actually mean is the foundation for every product decision you’ll make in this space.</p>
+<p>“Large” refers to scale. These models have billions of internal parameters — numerical knobs that got adjusted during training — &amp; they were fed an almost incomprehensible amount of text. “Language” is the domain: these systems operate on text, predicting sequences of words. “Model” means it’s a mathematical structure that learned patterns from data rather than being explicitly programmed with rules. Nobody sat down &amp; wrote instructions like “if the user asks about history, respond with dates.” Instead, the model was exposed to billions of pages of books, websites, code repositories, forums, articles, &amp; conversations, &amp; it figured out — on its own — which words tend to follow which other words, in which contexts. That process is called training, &amp; it’s less like teaching a student &amp; more like exposing a sponge to an ocean. The model didn’t memorize facts. It absorbed the shape of how humans use language.</p>
+<p>The result is next-token prediction. A “token” is the unit the model works in — not quite a word, roughly three-quarters of one. The word “hamburger” becomes something like [“ham”, “burger”]. The model reads your input as a sequence of tokens, then predicts the most likely next token, then the next, then the next, generating its response one piece at a time. You pay for tokens on both sides — the input &amp; the output — which is why the economics of AI products look nothing like traditional software. (Article 01 goes deeper on that.)</p>
+<p>Here’s what makes this interesting: if you’ve absorbed enough human writing, predicting “what comes next” turns out to be useful for a staggering range of tasks. Ask a question, &amp; the most likely continuation is an answer. Paste in a long document &amp; say “summarize this,” &amp; the most likely continuation is a summary. Give it code with a bug &amp; ask what’s wrong, &amp; the most likely continuation is a diagnosis. The model isn’t reasoning through your problem. It’s doing a very sophisticated version of autocomplete — but autocomplete trained on the entire internet’s worth of human knowledge produces something that looks remarkably like understanding.</p>
+<h2 id="foundation-models-who-builds-them">Foundation models &amp; who builds them</h2>
+<p>A handful of companies — OpenAI, Anthropic, Google, Meta — spend hundreds of millions of dollars training these massive base models, called foundation models. The training requires enormous amounts of data, computing power, &amp; specialized expertise. Thousands of other companies then build products on top of these models, accessing them through APIs the way you might use Google Maps inside a delivery app. You almost certainly won’t train your own foundation model. You’ll rent access to someone else’s &amp; shape it for your specific use case through prompts, fine-tuning, &amp; the product layer you build around it.</p>
+<h2 id="the-key-insight">The key insight</h2>
+<p>An LLM is a text prediction engine that happens to be useful for a huge range of tasks. It is not a database — it doesn’t store facts reliably &amp; will confidently present fabricated information as truth. It is not a search engine — it doesn’t look things up in real time unless you explicitly give it that capability. It is not traditional software — it doesn’t follow instructions deterministically, &amp; the same input can produce different outputs on different runs. It’s a pattern completion machine, &amp; understanding what it is prevents you from expecting what it isn’t.</p>
+<p>Every limitation you’ll encounter flows directly from this mechanism. Hallucinations happen cuz a tool that predicts the next word will sometimes predict a plausible-sounding but wrong word — with total confidence. Inconsistency happens cuz prediction is probabilistic, not deterministic. The model has no memory between conversations cuz each call is a fresh prediction with no persistent state. Running costs never stop cuz every interaction burns tokens. These aren’t bugs waiting to be fixed in the next version. They’re the physics of the technology — inherent properties of how next-token prediction works. The rest of this series is about building products that work with these physics rather than fighting them.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <span></span>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="02-00b-the-api-layer.html">The API Layer &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/token-prediction.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    TokenPredictionDiagram(canvas, container);
+  });
+</script>
+</body>
+</html>

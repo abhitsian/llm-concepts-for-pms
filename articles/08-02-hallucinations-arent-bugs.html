@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hallucinations Aren&#x27;t Bugs</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">581 words</div><h1>Hallucinations Aren’t Bugs</h1><div class="article-subtitle">Part 2 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<p>LLMs don’t retrieve facts from a database. They predict what text is most plausible given the input — sequences of tokens that are statistically likely to follow from what came before. Sometimes the most plausible-sounding continuation is factually accurate, &amp; sometimes it isn’t. Hallucination isn’t the model failing. It’s the model doing exactly what it was designed to do.</p>
+<p>This distinction matters for product decisions. If you think hallucination is a bug, you wait for the model provider to fix it. If you understand it as inherent, you design around it. With LLMs, the same query can return accurate information one moment &amp; confidently fabricated nonsense the next. No error code, no exception. The wrong answer looks exactly like the right one.</p>
+<h2 id="designing-for-unreliable-truth">Designing for Unreliable Truth</h2>
+<p>Given that your AI will sometimes lie with perfect confidence, how do you build products ppl can actually trust? Think about use cases along two axes — how often the model gets things wrong (frequency) &amp; what happens when it does (severity). A creative writing assistant producing a weird metaphor sits in low-frequency, low-severity. An AI summarizing medical records for clinical decisions sits somewhere very different.</p>
+<p>For high-severity domains, the patterns that work all reduce the user’s dependence on the model being right. Exposing uncertainty through confidence indicators. Enabling verification with citations &amp; source links. Constraining the domain so the model operates within a narrow space with access to authoritative data. Human-in-the-loop for anything consequential. &amp; graceful refusal — teaching the model to say “I don’t know” instead of guessing. Ppl trust systems that acknowledge their limits more than systems that always have an answer.</p>
+<p>There’s also the question of what counts as hallucination. When a copywriter asks an AI for tagline ideas &amp; it produces something novel, that’s the product working. The same generative capacity that fabricates citations in research produces creative breakthroughs in generative contexts. “Hallucination” &amp; “creativity” are the same mechanism pointed at different use cases. Product teams need to think carefully about where they want the model to be generative &amp; where they want it constrained, then design the experience differently for each mode.</p>
+<p>Use case selection is the most underappreciated product decision in AI. Structurally safe use cases are ones where hallucinations are low-cost, easily caught, or even beneficial — drafting emails, brainstorming, generating first drafts a human will revise. Structurally risky ones are where a confident wrong answer causes real harm — medical diagnosis, legal advice, financial calculations. The liability questions around AI-generated misinformation are still being worked out in courts &amp; legislatures. Nobody has clear answers yet on who’s responsible when an AI product gives advice that causes harm. This ambiguity alone should shape your product roadmap.</p>
+<p>The companies that figure out reliability will have a genuine competitive moat. As foundation models converge in raw capability, differentiation shifts to trustworthiness — how consistently the product delivers accurate outputs in its specific domain. That means investing in evaluation pipelines, domain-specific fine-tuning, retrieval systems that ground the model, UX that keeps users appropriately skeptical, &amp; monitoring that catches quality degradation. None of this is as exciting as shipping a new feature, but it’s what separates products ppl depend on from demos that impress on first use &amp; disappoint on the tenth.</p>
+<p>The discipline of designing for unreliable outputs, building verification layers, &amp; communicating uncertainty honestly isn’t a stopgap. It’s a permanent feature of building on probabilistic systems.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="07-01-tokens-are-the-new-api-calls.html">&larr; Tokens Are the New API Calls</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="09-03-the-prompt-is-the-product.html">The Prompt Is the Product &rarr;</a>
+</nav>
+  
+</body>
+</html>

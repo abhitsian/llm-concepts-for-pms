@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Prompt Is the Product</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">585 words</div><h1>The Prompt Is the Product</h1><div class="article-subtitle">Part 3 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<p>Thousands of companies are building thousands of different products on the same handful of foundation models. Same weights, same architecture, same training data — yet the products feel completely different. A customer support bot, a legal research tool, &amp; a creative writing assistant might all run on the same model, but the experience of using them has almost nothing in common. The differentiator isn’t the model. It’s the prompt — how you instruct, constrain, &amp; contextualize. Everything else is plumbing.</p>
+<h2 id="the-two-interfaces">The Two Interfaces</h2>
+<p>Every AI product has two interfaces. The visible one is the UX — chat window, buttons, input fields. The invisible one is everything between the user’s input &amp; the model’s processing: the system prompt defining identity &amp; behavior, the context injection providing background, the output formatting shaping responses, &amp; the guardrails preventing the model from going off the rails. This invisible interface is where most product decisions actually live.</p>
+<p>A system prompt layers several components together. Identity — who the AI is, what personality it projects. Constraints — what it refuses, what topics it avoids. Instructions — step-by-step guidance for different request types. Injected context — user data, conversation history, retrieved documents. Examples — showing the model what good outputs look like. &amp; output formatting — structured data, conversational prose, or something else. Each component is a product decision. The tone in the identity layer defines how the product feels. The constraints determine what it won’t do, often more important than what it will. The instructions encode business rules &amp; quality standards. Prompt engineering is product design expressed in natural language instead of code.</p>
+<p>One of the least discussed challenges is the prompt burden. Traditional software guides users through predefined workflows. AI products, esp those with open-ended chat interfaces, drop users in front of a blank text box. This is a radical increase in cognitive load — users have to figure out what to ask, how to phrase it, what’s even possible. Most ppl are bad at this, not cuz they’re unsophisticated, but cuz formulating good prompts is genuinely difficult.</p>
+<p>Smart AI products reduce this burden. Suggested prompts show what’s possible. Scaffolded conversations guide users through multi-step processes with targeted questions. Smart defaults make reasonable assumptions. Progressive disclosure reveals advanced capabilities gradually. The best AI products feel less like talking to a blank chatbot &amp; more like working with a knowledgeable collaborator who knows what questions to ask.</p>
+<p>There’s also the question of how much control to give users. Developers want full prompt access. Business users want a few meaningful knobs. Consumers want the product to just work. Getting this calibration wrong creates friction that has nothing to do with the model’s capability.</p>
+<p>The competitive implications are worth sitting with. Prompts feel ephemeral, easy to copy. But effective production prompts are the result of hundreds of iterations, informed by user feedback, edge case discovery, evaluation data, &amp; domain expertise. They encode institutional knowledge about what works for specific user populations in specific contexts. A competitor can reverse-engineer your outputs, but they’ll get a shallow approximation — they won’t have the iterative refinement or deep understanding of user needs that shaped those prompts over time. In a world where the model is commoditized, the prompt layer is where defensible product value accumulates. Teams that treat prompt development as a core discipline — with version control, systematic testing, &amp; continuous refinement — are building something genuinely hard to replicate.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="08-02-hallucinations-arent-bugs.html">&larr; Hallucinations Aren't Bugs</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="10-04-same-input-different-output.html">Same Input, Different Output &rarr;</a>
+</nav>
+  
+</body>
+</html>

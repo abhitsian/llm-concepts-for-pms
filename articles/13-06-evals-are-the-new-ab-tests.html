@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evals Are the New A/B Tests</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">599 words</div><h1>Evals Are the New A/B Tests</h1><div class="article-subtitle">Part 6 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
+<p>How do you know if your AI is good? Not benchmark-good — good for your users, good enough to ship. With traditional products you’d A/B test it: variant A, variant B, measure outcomes, ship the winner. But AI outputs vary on every run, quality is subjective, &amp; you can’t just count clicks. Traditional software has clear quality signals — does it work, does it return the right value. AI has fuzzy signals on spectrums. Is this summary good? Depends on context, on the user, on what they were trying to accomplish. Without clear metrics, you can’t improve, compare alternatives, or catch regressions. You’re flying blind.</p>
+<p>Evals are the answer. Systematic measurement of output quality. The structure is straightforward: take a set of inputs, run them through your system, score outputs against defined criteria, aggregate scores. Now you have a metric to track, compare, &amp; decide with.</p>
+<h2 id="anatomy-of-an-eval">Anatomy of an Eval</h2>
+<p>The details matter more than the structure. Input selection determines what you’re measuring — random sample of real queries, known edge cases, adversarial inputs? Your eval set shapes your conclusions, &amp; one that doesn’t reflect real usage gives confidence in things that don’t matter. Criteria definition is where you decide what “good” means — accuracy, helpfulness, safety, tone — different criteria produce different winners. Scoring method affects everything: human raters are expensive but high-signal, automated checks are cheap but limited, LLM-as-judge falls in between. Aggregation tells different stories — means hide catastrophic failures, worst-case analysis is overly pessimistic, distributions give the fullest picture.</p>
+<p>LLM-as-judge deserves attention cuz it’s genuinely weird. You generate output with one LLM, then ask another to rate it. Using AI to judge AI feels circular, &amp; it is, but it’s surprisingly effective — LLMs are good at evaluating text quality in ways that correlate with human judgment. The downsides are real: LLM judges prefer longer responses, can’t evaluate beyond their own knowledge, &amp; the meta-circularity is uncomfortable. Calibration against human judgment stays essential.</p>
+<p>Mature AI products build multiple eval layers. Unit evals test specific capabilities in isolation — binary, automated, fast, running on every code change. Integration evals test the full system end-to-end, often scored by LLM-as-judge. Scenario evals target known difficult cases before major releases. Human evals bring expert raters for nuanced assessment, expensive but highest signal. Production evals monitor live traffic, catching problems no pre-deployment set anticipated. Each layer has a different cost-signal tradeoff. Skipping any leaves blind spots.</p>
+<h2 id="from-evals-to-decisions">From Evals to Decisions</h2>
+<p>Evals only matter if they drive decisions. Feature prioritization becomes data-driven when evals show which capabilities are weakest. Model selection gets grounded — model A might beat B on public benchmarks but lose on your specific task. Prompt iteration becomes measurable. Trade-off analysis between speed &amp; quality becomes concrete when evals put numbers on both sides. &amp; regression detection catches quality drops before users do, cuz something always changes — dependency updates, prompt tweaks, version bumps.</p>
+<p>Some eval metrics actively mislead. Response length is a trap — longer isn’t better, but LLM judges prefer verbose outputs. User ratings sound like gold but ppl say they like things they don’t use. The move is pairing proxy metrics with ground truth. How users behave after getting a response — accept it, edit it, regenerate it, abandon the task — tells you more about quality than any rating. The best eval strategies combine automated scoring, LLM-as-judge, human calibration, &amp; behavioral analytics, cuz no single metric captures quality &amp; any single one can mislead.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="12-05-context-is-all-you-have.html">&larr; Context Is All You Have</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="14-08-streaming-changed-everything.html">Streaming Changed Everything &rarr;</a>
+</nav>
+  
+</body>
+</html>

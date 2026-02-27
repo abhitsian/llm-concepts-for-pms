@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Harness Designed to Shrink</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">530 words</div><h1>The Harness Designed to Shrink</h1><div class="article-subtitle">Part 15 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=fI2EYoOGulxOgKbsOvYU8,6c7ZgetByOXkCC4svdPZ-w">View diagram: The Harness Designed to Shrink</a>
+<figcaption aria-hidden="true">The Harness Designed to Shrink</figcaption>
+</figure>
+<p>Most successful AI products today are, by volume, not AI. They’re scaffolding. Context assembly systems that gather relevant documents, conversation history, &amp; user preferences into a prompt. Tool routing layers that decide whether the model needs to call a search API, a database, or a calculator. Output validation that checks whether the response is well-formed, factually grounded, &amp; safe. Error recovery logic that retries, reformulates, or falls back gracefully when the model produces garbage. Permission management that controls what the model can access &amp; do. This orchestration layer — the harness — is where most of the engineering effort goes, &amp; it’s where most of the product’s value currently lives.</p>
+<p>It’s also designed to disappear.</p>
+<p>Features that required elaborate multi-step prompt chains eighteen months ago work with a single call on current models. Tasks that needed careful few-shot examples &amp; chain-of-thought scaffolding now succeed with a straightforward instruction. Retry logic that fired constantly with GPT-3.5 barely triggers with Claude or GPT-4o. The models are absorbing capabilities that used to live in the application layer, &amp; each generation of model improvement thins the harness further.</p>
+<h2 id="whats-already-shrinking">What’s Already Shrinking</h2>
+<p>Prompt engineering is the most visible example. The elaborate techniques of 2023 — meticulous formatting instructions, XML-tagged sections, carefully ordered few-shot examples — matter less with each model generation. Models have gotten better at following intent rather than requiring precise incantations. The prompt craftsmanship that was a genuine competitive advantage is becoming table stakes, then becoming unnecessary.</p>
+<p>Output parsing is another layer thinning out. Early AI products needed complex regex &amp; custom parsers to extract structured data from model outputs. Now models reliably produce clean JSON, follow schemas, &amp; use tool-calling interfaces that return structured results natively. The parsing infrastructure that teams spent months building is becoming dead code.</p>
+<p>Error handling follows the same pattern. As models become more reliable &amp; less prone to degenerate outputs, the elaborate fallback chains &amp; retry mechanisms that kept products stable become over-engineered for the actual failure rate. You’re maintaining recovery infrastructure for failures that increasingly don’t happen.</p>
+<h2 id="what-remains-durable">What Remains Durable</h2>
+<p>Not everything thins. Domain knowledge — understanding the specific workflows, constraints, &amp; terminology of your users’ field — doesn’t become less valuable as models improve. UX design that shapes how humans interact with AI output, how they build trust, how they correct errors — that stays. Data assets, proprietary integrations, &amp; the organizational relationships that give you access to contexts other products can’t reach — those remain.</p>
+<p>The strategic question is uncomfortable but necessary: if your product is 80% harness &amp; 20% durable differentiation, what happens when the harness becomes unnecessary? The honest answer for many AI startups is that they’re building features the model will eventually provide natively. The surviving products will be the ones that used the harness era to build something underneath it — a data flywheel, a user relationship, a domain position — that persists after the scaffolding dissolves. Build the harness. Ship the product. But know which parts are temporary &amp; invest accordingly, cuz the models aren’t waiting.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="38-dp-14-the-memory-problem-nobody-solved.html">&larr; The Memory Problem Nobody Solved</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <span></span>
+</nav>
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/harness-shrink.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    HarnessShrinkDiagram(canvas, container);
+  });
+</script>
+</body>
+</html>

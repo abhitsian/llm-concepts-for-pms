@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thinking Became a Dial</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">577 words</div><h1>Thinking Became a Dial</h1><div class="article-subtitle">Part 3 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=8DiGcqoAmXY0zdBV54FHp,VSAIXWRzJqrDZntvjTpVOg">View diagram: Thinking Became a Dial</a>
+<figcaption aria-hidden="true">Thinking Became a Dial</figcaption>
+</figure>
+<p>When OpenAI shipped o1, something shifted in what LLMs could do. The model didn’t just predict the next token faster or with better calibration — it spent time reasoning before answering, producing chains of internal thought that let it solve problems previous models couldn’t touch. Math competition problems. Multi-step logic puzzles. Code that required planning three functions ahead. Then DeepSeek R1 proved the technique wasn’t proprietary magic: you could train reasoning into open-weight models with reinforcement learning. Thinking became a capability anyone could build on, &amp; almost immediately, it became a product decision.</p>
+<p>The key mental model: thinking tokens are a resource, like compute or bandwidth. When a reasoning model works through a hard problem, it generates internal tokens — sometimes thousands of them — before producing its visible answer. Those tokens cost money &amp; take time. A straightforward factual lookup doesn’t need 10,000 tokens of deliberation. A gnarly debugging session across multiple files might need exactly that. The product question is when to spend &amp; when to save.</p>
+<h2 id="the-cost-quality-curve">The Cost-Quality Curve</h2>
+<p>This creates a genuinely new tradeoff space. With standard models, you had one knob — which model to use. Bigger was better but slower &amp; more expensive, &amp; the relationship was roughly linear. Reasoning models introduced a second axis. The same model can produce quick, cheap answers or slow, expensive, significantly more capable answers depending on how much thinking budget you allocate.</p>
+<p>Products are already making this decision in different ways. Claude’s extended thinking lets the model use up to a configurable token budget for reasoning, &amp; the developer controls the ceiling. Some implementations route simple queries to fast non-reasoning paths &amp; escalate complex ones to deep thinking mode. Others let users choose — Anthropic’s interface surfaces a thinking toggle, letting the human decide whether the problem warrants the extra cycles.</p>
+<p>The economics matter. A query that triggers 50,000 thinking tokens costs roughly 10-20x what a standard completion costs. For a product serving millions of requests, indiscriminate thinking burns budget fast. But for the subset of queries where reasoning depth is the difference between a correct answer &amp; a hallucinated one — complex code generation, multi-step analysis, research synthesis — the ROI is enormous. The skill is in the routing.</p>
+<h2 id="what-changed-structurally">What Changed Structurally</h2>
+<p>Reasoning models didn’t just make LLMs incrementally better at existing tasks. They opened up categories of work that were previously out of reach. Before o1, asking an LLM to solve a competitive programming problem was a coin flip at best. After, it became reliable enough to build products around. The same applies to complex refactoring, mathematical proof steps, &amp; multi-constraint planning problems. The ceiling moved.</p>
+<p>This matters for product teams cuz it means the capability matrix isn’t static anymore. Features that were infeasible six months ago might be viable now — not because a new model dropped, but because you can allocate more thinking to the problem. The model is the same. The budget changed. The output quality followed.</p>
+<p>Thinking isn’t a binary. It’s a dial, &amp; learning to turn it — when, how much, for whom — is one of the core product design problems of the current generation of AI applications. Ppl building these systems need to think about reasoning budgets the way they think about any other scarce resource: allocate deliberately, measure the return, &amp; never spend uniformly.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="26-dp-02-context-engineering-replaced-prompt-engineering.html">&larr; Context Engineering Replaced Prompt Engineering</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="28-dp-04-mcp-won-because-it-was-boring.html">MCP Won Because It Was Boring &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/thinking-dial.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ThinkingDialDiagram(canvas, container);
+  });
+</script>
+</body>
+</html>

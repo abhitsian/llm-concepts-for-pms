@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open Models &amp; the Race to Zero</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">620 words</div><h1>Open Models &amp; the Race to Zero</h1><div class="article-subtitle">Part 15 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=iys-pN_k649EGhrsGGm-s,IDVUZJsqeSjHnG-yz1sPiw">View diagram: Inference Cost Deflation</a>
+<figcaption aria-hidden="true">Inference Cost Deflation</figcaption>
+</figure>
+<p>Inference costs have been falling at roughly 10x per year since GPT-3 launched. A query that cost six cents in 2022 costs fractions of a cent today. GPT-4 level capability — about $30 per million tokens at debut — now runs $1-3 for equivalent quality from competing providers. This isn’t Moore’s Law gently working through server hardware — it’s a collapse driven by competition, architectural efficiency gains, &amp; open-weight models pushing the floor lower with every release.</p>
+<p>The deflation curve changes the viability threshold for every AI feature you’ve considered. The feature math from Article 09 — cost per invocation times frequency, measured against value — is a moving target now. A feature that was economically unviable last quarter might pencil out today. PMs should revisit their killed-feature graveyards periodically, cuz the economic veto that buried those ideas has a shelf life.</p>
+<h2 id="open-weight-models-are-closing-the-gap">Open-weight models are closing the gap</h2>
+<p>The other half of this story is arguably more consequential. DeepSeek R1 — built by a Chinese lab with a fraction of the headcount of its American counterparts — matches OpenAI’s o1 on reasoning benchmarks at roughly 90% less cost. Meta’s Llama 4 is production-grade for a wide swath of enterprise use cases. Alibaba’s Qwen 3 is the default for products serving Asian markets. Mistral has carved out a position as the European alternative with strong performance at efficient parameter counts. These aren’t research curiosities — they’re models running in production, at scale, today. The distance between open-weight &amp; proprietary frontier used to be measured in years; now it’s weeks to months. Proprietary providers still lead on the bleeding edge, esp for the hardest reasoning tasks, but most product use cases don’t live there.</p>
+<p>This compression makes self-hosting viable. Running on your own infrastructure means data never leaves your environment — no third-party API calls, no trust assumptions about a provider’s data handling. For regulated industries this is often a hard requirement that previously forced ppl into expensive private deployments or just not using LLMs at all. Latency drops too cuz you eliminate the network round trip, &amp; the cost structure shifts from per-token pricing to hardware amortization — at high volume, dramatically cheaper. The crossover depends on scale; for a startup, APIs win. For an enterprise processing millions of queries, the math flips.</p>
+<p>Self-hosting isn’t free in any sense other than the weights themselves. You own the infra burden — provisioning, scaling, monitoring, failover — &amp; you need ML ops expertise. You lose the continuous improvement API providers ship silently behind their endpoints. For most startups, APIs still win on total cost of ownership when you account for engineering time &amp; operational complexity.</p>
+<p>The commoditization question looms behind all of this. If costs race toward zero &amp; open-weight models keep closing the gap, the model layer becomes a commodity. Value lives in the layers above — data curation, domain expertise, workflow integration, user experience. The model is the engine, but engines are interchangeable when they all meet a quality threshold.</p>
+<p>There’s a geopolitical dimension worth tracking. DeepSeek is Chinese, Mistral is French, Meta’s open-source strategy is a deliberate move to commoditize the layer where it doesn’t compete. Choosing which open-weight model to deploy carries implications about regulatory jurisdiction, supply chain risk, &amp; what happens if geopolitical tensions affect licensing terms.</p>
+<p>The trajectory is clear enough to plan around. Inference costs will keep falling, open-weight models will keep improving, &amp; the gap between “good enough” &amp; “frontier” will keep narrowing. The cost of intelligence is dropping — the question is what you build on top of cheap intelligence that’s worth paying for.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="18-12-the-architecture-tax.html">&larr; The Architecture Tax</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="20-16-tools-gave-models-hands.html">Tools Gave Models Hands &rarr;</a>
+</nav>
+  
+</body>
+</html>

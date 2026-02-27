@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Training vs. Inference</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">598 words</div><h1>Training vs. Inference</h1><div class="article-subtitle">Part 0c of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=tE8In6K-NSRvnliCbud7g,sBKJDZZQmsohTGYGW_WeLA">View diagram: Training vs Inference</a>
+<figcaption aria-hidden="true">Training vs Inference</figcaption>
+</figure>
+<p>Every LLM has exactly two phases in its life, &amp; if you conflate them you will make bad product decisions for months before anyone catches it. The first phase is training. The second is inference. One builds the brain, the other uses it.</p>
+<p>Training is what happens before you ever touch the model. Someone — OpenAI, Anthropic, Meta — feeds billions of pages of text into massive GPU clusters &amp; lets them run for weeks or months. The model learns statistical patterns: which tokens tend to follow which, in what contexts, with what frequencies. This is staggeringly expensive — tens of millions to billions of dollars per run. You don’t do this. You don’t pay for this directly. The model providers absorb it &amp; amortize it across every customer.</p>
+<p>Inference is what happens every time a user asks your product a question &amp; the model generates a response. One query in, one completion out. This is the phase you live in as a PM. This is the cost that shows up on your monthly bill, priced per token, scaling with every user &amp; every request. Training costs are fixed &amp; sunk. Inference costs grow with usage — which is why token economics (see article 01) matter so much.</p>
+<h2 id="the-model-doesnt-learn-from-your-users">The model doesn’t learn from your users</h2>
+<p>This is the single most important thing to internalize. When someone uses your product &amp; the model gives a brilliant answer, the model hasn’t gotten smarter. When it gives a terrible answer, it hasn’t learned from the mistake. Each inference call is stateless — the model’s weights are identical before &amp; after. This is why conversations don’t magically carry over between sessions, why the same question can yield slightly different answers each time — there’s randomness baked into the generation process — &amp; why making the model “better” at your specific task requires deliberate effort, not just more usage.</p>
+<p>Ppl will constantly ask you “can’t the AI learn from feedback?” or “will it get better over time?” The answer is: not automatically. Inference is stateless. Making your product smarter requires one of three moves, roughly ordered by effort. You can change the prompt — cheap &amp; instant. You can add retrieval, sometimes called RAG, where you feed relevant documents into the context at query time — moderate effort, maybe days. Or you can fine-tune — expensive, weeks. There is no fourth option where the model quietly improves itself through use. Understanding this prevents an enormous amount of wishful thinking about AI products.</p>
+<p>Fine-tuning deserves a quick mention cuz it sits in the middle. You take a pre-trained model &amp; do a small additional round of training on your own data. It’s dramatically cheaper than training from scratch — maybe $100 to $10K instead of $100M — but it permanently changes the model’s behavior for your copy. Think of it as sending someone to a specialized workshop after they’ve already finished their general education. The foundation stays, but the specialization gets layered on top. It’s powerful, esp for tone, format, or domain-specific tasks, but it’s still a training step — not something that happens during inference.</p>
+<p>The reason this mental model matters is that it shapes every downstream decision. Your cost structure, your improvement roadmap, your answer to “why did the AI say that” — all of it traces back to whether you’re thinking about the training phase or the inference phase. Get the split right &amp; the rest of the series will make a lot more sense.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="02-00b-the-api-layer.html">&larr; The API Layer</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="04-00d-embeddings-and-the-shape-of-meaning.html">Embeddings & the Shape of Meaning &rarr;</a>
+</nav>
+  
+</body>
+</html>

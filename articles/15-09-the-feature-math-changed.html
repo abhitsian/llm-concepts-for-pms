@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Feature Math Changed</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">559 words</div><h1>The Feature Math Changed</h1><div class="article-subtitle">Part 9 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
+<p>Traditional software has a specific cost structure: high build cost, near-zero run cost. An engineer spends two weeks building a feature, &amp; serving it to a million users costs almost nothing incremental. The math rewards building cuz you amortize the fixed investment across effectively infinite usage.</p>
+<p>LLM features broke this equation. Build cost drops dramatically — sometimes to a single afternoon of prompt engineering. But run cost never goes away. Every user, every query consumes tokens. The millionth use costs as much as the first. The old question was “can we afford to build this?” The new question is “can we afford to run this?”</p>
+<h2 id="new-variables-new-math">New Variables, New Math</h2>
+<p>The feature decision framework needs new inputs. Cost per invocation: how many tokens does this feature consume each time? A feature stuffing 4,000 tokens of context costs 10x more than one using 400, compounding across every interaction. Invocation frequency: a feature triggered once per session has radically different economics than one triggered fifty times. Value per invocation: high-value low-frequency features can tolerate expensive calls, while low-value high-frequency features need ruthless efficiency or they’ll eat your margins. Failure cost: retries consume tokens, bad outputs erode trust.</p>
+<p>The contrast makes the stakes concrete. AI email summaries: ~2,200 tokens per call, 50 times per user per day. At $0.01 per 1K tokens, that’s roughly $33 per user per month — for a convenience feature. Unless your product charges $50+/month, it loses money on every active user. Contract clause analysis: ~9,000 tokens per call, but only 3 invocations per user per month. That’s $0.27/month. On a $200/month legal product, the unit economics are excellent despite higher per-call cost. The difference isn’t raw token cost — it’s the relationship between frequency &amp; value.</p>
+<p>PMs still overweight build cost, which makes sense given decades of conditioning. But a feature that takes a week to build &amp; costs $5/user/month will far outspend one that takes a month to build at $0.10/user/month. Traditional software rewarded fast shipping cuz run costs approached zero. LLM software punishes shipping features you can’t afford to run. Usage growth, which used to be purely good news, becomes a cost scaling event.</p>
+<h2 id="efficiency-as-day-one-constraint">Efficiency as Day-One Constraint</h2>
+<p>Efficiency isn’t a post-launch optimization — it’s a day-one design constraint. Every LLM feature needs an efficiency budget before anyone writes code. The levers: shorter prompts, smaller context windows, cheaper models for simpler tasks, caching common responses, reducing invocation frequency through better UX. These aren’t things to tighten up later. They’re constraints that shape the feature from the start.</p>
+<p>Model tiering is where this gets particularly interesting as a product skill. Classification tasks often run fine on small models. Simple generation can use mid-tier options. Complex reasoning is where you bring in frontier models. The difference between a $0.001 call &amp; a $0.10 call is two orders of magnitude, compounding across millions of invocations into the difference between a profitable feature &amp; a money pit.</p>
+<p>Every feature request now needs to pass an economic screen: estimated cost per invocation, expected frequency, value delivered, &amp; whether the math works at planned scale. Features that fail don’t get built — not cuz they’re bad ideas, but cuz they’re economically unviable. The constraint on your roadmap isn’t engineering capacity anymore. It’s unit economics.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="14-08-streaming-changed-everything.html">&larr; Streaming Changed Everything</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="16-11-when-not-to-use-an-llm.html">When Not to Use an LLM &rarr;</a>
+</nav>
+  
+</body>
+</html>

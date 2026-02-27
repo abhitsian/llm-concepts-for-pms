@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MCP Won Because It Was Boring</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">571 words</div><h1>MCP Won Because It Was Boring</h1><div class="article-subtitle">Part 4 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=O6kiYqo6jwKIQoOEfPDjn,RmtvoTsSs7e4ow_OOxK7ng">View diagram: MCP: USB-C for AI</a>
+<figcaption aria-hidden="true">MCP: USB-C for AI</figcaption>
+</figure>
+<p>Model Context Protocol is USB-C for AI tools. That analogy does most of the explanatory work &amp; also explains why it won. MCP defines a standard way for an AI application (the client) to discover &amp; call tools exposed by external services (the servers). A Postgres MCP server exposes query tools. A GitHub MCP server exposes repo operations. A filesystem MCP server exposes read &amp; write. The client doesn’t need custom integration code for each service — it speaks MCP, &amp; any conforming server just works.</p>
+<p>Anthropic published MCP as an open specification in late 2024. Within months, the ecosystem grew faster than anyone expected. Cursor, Windsurf, Cline, &amp; other AI coding tools adopted it. Thousands of community-built servers appeared — for Slack, Linear, Notion, databases, APIs, local dev tools, &amp; everything in between. OpenAI, which initially stayed on the sidelines, eventually added MCP support to its own products. The protocol became a de facto standard not through mandate but through adoption.</p>
+<h2 id="why-boring-wins">Why Boring Wins</h2>
+<p>The technical design of MCP is deliberately simple. A server declares its capabilities — tools, resources, prompts — via a JSON schema. The client discovers them at connection time &amp; can invoke them with structured arguments. Transport is flexible: stdio for local servers, HTTP with server-sent events for remote ones. There’s no complex authentication framework, no capability negotiation dance, no versioning headaches in the base protocol. An experienced developer can build a working MCP server in an afternoon, &amp; that low barrier is precisely why it spread.</p>
+<p>This follows a well-documented pattern in protocol adoption. The standards that win at scale are almost never the most technically sophisticated. They’re the ones with the lowest implementation cost &amp; the fewest barriers to a first working integration. USB beat FireWire. HTTP beat CORBA. JSON beat XML for most use cases. MCP is playing the same game — simple enough that building a server feels like a weekend project, not a quarterly initiative.</p>
+<h2 id="the-security-gap">The Security Gap</h2>
+<p>Simon Willison flagged the uncomfortable part early: MCP’s trust model is essentially nonexistent. When you connect an MCP server to your AI agent, you’re giving that server — &amp; by extension the model — access to whatever the server exposes. There’s no granular permission system, no sandboxing, no audit trail in the base protocol. For local dev tools running on your laptop, this is manageable. You trust your own filesystem server cuz you installed it &amp; you control the scope.</p>
+<p>But MCP is already moving beyond local dev. Ppl are building remote MCP servers, shared team servers, &amp; public server registries. At that point, the trust-everything model becomes a real liability. A malicious or compromised MCP server could exfiltrate data, execute arbitrary commands, or manipulate the model’s context in ways the user never sees. Prompt injection through tool responses is a known attack vector, &amp; MCP currently offers no defense against it.</p>
+<p>The protocol needs an authentication &amp; authorization layer, scoped permissions, &amp; probably a signing mechanism for server identity. These are solvable problems, &amp; work is underway. But the gap between MCP’s current adoption curve &amp; its current security posture is real, &amp; closing it will determine whether the protocol scales beyond developer tooling into enterprise &amp; consumer products. Boring got it adopted. Security will determine if it stays.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="27-dp-03-thinking-became-a-dial.html">&larr; Thinking Became a Dial</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="29-dp-05-subagents-and-the-swarm.html">Subagents & the Swarm &rarr;</a>
+</nav>
+  
+</body>
+</html>

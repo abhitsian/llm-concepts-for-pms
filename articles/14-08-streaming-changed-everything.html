@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Streaming Changed Everything</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">559 words</div><h1>Streaming Changed Everything</h1><div class="article-subtitle">Part 8 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
+<p>ChatGPT could have shown you the complete response after it finished generating. Instead, it streams tokens as they’re produced — words appearing one by one, like watching someone type. This design choice set the standard for every AI chat interface that followed, not cuz of what it does technically but cuz of what it does psychologically.</p>
+<p>The core metric that emerged is time-to-first-token (TTFT). In a traditional API flow, the user waits for the entire computation to finish. With streaming, tokens start appearing almost immediately. A 10-second response with 200ms TTFT feels faster than a 5-second response where nothing appears for all 5 seconds. Uncertain waits feel longer than known waits, &amp; streaming provides constant progress signals. Occupied time feels shorter than unoccupied time, &amp; reading incoming text is genuine occupation while watching a spinner is not. Words appearing on screen prove the system is working. There’s a mild narrative tension in watching a response unfold that holds attention in ways a complete text dump doesn’t.</p>
+<h2 id="where-it-works-where-it-doesnt">Where It Works &amp; Where It Doesn’t</h2>
+<p>Streaming shines with long responses, exploratory interactions, conversational interfaces where typing mimicry feels natural, &amp; uncertain outcomes where users want to evaluate early. It falls apart with structured outputs like JSON or code where partial results are useless. It’s unnecessary overhead for sub-second responses. It annoys action-oriented users who just want the answer. &amp; it creates real confusion around errors — streaming partial content before failing leaves users with an incomplete response &amp; no clear signal about what went wrong.</p>
+<p>The typewriter effect has become so distinctive it functions as a design language. Ppl associate it with AI-generated content. Some products lean into this deliberately, using the visual pattern to signal intelligence &amp; effort. Others might want to avoid it, esp if the goal is making AI feel invisible rather than performatively present.</p>
+<p>Streaming opens up perception manipulation too. You can control how fast tokens appear, show words in chunks instead of individual tokens, introduce brief delays before streaming starts. None of this changes actual generation speed — only perceived speed. One of streaming’s most practical benefits is enabling early stopping: if users see a response going sideways, they can hit stop before the model finishes, saving tokens &amp; time while giving users real control over the interaction.</p>
+<h2 id="beyond-the-chatbot-era">Beyond the Chatbot Era</h2>
+<p>There’s a tension between streaming’s engagement properties &amp; efficiency. Streaming captures attention — ppl watch the response unfold instead of doing something productive during a clean wait. If your product optimizes for engagement, streaming is powerful. If your goal is efficiency, it might be working against you.</p>
+<p>Streaming was the right call for the chatbot moment, but AI products are evolving in directions that challenge its relevance. Agentic workflows involve multi-step tasks where intermediate reasoning token by token is noise, not signal. Background processing makes streaming irrelevant. Structured output generation is increasingly common as products mature beyond chat. &amp; as inference gets faster with each generation of hardware, the window where streaming provides meaningful benefit keeps shrinking. A 500ms response doesn’t need the streaming treatment.</p>
+<p>The question going forward isn’t whether to stream — it’s understanding precisely which interactions benefit from it &amp; which are better served by letting the AI finish &amp; presenting a clean result.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="13-06-evals-are-the-new-ab-tests.html">&larr; Evals Are the New A/B Tests</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="15-09-the-feature-math-changed.html">The Feature Math Changed &rarr;</a>
+</nav>
+  
+</body>
+</html>

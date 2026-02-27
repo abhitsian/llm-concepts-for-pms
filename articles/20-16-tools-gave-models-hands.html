@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tools Gave Models Hands</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">600 words</div><h1>Tools Gave Models Hands</h1><div class="article-subtitle">Part 16 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=PjzuoyEKWk4hug8711H-X,n6sz2OnkftGqtF-wZgWgdw">View diagram: How Tool Use Works</a>
+<figcaption aria-hidden="true">How Tool Use Works</figcaption>
+</figure>
+<p>For years, LLMs were brains in jars. Text in, text out. They could reason &amp; summarize but couldn’t act — no database lookups, no messages sent, no files written. A real limitation, but also an unappreciated safety property: a system that only produces words has a bounded blast radius.</p>
+<p>Function calling changed this. Instead of responding with natural language, the model emits a structured JSON blob — a request to call a specific function with specific parameters. Your application intercepts it, executes the function, &amp; feeds the result back. The model never executes anything itself — it expresses intent in structured format &amp; a surrounding system carries out the action. This indirection is what makes it powerful. The model can now query a database, reason about results, draft an email, &amp; send it. The gap between “talks about things” &amp; “does things” collapses.</p>
+<p>The PM question shifts from “what should the AI say” to “what should the AI be allowed to do” — &amp; that second question is substantially harder. Saying the wrong thing is embarrassing; doing the wrong thing is destructive. When a model can send emails, modify records, transfer money, or execute code, every failure mode carries operational consequences. The design challenge becomes about permission, scope, &amp; containment.</p>
+<h2 id="mcp-the-blast-radius-problem">MCP &amp; the blast radius problem</h2>
+<p>Every tool requires its own integration code — function definitions, parameter schemas, auth handling, error parsing. Connect to Slack, Jira, a database, &amp; a CRM, &amp; you’ve written four bespoke integrations that all need maintenance. MCP — Model Context Protocol — is an open standard that defines how models connect to tools &amp; data sources, something like USB-C for AI. Before USB, every peripheral needed its own cable &amp; driver. MCP does the same for AI integrations. It’s been adopted by OpenAI, Google, Microsoft, &amp; others, which matters cuz the standard now has enough gravity to stick. For PMs, the build-versus-buy calculus shifts — instead of maintaining custom connectors, you lean on a growing ecosystem of MCP servers exposing enterprise tools through a standard interface.</p>
+<p>The trust problem is where tool use gets genuinely hard. When the model could only generate text, the worst outcome was a hallucinated fact — annoying but contained. With tool access, failures get real: a model sending a poorly worded client email, running a query that modifies production data, or triggering cascading API calls based on misunderstood intent. The design pattern that works is tiered autonomy — let the model act freely on low-stakes operations like reading &amp; searching, require confirmation for medium-stakes actions like sending messages &amp; creating records, &amp; escalate high-stakes actions like deletions &amp; financial transactions to a human. Designing these tiers is some of the most important product work on an AI feature.</p>
+<p>Error handling introduces failure modes unique to tool-enabled systems. The dangerous pattern is cascading failure: a tool call fails, the model tries a worse alternative, that fails too, &amp; it spirals into progressively worse workarounds. A model that can’t reach the CRM piecing together customer info from email snippets isn’t resourceful — it’s dangerous. Graceful degradation means recognizing when failure makes the task impossible &amp; saying so.</p>
+<p>The strategic question is how many tools to expose. Each one expands capability but also what can go wrong. Models with dozens of tools sometimes pick the wrong one, esp when descriptions overlap or intent is ambiguous. Start narrow, expand based on evidence, &amp; treat every new tool as surface area you’ll need to monitor &amp; defend.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="19-15-open-models-and-the-race-to-zero.html">&larr; Open Models & the Race to Zero</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="21-13-agents-are-loops-not-features.html">Agents Are Loops, Not Features &rarr;</a>
+</nav>
+  
+</body>
+</html>

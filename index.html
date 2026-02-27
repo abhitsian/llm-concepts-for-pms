@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM Concepts for PMs</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #fbfbfb; }
+    .site-hero {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      aspect-ratio: 21 / 9;
+      background: #0a0a0f;
+      overflow: hidden;
+      position: relative;
+    }
+    .site-hero canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .index-card {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 48px 72px 64px;
+      box-shadow: 0px 1px 4px 1px rgba(0,0,0,0.05), 0px 1px 1px 0px rgba(0,0,0,0.08);
+    }
+    .index-title {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: -0.8px;
+      color: var(--color-text-80);
+      text-align: center;
+      margin: 0 0 8px;
+    }
+    .index-subtitle {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--color-gray);
+      text-align: center;
+      margin: 0 auto 32px;
+      max-width: 480px;
+    }
+    .series-block { margin: 0 0 48px; }
+    .series-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--color-text);
+      margin: 0 0 24px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .section-block { margin: 0 0 28px; }
+    .section-heading {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin: 0 0 2px;
+    }
+    .section-desc {
+      font-family: var(--font-serif);
+      font-size: 13px;
+      color: var(--color-gray);
+      margin: 0 0 10px;
+      text-align: left;
+    }
+    .article-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .article-list li {
+      margin: 0;
+      padding: 0;
+    }
+    .article-list a {
+      display: block;
+      padding: 6px 0;
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--color-text);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      transition: color 0.15s;
+    }
+    .article-list a:hover {
+      color: var(--color-accent);
+    }
+    .badge-bezier {
+      display: inline-block;
+      font-size: 6px;
+      color: #4ecdc4;
+      vertical-align: middle;
+      margin-left: 6px;
+      opacity: 0.7;
+    }
+    .index-footer {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-align: center;
+      color: var(--color-gray);
+      margin: 32px 0 0;
+      letter-spacing: 0.5px;
+    }
+    .hero-label {
+      position: absolute;
+      bottom: 12px;
+      right: 16px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.5px;
+    }
+    @media (max-width: 768px) {
+      .index-card { padding: 32px 24px 48px; }
+      .index-title { font-size: 26px; }
+      .site-hero { aspect-ratio: 16 / 9; }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-label">interactive &middot; hover to explore</div>
+  </div>
+  <div class="index-card">
+    <h1 class="index-title">LLM Concepts for PMs</h1>
+    <p class="index-subtitle">What product managers actually need to know about AI. 39 articles across two series. Start anywhere.</p>
+    <div class="divider">&#x254C;&#x254C;&#x254C;&#x254C;</div>
+    <div class="series-block"><h2 class="series-title">LLM Concepts for Product Managers</h2><div class="section-block"><h3 class="section-heading">Foundations</h3><p class="section-desc">The bedrock. What LLMs are, how they work, who builds them.</p><ul class="article-list"><li><a href="articles/01-00a-what-is-an-llm-actually.html">What Is an LLM, Actually?</a> <span class="badge-bezier" title="Interactive diagram">&#x2B24;</span></li><li><a href="articles/02-00b-the-api-layer.html">The API Layer</a></li><li><a href="articles/03-00c-training-vs-inference.html">Training vs. Inference</a></li><li><a href="articles/04-00d-embeddings-and-the-shape-of-meaning.html">Embeddings & the Shape of Meaning</a> <span class="badge-bezier" title="Interactive diagram">&#x2B24;</span></li><li><a href="articles/05-00e-three-ways-to-customize-an-llm.html">Three Ways to Customize an LLM</a></li><li><a href="articles/06-00f-the-llm-landscape.html">The LLM Landscape</a></li></ul></div><div class="section-block"><h3 class="section-heading">Core Mechanics</h3><p class="section-desc">The properties that define what building with LLMs feels like.</p><ul class="article-list"><li><a href="articles/07-01-tokens-are-the-new-api-calls.html">Tokens Are the New API Calls</a></li><li><a href="articles/08-02-hallucinations-arent-bugs.html">Hallucinations Aren't Bugs</a></li><li><a href="articles/09-03-the-prompt-is-the-product.html">The Prompt Is the Product</a></li><li><a href="articles/10-04-same-input-different-output.html">Same Input, Different Output</a></li><li><a href="articles/11-07-the-temperature-dial.html">The Temperature Dial</a> <span class="badge-bezier" title="Interactive diagram">&#x2B24;</span></li><li><a href="articles/12-05-context-is-all-you-have.html">Context Is All You Have</a></li><li><a href="articles/13-06-evals-are-the-new-ab-tests.html">Evals Are the New A/B Tests</a></li></ul></div><div class="section-block"><h3 class="section-heading">UX & Economics</h3><p class="section-desc">How LLMs change the math on features, pricing, and build-vs-buy.</p><ul class="article-list"><li><a href="articles/14-08-streaming-changed-everything.html">Streaming Changed Everything</a></li><li><a href="articles/15-09-the-feature-math-changed.html">The Feature Math Changed</a></li><li><a href="articles/16-11-when-not-to-use-an-llm.html">When Not to Use an LLM</a></li><li><a href="articles/17-10-build-vs-buy-in-llm-world.html">Build vs. Buy in an LLM World</a></li></ul></div><div class="section-block"><h3 class="section-heading">Architecture & Market</h3><p class="section-desc">System-level decisions and the forces reshaping the market.</p><ul class="article-list"><li><a href="articles/18-12-the-architecture-tax.html">The Architecture Tax</a></li><li><a href="articles/19-15-open-models-and-the-race-to-zero.html">Open Models & the Race to Zero</a></li></ul></div><div class="section-block"><h3 class="section-heading">Advanced Capabilities</h3><p class="section-desc">Tools, agents, reasoning, vision, and the expanding surface area.</p><ul class="article-list"><li><a href="articles/20-16-tools-gave-models-hands.html">Tools Gave Models Hands</a></li><li><a href="articles/21-13-agents-are-loops-not-features.html">Agents Are Loops, Not Features</a></li><li><a href="articles/22-14-reasoning-models-changed-the-ceiling.html">Reasoning Models Changed the Ceiling</a></li><li><a href="articles/23-17-your-ai-can-see-now.html">Your AI Can See Now</a></li><li><a href="articles/24-18-the-interface-broke-free.html">The Interface Broke Free</a></li></ul></div></div>
+    <div class="divider">&#x254C;&#x254C;&#x254C;&#x254C;</div>
+    <div class="series-block"><h2 class="series-title">Design Patterns of the AI Era</h2><div class="section-block"><h3 class="section-heading">The Architecture</h3><p class="section-desc">How agents are built. Loops, context, thinking, protocols, swarms.</p><ul class="article-list"><li><a href="articles/25-dp-01-the-loop-is-the-product.html">The Loop Is the Product</a> <span class="badge-bezier" title="Interactive diagram">&#x2B24;</span></li><li><a href="articles/26-dp-02-context-engineering-replaced-prompt-engineering.html">Context Engineering Replaced Prompt Engineering</a></li><li><a href="articles/27-dp-03-thinking-became-a-dial.html">Thinking Became a Dial</a> <span class="badge-bezier" title="Interactive diagram">&#x2B24;</span></li><li><a href="articles/28-dp-04-mcp-won-because-it-was-boring.html">MCP Won Because It Was Boring</a></li><li><a href="articles/29-dp-05-subagents-and-the-swarm.html">Subagents & the Swarm</a> <span class="badge-bezier" title="Interactive diagram">&#x2B24;</span></li></ul></div><div class="section-block"><h3 class="section-heading">The Economics</h3><p class="section-desc">What happened when AI got cheap. Jevons, vibe coding, task horizons.</p><ul class="article-list"><li><a href="articles/30-dp-06-the-jevons-paradox-hit-ai.html">The Jevons Paradox Hit AI</a></li><li><a href="articles/31-dp-07-vibe-coding-and-the-skill-inversion.html">Vibe Coding & the Skill Inversion</a></li><li><a href="articles/32-dp-08-task-length-doubled-every-seven-months.html">Task Length Doubled Every 7 Months</a></li></ul></div><div class="section-block"><h3 class="section-heading">The Patterns</h3><p class="section-desc">Permission gradients, hooks, slop filters, and deviance normalization.</p><ul class="article-list"><li><a href="articles/33-dp-09-the-permission-gradient.html">The Permission Gradient</a> <span class="badge-bezier" title="Interactive diagram">&#x2B24;</span></li><li><a href="articles/34-dp-10-hooks-not-hope.html">Hooks Not Hope</a></li><li><a href="articles/35-dp-11-slop-and-the-quality-collapse.html">Slop & the Quality Collapse</a></li><li><a href="articles/36-dp-12-the-normalization-of-deviance.html">The Normalization of Deviance</a></li></ul></div><div class="section-block"><h3 class="section-heading">The Frontier</h3><p class="section-desc">Async agents, memory, and the scaffolding designed to dissolve.</p><ul class="article-list"><li><a href="articles/37-dp-13-async-agents-changed-the-clock.html">Async Agents Changed the Clock</a></li><li><a href="articles/38-dp-14-the-memory-problem-nobody-solved.html">The Memory Problem Nobody Solved</a></li><li><a href="articles/39-dp-15-the-harness-designed-to-shrink.html">The Harness Designed to Shrink</a> <span class="badge-bezier" title="Interactive diagram">&#x2B24;</span></li></ul></div></div>
+    <div class="index-footer">&#x254C;&#x254C; 39 articles &#x254C;&#x254C;</div>
+  </div>
+  <script src="js/bezier-core.js"></script>
+  <script>
+    // Hero animation: flowing interconnected Bézier curves
+    document.addEventListener('DOMContentLoaded', function() {
+      var canvas = document.getElementById('hero-canvas');
+      var container = canvas.parentElement;
+      var B = Bezier;
+      var mouse = { x: -1, y: -1 };
+
+      container.addEventListener('mousemove', function(e) {
+        var r = container.getBoundingClientRect();
+        mouse.x = e.clientX - r.left;
+        mouse.y = e.clientY - r.top;
+      });
+      container.addEventListener('mouseleave', function() {
+        mouse.x = -1; mouse.y = -1;
+      });
+
+      // Generate a set of flowing curves
+      var curves = [];
+      var colors = [B.palette.teal, B.palette.coral, B.palette.blue, B.palette.purple, B.palette.yellow, B.palette.green];
+      for (var i = 0; i < 12; i++) {
+        curves.push({
+          color: colors[i % colors.length],
+          speed: 0.15 + Math.random() * 0.25,
+          phase: Math.random() * Math.PI * 2,
+          amp: 0.15 + Math.random() * 0.3,
+          yBase: 0.2 + Math.random() * 0.6,
+        });
+      }
+
+      B.animate(canvas, container, function(ctx, w, h, time) {
+        B.clear(ctx, w, h);
+        B.drawGrid(ctx, w, h, 50);
+
+        curves.forEach(function(c) {
+          var t = time * c.speed + c.phase;
+          var yBase = c.yBase * h;
+          var amp = c.amp * h * 0.4;
+
+          var p0 = { x: -20, y: yBase + Math.sin(t) * amp };
+          var p1 = { x: w * 0.33, y: yBase + Math.sin(t + 1.2) * amp };
+          var p2 = { x: w * 0.66, y: yBase + Math.cos(t + 0.8) * amp };
+          var p3 = { x: w + 20, y: yBase + Math.sin(t + 2.0) * amp };
+
+          // Mouse influence
+          if (mouse.x > 0) {
+            var mx = mouse.x, my = mouse.y;
+            [p1, p2].forEach(function(p) {
+              var dx = p.x - mx, dy = p.y - my;
+              var d = Math.sqrt(dx*dx + dy*dy);
+              if (d < 150) {
+                var force = (150 - d) / 150 * 30;
+                p.x += (dx / d) * force;
+                p.y += (dy / d) * force;
+              }
+            });
+          }
+
+          B.drawCurve(ctx, [p0, p1, p2, p3], 80, B.withAlpha(c.color, 0.08), 3, 15);
+          B.drawCurve(ctx, [p0, p1, p2, p3], 80, B.withAlpha(c.color, 0.35), 1.5, 8);
+        });
+
+        // Floating dots at intersections
+        for (var i = 0; i < 6; i++) {
+          var angle = time * 0.3 + i * 1.05;
+          var px = w * (0.15 + 0.7 * ((Math.sin(angle * 0.7 + i) + 1) / 2));
+          var py = h * (0.2 + 0.6 * ((Math.cos(angle * 0.5 + i * 1.3) + 1) / 2));
+          var pulse = 0.4 + 0.6 * ((Math.sin(time * 2 + i) + 1) / 2);
+          B.drawDot(ctx, {x: px, y: py}, 2 + pulse, B.withAlpha(colors[i], 0.5 * pulse), 8 * pulse);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

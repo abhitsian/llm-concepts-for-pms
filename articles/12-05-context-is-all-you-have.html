@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Context Is All You Have</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">599 words</div><h1>Context Is All You Have</h1><div class="article-subtitle">Part 5 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
+<p>Your AI doesn’t remember anything. Yesterday’s conversation is gone. Last week’s preferences, forgotten. Every interaction starts from zero, &amp; the only thing the model knows is whatever you stuff into its context window before it generates a response. When it feels like the AI “remembers” earlier conversation, that content is still sitting in the window, re-read with every new response. When the conversation ends or the context overflows, it’s gone.</p>
+<p>LLMs are goldfish with enormous working memory — they can process vast amounts of information right now but can’t carry anything forward.</p>
+<p>Context is the most constrained resource in AI products. It’s bounded — models have maximum window sizes. It’s expensive — every token costs money on every request. &amp; it’s ephemeral — gone after each interaction. System prompts, user messages, retrieved documents, conversation history all compete for limited space. This forces hard tradeoffs that are really product decisions disguised as technical choices. System prompt size, history length, retrieval volume, summary vs. verbatim — every one shapes the user experience, even though they look like engineering parameters.</p>
+<h2 id="search-over-inject">Search Over Inject</h2>
+<p>The naive approach is giving the AI everything it might need, all the time. User profile, company docs, previous conversations — just pack it in. This fails fast. Costs balloon, &amp; too much context actually hurts quality cuz the model gets distracted by irrelevant information.</p>
+<p>The better pattern is search over inject. Store liberally — keep everything in your databases; storage is cheap. Search intelligently — build systems that identify what’s relevant to this specific request using embeddings, keywords, recency signals. Inject selectively — put only the relevant subset into context. Memory lives outside the model. Context is a curated window into that memory, &amp; the curation is where the product intelligence lives.</p>
+<h2 id="building-continuity-from-statelessness">Building Continuity from Statelessness</h2>
+<p>If the model can’t remember, how do you create products that feel continuous? External memory systems store preferences &amp; history in databases, then inject relevant memories into each request. Compression summarizes long conversation histories into compact representations — preserving signal while reducing token cost. User profiles inject relevant information about who someone is before the model responds. Preference loops capture corrections &amp; feed them into future interactions, so the AI appears to improve over time cuz your surrounding system is learning even though the model itself isn’t.</p>
+<p>Ppl expect continuity. Explicit memory features let users say “remember I prefer bullet points,” which gets stored &amp; injected later. Implicit learning observes behavior &amp; infers preferences. Transparency about what the AI “remembers” — letting users see &amp; edit stored context — builds trust. The goal is an illusion of persistent relationship from a stateless system. The quality of that illusion is a massive differentiator.</p>
+<p>Anyone can call the same API. The models are commoditized. Differentiation lives in how you manage context — retrieval systems, injection logic, compression strategies, memory architecture. Products with sophisticated context management feel smarter cuz they’re better at deciding what the AI should know for any given interaction. &amp; this compounds: more user data means better curation means better responses means more engagement means more data. The flywheel is in the context layer, not the model layer.</p>
+<p>Good context management isn’t about fitting more in — it’s about keeping the wrong things out. Irrelevant information doesn’t just waste tokens; it actively makes the AI worse. The teams that obsess over what not to include end up with products that feel dramatically smarter than competitors trying to cram in as much as possible.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="11-07-the-temperature-dial.html">&larr; The Temperature Dial</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="13-06-evals-are-the-new-ab-tests.html">Evals Are the New A/B Tests &rarr;</a>
+</nav>
+  
+</body>
+</html>

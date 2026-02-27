@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your AI Can See Now</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">614 words</div><h1>Your AI Can See Now</h1><div class="article-subtitle">Part 17 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=4nTWeAZjPLXluBVWqpvUu,ZfqIyfK24t5w3nMKDkKUgg">View diagram: Multimodal Inputs</a>
+<figcaption aria-hidden="true">Multimodal Inputs</figcaption>
+</figure>
+<p>The “L” in LLM stands for language, &amp; for a while that label was accurate. Text in, text out. But the most capable models shipped recently broke that contract. GPT-4V, Claude, Gemini — they accept images, PDFs, charts, screenshots, handwritten notes, &amp; in some cases audio &amp; video as native inputs. The text box has been joined by a camera, a microphone, &amp; a file uploader. The term is multimodal, &amp; the product implications run deep.</p>
+<p>In practice, you can send a photo of a whiteboard &amp; get structured text. Screenshot a UI &amp; get code that reproduces it. Upload a quarterly report chart &amp; get trend analysis. Photograph handwritten notes &amp; get clean transcription. The vision &amp; language capabilities are integrated — the model reasons across both simultaneously, so “what’s wrong with this UI layout?” becomes answerable. Every surface in your product that currently accepts only text becomes a candidate for richer input: receipt photos for expense tools, product defect images for support, scanned contracts for legal workflows, designer mockups turned into working front-end code. Each of these used to require a separate ML pipeline. Multimodal models collapse them into one capability behind the same API you already use for text.</p>
+<h2 id="voice-cost">Voice &amp; cost</h2>
+<p>Voice is a different dimension of multimodal with its own design constraints. Real-time voice transforms the interaction from typing to talking — closer to a fundamental rethink than a UX variation. Text is asynchronous; voice is synchronous, introducing turn-taking, interruption handling, ambient noise, &amp; tonal information that text strips away. A user saying “that’s fine” in a flat tone means something different than the same words typed. LLM-powered voice differs from Siri &amp; Alexa-era assistants cuz the model can sustain extended, contextual conversation rather than responding to isolated commands. The design space is wide open.</p>
+<p>The cost math shifts too. An image gets tokenized into hundreds or thousands of tokens — a high-res image can cost as much as several pages of text. Video is dramatically worse; even short clips processed frame by frame can exhaust a context window &amp; run up costs fast. This creates product decisions that didn’t exist before: do you sample one frame per second or process every frame? Downscale images for cost? Cap uploads? These need deliberate answers, not ones discovered in the first month’s API bill.</p>
+<p>Reliability boundaries matter for scoping. Current models are strong at OCR — reading signs, documents, screenshots, handwriting. Chart interpretation works well. UI analysis is surprisingly capable, identifying components, layout patterns, even usability issues. But precise spatial reasoning is weak, esp exact positions or measurements. Counting objects in cluttered scenes is unreliable. Small text in large images gets missed. Anything requiring pixel-level precision is beyond consistent reach. PMs need to know where the reliability cliff is, cuz a feature that works on 70% of inputs &amp; fails silently on 30% is worse than not shipping it.</p>
+<p>One shift easy to overlook — multimodal models change what a “document” is to the AI. Before vision, sending a PDF meant extracting text first, losing formatting along the way. Now you send PDF pages as images. The model sees what a human sees — layout, tables, figures, footnotes. The preprocessing tax that document-heavy AI products have been paying drops to near zero, &amp; questions like “what does the chart on page 3 show” work directly rather than requiring separate extraction pipelines.</p>
+<p>The input surface went from a text box to something closer to the full range of human communication. The models can see now. The harder question is figuring out what’s worth showing them.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="22-14-reasoning-models-changed-the-ceiling.html">&larr; Reasoning Models Changed the Ceiling</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="24-18-the-interface-broke-free.html">The Interface Broke Free &rarr;</a>
+</nav>
+  
+</body>
+</html>

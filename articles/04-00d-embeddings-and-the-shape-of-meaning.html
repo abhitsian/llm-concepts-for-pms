@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Embeddings &amp; the Shape of Meaning</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">616 words</div><h1>Embeddings &amp; the Shape of Meaning</h1><div class="article-subtitle">Part 0d of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=50vIye0fz3iX-rexbfc5U,-VTmxYvJ4l_hcqlHfKFDzA">View diagram: Embeddings &amp; Semantic Search</a>
+<figcaption aria-hidden="true">Embeddings &amp; Semantic Search</figcaption>
+</figure>
+<p>Take the phrase “happy dog.” Now take “joyful puppy.” Different words, same meaning. Now take “tax policy.” Completely unrelated. You know this instantly, but computers have historically been terrible at it. Keyword search would tell you “happy dog” &amp; “joyful puppy” have zero words in common &amp; therefore aren’t related. This is the gap that embeddings close.</p>
+<p>An embedding is what you get when you ask an AI model to convert text into a list of numbers — a vector. These aren’t random numbers. They encode meaning, not specific words. “Happy dog” &amp; “joyful puppy” end up as nearly identical vectors cuz they mean nearly the same thing. “Tax policy” ends up somewhere entirely different. Texts that are semantically close become numerically close; texts that are unrelated become numerically distant. The model has, in effect, given meaning a shape — a position in high-dimensional space where proximity equals similarity.</p>
+<p>This unlocks something traditional search never could: search by concept instead of keyword. A customer typing “can’t log in” won’t match a help article titled “authentication troubleshooting” — no overlapping words. But their embeddings sit close together, cuz the meaning overlaps even though the words don’t. This is called semantic search, &amp; it’s why modern AI products can find relevant information in ways that feel almost spookily good. It’s not magic. It’s geometry — measuring the distance between meanings.</p>
+<h2 id="vector-databases-the-retrieval-layer">Vector databases &amp; the retrieval layer</h2>
+<p>To make this useful at scale, you need somewhere to store embeddings. You take all your documents — help articles, product docs, internal wikis, whatever — convert each one into a vector, &amp; store them in a vector database. When a user asks a question, you convert their question into a vector too, then find the stored vectors closest to it. The closest vectors point to your most relevant documents. The entire operation is a nearest-neighbor search in number space.</p>
+<p>This is the engine behind RAG — Retrieval-Augmented Generation — the pattern where you search your own data for relevant context, then feed that context to the LLM alongside the user’s question. The model gets to answer using your specific information, not just its training data. Embeddings are what make the “retrieval” part of RAG work. Without them, you’re back to keyword matching, which breaks every time a user phrases something differently than your documentation authors did.</p>
+<p>For PMs, embeddings are the invisible infrastructure behind any AI feature that touches your company’s data. Knowledge base search, support bots that pull from your docs, product recommendations, “find similar” features — all running on embeddings underneath. You don’t need to understand the linear algebra, but you need to know this layer exists cuz it has its own cost (embedding calls cost money &amp; add latency), its own quality dimension (bad embeddings mean bad retrieval mean bad answers), &amp; its own maintenance burden (when docs change, embeddings need regenerating, or search results go stale). Embeddings also quietly power semantic caching — if a new question is close enough to a cached one, serve the cached response instead of burning another LLM call — &amp; clustering, where you group similar support tickets or surface patterns in feedback without manual rules.</p>
+<p>The mental model is simple: embeddings turn meaning into math. Every concept gets a location, &amp; similar concepts live nearby. That single primitive — meaning as position — is what makes it possible for AI products to work with messy, inconsistently worded, real-world language instead of demanding that everyone use the exact right keywords. It’s one of the quietest &amp; most load-bearing layers in the stack.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="03-00c-training-vs-inference.html">&larr; Training vs. Inference</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="05-00e-three-ways-to-customize-an-llm.html">Three Ways to Customize an LLM &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/embeddings.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    EmbeddingsDiagram(canvas, container);
+  });
+</script>
+</body>
+</html>

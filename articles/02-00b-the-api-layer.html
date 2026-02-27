@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The API Layer</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">799 words</div><h1>The API Layer</h1><div class="article-subtitle">Part 0b of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=fY0jXaP00ziKm5TMTUSxy,fWlzd4AqROy1MuVKs7HXGg">View diagram: The API Layer</a>
+<figcaption aria-hidden="true">The API Layer</figcaption>
+</figure>
+<p>When a user types something into your AI feature &amp; hits enter, what actually happens? Not the product-level abstraction — the mechanical reality. Your product sends a message over the internet to someone else’s computer. That computer runs the message through a model. The model generates a response. The response comes back. You display it. That round trip is an API call, &amp; understanding it is the foundation of every product decision you’ll make in this space.</p>
+<p>An API — Application Programming Interface — is how software talks to other software. In this case, your application is talking to a model provider: OpenAI, Anthropic, Google, or whoever’s model you’re using. Think of it like calling a contractor. You describe the job, the contractor does the work, they send you the result, &amp; you get a bill. Every single time. There’s no retainer, no flat fee, no “unlimited usage” plan at the infrastructure level. Every interaction is a discrete transaction with a discrete cost.</p>
+<h2 id="anatomy-of-a-call">Anatomy of a Call</h2>
+<p>Here’s what your product actually sends: the prompt — the text input, including whatever system instructions &amp; context your application has assembled — plus a set of settings. Which model to use, how creative the response should be (a parameter called temperature, covered in article 07), the maximum length of the response. The provider receives this, runs it through the model — a process called inference — &amp; the model generates a response token by token, each one predicted from everything that came before it. When it’s done, the provider sends back two things: the generated text &amp; a usage report showing exactly how many tokens were consumed, both input &amp; output. That usage report is your bill.</p>
+<p>Four things are true about every single one of these calls. First, it costs money — you pay per token, for what you send &amp; what you get back. Article 01 goes deep on the economics. Second, it takes time. This delay — the gap between sending the request &amp; receiving the response — is called latency, &amp; it matters more in AI products than almost anywhere else in software. Generating text takes real computation. Depending on the model &amp; the task, you’re looking at anywhere from half a second to thirty seconds or more. Users notice. They notice a lot. Third, it can fail. The provider might be overloaded, you might hit a rate limit — a cap on how many requests you can make per minute — or the network might simply hiccup. Your product needs to handle all of these gracefully. Fourth, the output varies. Send the exact same input twice &amp; you can get different responses each time. This non-determinism is fundamental to how these models work, &amp; article 04 explores why.</p>
+<p>These four properties — cost, latency, failure, variation — are what separate LLM calls from traditional software operations. In conventional software, calling a function is instant &amp; free. You can make fifty database queries per page load without thinking twice. You cannot make fifty LLM calls per page load. Each call is a considered expenditure of money &amp; time, &amp; that constraint shapes everything — feature design, architecture, user experience. The articles that follow explore each of these dimensions, but the underlying mechanic is always the same: your product sends a request, waits, pays, &amp; hopes the response is good.</p>
+<h2 id="the-provider-relationship">The Provider Relationship</h2>
+<p>There’s one more thing worth internalizing early. When your product calls an LLM API, you’re renting someone else’s model. You don’t own it. You don’t control it. The provider can update the model, change its behavior, deprecate the version you depend on, or raise prices — &amp; your product’s core behavior shifts accordingly. This is a dependency relationship unlike anything most software teams are used to. A database doesn’t change how it interprets queries on a Tuesday afternoon. An LLM provider might. Articles 10 &amp; 12 explore the strategic &amp; architectural implications of this dependency, but the basic fact is worth carrying with you from the start: the intelligence at the center of your product lives on someone else’s servers, runs on someone else’s schedule, &amp; costs whatever they decide to charge.</p>
+<p>A PM working on an AI product doesn’t need to understand the math inside the model. But they absolutely need to understand this layer — the request, the wait, the cost, the variability, the dependency. Every product question you’ll face — why is this feature slow, why did our costs spike, why did the output change, why can’t we just call the model more — traces back to the mechanics of the API call. This is the plumbing. Everything else is built on top of it.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="01-00a-what-is-an-llm-actually.html">&larr; What Is an LLM, Actually?</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="03-00c-training-vs-inference.html">Training vs. Inference &rarr;</a>
+</nav>
+  
+</body>
+</html>

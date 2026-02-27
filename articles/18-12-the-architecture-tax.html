@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Architecture Tax</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">586 words</div><h1>The Architecture Tax</h1><div class="article-subtitle">Part 12 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
+<p>Every LLM architecture choice carries an ongoing tax — not the one-time implementation cost in sprint planning, but a per-request, per-user, per-day levy that compounds quietly until someone looks at the bill &amp; asks what happened. A hundred dollars a day in retrieval costs seems fine when you’re excited about the prototype. Then usage grows 10x, the architecture is load-bearing, &amp; changing it is expensive.</p>
+<p>RAG — retrieval-augmented generation — carries a context tax. Retrieve documents, stuff them into the context window, generate a grounded response. Every retrieval adds tokens to every request. Five chunks of 500 tokens each means 2,500 tokens of context before the user has said anything. There’s a hidden multiplier: bad retrieval means irrelevant context, which means the model processes garbage &amp; produces worse outputs. You’re paying tokens for noise. For stable knowledge, put it in the system prompt or fine-tune it into the model — you pay once rather than per retrieval. RAG earns its tax when the knowledge base is large, changing frequently, &amp; questions require specific factual grounding. It’s overpaying when queries are high-frequency &amp; most don’t actually need retrieved context.</p>
+<p>Fine-tuning is a different tax structure — upfront. You bake knowledge into the model through training: no runtime retrieval, lower per-query costs. But you’re coupled to a specific model version. When the foundation model updates, your fine-tune may need retraining. It makes sense with stable domain knowledge, consistent output requirements, &amp; high volume to amortize the upfront cost. Agent architectures carry the most unpredictable tax: agents loop — plan, execute, observe, repeat. Each loop costs tokens, &amp; the count varies. A simple task might take two iterations, a complex one twenty. Cost variance explodes, &amp; failure modes like indefinite loops burn tokens on dead ends. You need circuit breakers, which means some tasks just fail.</p>
+<h2 id="the-compounding-effect">The Compounding Effect</h2>
+<p>Caching is the great tax reducer. If the same query appears twice, serve the cached response at zero token cost. A 50% hit rate halves effective cost; 90% is a 10x reduction. The investment in cache infrastructure &amp; invalidation logic is real, but for high-volume applications the payback is short.</p>
+<p>System prompt economics deserve special attention cuz the system prompt runs on every single request. A 1,000-token system prompt at one million requests/month burns one billion tokens. At $10 per million tokens, that’s $10,000/month before any user input or retrieved context. Trimming 200 tokens saves $2,000/month, ongoing. System prompts tend to accumulate — each feature adds instructions, nobody removes old ones, the prompt bloats. Every token should justify its presence. Run a quarterly audit.</p>
+<p>Latency functions as a hidden cost multiplier. Slow responses aren’t just bad UX — users who wait too long retry (doubling cost), send follow-up messages (adding queries), or abandon entirely (meaning you paid for tokens that delivered zero value). Faster responses frequently mean lower total costs, not just better experience.</p>
+<p>All these taxes compound — that’s what catches ppl off guard. Layer retrieval tokens plus a bloated system prompt plus agent loops plus no caching, &amp; individually modest decisions combine into a cost structure that eats your margins. The time to think about architecture taxes is before shipping, when choices are cheap to change, &amp; then again once real usage data shows where costs concentrate. These aren’t engineering details to revisit someday. They’re cost structure decisions that shape whether the product is viable at the scale you’re trying to reach.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="17-10-build-vs-buy-in-llm-world.html">&larr; Build vs. Buy in an LLM World</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="19-15-open-models-and-the-race-to-zero.html">Open Models & the Race to Zero &rarr;</a>
+</nav>
+  
+</body>
+</html>

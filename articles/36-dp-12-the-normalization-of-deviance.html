@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Normalization of Deviance</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">554 words</div><h1>The Normalization of Deviance</h1><div class="article-subtitle">Part 12 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=fjuB3VJPtdEZieRBg3ldx,MKUtdg5D0rm7J3lbsMtIDQ">View diagram: The Normalization of Deviance</a>
+<figcaption aria-hidden="true">The Normalization of Deviance</figcaption>
+</figure>
+<p>Before the Challenger disaster in 1986, NASA engineers knew the O-ring seals on the solid rocket boosters behaved unpredictably in cold weather. They’d seen anomalies on previous launches. But each time, the shuttle flew &amp; returned safely. The anomaly became expected, then acceptable, then invisible. Sociologist Diane Vaughan called this “the normalization of deviance” — when a practice that violates accepted standards becomes routine cuz nothing bad has happened yet. Simon Willison borrowed the concept for AI product development, &amp; the parallel is uncomfortably precise.</p>
+<p>Teams shipping AI features without evals. Deploying prompt changes straight to production without version control. Letting models make customer-facing decisions without audit trails. Skipping human review on AI-generated content cuz “it’s been fine so far.” Each of these is a recognized bad practice. Each of them works, repeatedly, until the day it doesn’t. &amp; by then the shortcuts aren’t individual choices — they’re institutional habits embedded in deployment pipelines, team norms, &amp; product roadmaps that assume the current level of risk is the actual level of risk.</p>
+<h2 id="why-probabilistic-systems-make-this-worse">Why Probabilistic Systems Make This Worse</h2>
+<p>With deterministic software, failures are usually obvious &amp; reproducible. A bug either exists or it doesn’t. You can write a test, catch it, fix it. With probabilistic systems, failures are statistical. A model that hallucinates 2% of the time will appear reliable across dozens of manual spot checks. The failure mode isn’t a crash — it’s a slow, silent degradation of accuracy that surfaces only in aggregate or in the exact wrong moment. You can’t catch it by looking; you catch it by measuring.</p>
+<p>This means the normalization of deviance is especially insidious in AI product development. The team that skips building an eval suite isn’t ignoring a blinking red warning. They’re ignoring a risk that’s genuinely invisible at the scale of individual interactions. The prompt that works great in testing &amp; demos will produce subtly wrong outputs for 3% of production users, &amp; without systematic measurement, nobody notices until a customer does — publicly.</p>
+<h2 id="building-infrastructure-before-you-need-it">Building Infrastructure Before You Need It</h2>
+<p>The pattern here is straightforward but culturally difficult: build the safety infrastructure before the failure that justifies it. Version control for prompts &amp; system configurations. Eval suites that run on every change, measuring regression across representative inputs. Audit logs that capture what the model received, what it produced, &amp; what action was taken. Human review workflows with clear escalation criteria rather than ad hoc spot checks.</p>
+<p>The difficulty isn’t technical. These are solved problems with known implementations. The difficulty is organizational. Every one of these practices adds friction to a shipping cadence. Every one feels unnecessary when things are going well. The PM who insists on eval coverage before deploying a prompt change is slowing down a team that has never seen a prompt change cause a problem — &amp; that’s exactly the dynamic Vaughan described at NASA.</p>
+<p>The question for AI product teams isn’t whether they’ve experienced a failure from skipped safety practices. It’s whether they’ve built the measurement systems that would detect one. If the answer is no, then “it’s been fine so far” is not data. It’s the absence of data. &amp; that absence is the most dangerous signal of all.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="35-dp-11-slop-and-the-quality-collapse.html">&larr; Slop & the Quality Collapse</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="37-dp-13-async-agents-changed-the-clock.html">Async Agents Changed the Clock &rarr;</a>
+</nav>
+  
+</body>
+</html>

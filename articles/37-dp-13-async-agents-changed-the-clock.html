@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Async Agents Changed the Clock</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">582 words</div><h1>Async Agents Changed the Clock</h1><div class="article-subtitle">Part 13 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=rlYVYckgpzTRlplVYee2-,M13Rd1cNZprK1n5ZFxUzlg">View diagram: Async Agents</a>
+<figcaption aria-hidden="true">Async Agents</figcaption>
+</figure>
+<p>Claude Code’s background agents, Devin, OpenAI’s Codex — they share a property that breaks the interaction model most AI products were built on. They don’t need you watching. You describe a task, fire it off, &amp; come back later to a pull request, a report, or a completed workflow. The human isn’t in the loop during execution. The human is the reviewer after the fact.</p>
+<p>This sounds like a minor UX shift. It’s a fundamental architectural change. For the past three years, the dominant model for human-AI interaction has been synchronous co-piloting. You type, the model responds. You edit, the model adjusts. The feedback loop is tight, measured in seconds. The human maintains control through continuous presence — guiding, correcting, steering in real time. Async agents dissolve that loop entirely. The model operates on its own timeline, making hundreds of intermediate decisions without human input, &amp; presents a finished artifact for review.</p>
+<h2 id="from-co-pilot-to-reviewer">From Co-Pilot to Reviewer</h2>
+<p>The role shift is significant. A co-pilot relationship is collaborative — the human &amp; the model think together, building iteratively. A reviewer relationship is evaluative — the human assesses completed work &amp; decides whether to accept, reject, or request changes. These require different skills, different interfaces, &amp; different trust calibrations.</p>
+<p>Reviewing AI-completed work is harder than guiding AI work-in-progress. When you’re co-piloting, you see each step &amp; catch errors as they emerge. When you’re reviewing, you’re looking at a finished product &amp; trying to infer whether the intermediate reasoning was sound. Did the agent make the right architectural choices? Did it handle edge cases you didn’t specify? Did it take shortcuts that work now but create debt later? The surface might look correct while the structure underneath is fragile.</p>
+<p>This is the trust problem async agents introduce. Trust in synchronous AI is incremental — you build it through repeated small interactions where you can verify each step. Trust in async AI has to be granted upfront &amp; verified after the fact. You’re trusting the agent to make good decisions in your absence, &amp; your only evidence is the output.</p>
+<h2 id="products-without-the-user-in-the-loop">Products Without the User in the Loop</h2>
+<p>The product design implications cascade. Notification systems become critical — when should the agent interrupt you versus proceed on its own? Diff &amp; review interfaces need to surface not just what changed but why, showing the agent’s reasoning at key decision points. Rollback &amp; undo capabilities move from nice-to-have to essential, cuz the blast radius of a bad autonomous decision is larger than a bad suggestion you could have ignored.</p>
+<p>Pricing models shift too. Synchronous AI usage correlates roughly with user time — you use it while you’re working. Async agents decouple usage from attention. An agent might run for hours on a task you spent thirty seconds describing. The compute cost &amp; the user’s perception of value diverge in ways that seat-based or usage-based pricing wasn’t designed to handle.</p>
+<p>The deeper question for PMs is what “using the product” means when the product works while you’re away. Session length, active usage time, interactions per session — the metrics that define engagement for synchronous tools become meaningless. The valuable signal is whether ppl trust the output enough to ship it without heavy modification. Acceptance rate, edit distance, time-to-approval — these are the metrics of the async agent era, &amp; most product teams haven’t built the instrumentation to track them yet.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="36-dp-12-the-normalization-of-deviance.html">&larr; The Normalization of Deviance</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="38-dp-14-the-memory-problem-nobody-solved.html">The Memory Problem Nobody Solved &rarr;</a>
+</nav>
+  
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subagents &amp; the Swarm</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">588 words</div><h1>Subagents &amp; the Swarm</h1><div class="article-subtitle">Part 5 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=LMnM9KP-7iHSZbzAGVnUq,O2crMjhaNQNCMtudJ4etag">View diagram: Subagents and the Swarm</a>
+<figcaption aria-hidden="true">Subagents and the Swarm</figcaption>
+</figure>
+<p>Claude Code, when faced with a complex task, does something interesting: it spawns subagents. A research subagent searches the codebase &amp; gathers context. A code review subagent examines a diff for issues. An exploration subagent maps out a module’s dependencies. Each subagent runs with its own scoped tools &amp; isolated context window, works its focused subtask, &amp; returns results to the parent orchestrator. The parent synthesizes everything &amp; continues. This is the swarm pattern, &amp; it’s becoming the dominant architecture for capable AI systems.</p>
+<p>The intuition behind it is straightforward. A single agent with one massive context window trying to do everything at once hits practical limits fast. Context gets cluttered with irrelevant information from earlier steps. The model loses track of its own plan. Token costs balloon as the full history rides along on every call. Subagents solve this by decomposition — each one sees only what it needs, operates in a clean context, &amp; returns a compressed result. The parent never has to hold the full detail of every subtask simultaneously.</p>
+<h2 id="orchestration-is-the-new-programming">Orchestration Is the New Programming</h2>
+<p>The shift here is that the orchestration layer — the code that decides what subagents to spawn, what tools each gets, how their results combine, &amp; what happens when one fails — becomes the primary site of engineering. The individual model calls are almost commodity. The value is in the topology: how you wire agents together, what you scope them to, &amp; how you manage the information flow between them.</p>
+<p>This looks a lot like distributed systems design, &amp; it inherits similar tradeoffs. Parallel execution is faster but harder to coordinate. Sequential execution is simpler but slower &amp; can’t exploit the natural parallelism in many tasks. Most production systems use a hybrid: parallelize independent subtasks (search multiple files simultaneously, run tests while generating documentation) &amp; sequence dependent ones (gather context before writing code, write code before reviewing it).</p>
+<p>Context isolation is a feature, not an accidental limitation. When a subagent only sees the files relevant to its task, it can’t get confused by unrelated code. It can’t accidentally reference a variable from a different module. Its context window is spent entirely on the problem at hand. This scoping acts as a form of attention management — the architectural equivalent of closing your browser tabs before doing focused work.</p>
+<h2 id="why-swarms-beat-monoliths">Why Swarms Beat Monoliths</h2>
+<p>Monolithic agents — one model, one context, one long loop — work fine for simple tasks. Ask it to write a function, it writes a function. But for anything requiring coordination across multiple files, multiple concerns, or multiple steps of reasoning, the monolith degrades. It forgets earlier decisions. It drifts from the plan. It burns tokens carrying context that’s no longer relevant.</p>
+<p>Swarm architectures handle complexity better cuz they mirror how complex work actually gets done: break it into pieces, assign each piece to a focused worker, &amp; have a coordinator stitch the results together. The pattern works for code generation, research synthesis, data analysis, &amp; most multi-step workflows that product teams care about.</p>
+<p>The cost is orchestration complexity. You need to decide task boundaries, manage failure &amp; retries at the subagent level, &amp; handle the case where subagent results conflict. But this is engineering complexity that ppl know how to manage — it’s the same set of problems that come with microservices, MapReduce, &amp; any other divide-and-conquer architecture. The tools are different. The pattern is ancient.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="28-dp-04-mcp-won-because-it-was-boring.html">&larr; MCP Won Because It Was Boring</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="30-dp-06-the-jevons-paradox-hit-ai.html">The Jevons Paradox Hit AI &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/subagents.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    SubagentsDiagram(canvas, container);
+  });
+</script>
+</body>
+</html>

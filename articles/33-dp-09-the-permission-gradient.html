@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Permission Gradient</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">602 words</div><h1>The Permission Gradient</h1><div class="article-subtitle">Part 9 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=U_XlHNvSytJ4YsIJzBzCm,45GQKcEq7XHvzU4u5sH7OA">View diagram: The Permission Gradient</a>
+<figcaption aria-hidden="true">The Permission Gradient</figcaption>
+</figure>
+<p>Claude Code’s permission model established what is becoming the default template for AI tool trust: read freely, write with approval, execute with confirmation, push with explicit consent. Each tier escalates the consequence of failure &amp; correspondingly escalates the level of human oversight. This layered approach reflects something fundamental about how AI agents should interact with real systems — the degree of autonomy should scale with the reversibility of the action.</p>
+<p>Reading a file can’t break anything. Writing a file can introduce bugs but is easily reverted. Executing a command can change system state in ways that are harder to undo. Pushing code to a shared repository affects other people. The permission tiers map directly to these consequence levels, &amp; that mapping is the core design insight.</p>
+<p>The two failure modes in AI permissions are obvious in retrospect. Blanket “allow all” treats every AI action as equally safe, which works fine until the agent runs <code>rm -rf</code> on the wrong directory or pushes broken code to main. Blanket “confirm everything” treats every action as equally dangerous, which buries the user in approval dialogs until they start clicking “yes” without reading — which is functionally the same as allow-all, just with extra steps &amp; more annoyance.</p>
+<h2 id="designing-the-gradient">Designing the Gradient</h2>
+<p>The hard design problem isn’t identifying that a gradient should exist. It’s deciding which rung each specific action belongs on. Consider an AI assistant that can send emails on your behalf. Reading your inbox is low-consequence. Drafting a reply for your review is medium-consequence. Sending that reply is high-consequence. But sending a routine calendar acceptance is low-consequence even though it’s technically “sending an email.” The granularity of the permission model has to match the granularity of consequence, &amp; consequence depends on context.</p>
+<p>This is where most AI product permission systems fall short. They model permissions at the action-type level (can the AI send emails: yes/no) rather than at the consequence level (can the AI send a routine reply vs. a message to the CEO vs. a mass communication). The better design evaluates the specific instance, not just the category.</p>
+<p>The trust ladder also needs to move in both directions. Users should be able to grant broader permissions as they build confidence in the tool’s judgment, &amp; the tool should be able to request elevated permissions when it encounters an action outside its current authorization. The ratchet should feel natural — more like gradually trusting a new team member with bigger responsibilities &amp; less like configuring a firewall.</p>
+<h2 id="the-ux-challenge">The UX Challenge</h2>
+<p>The deepest challenge is making the permission gradient feel lightweight rather than obstructive. Every confirmation dialog is a tax on the user’s attention. Too many &amp; ppl develop “approval fatigue,” rubber-stamping requests without evaluation — which defeats the entire purpose of the permission system. The design has to minimize interruptions for low-risk actions while ensuring high-risk actions genuinely receive human attention.</p>
+<p>Batching helps. Instead of confirming each file write individually, present a summary of planned changes for review. Progressive disclosure helps — show the brief version by default, let the user expand for details. Sensible defaults help — start with conservative permissions cuz a user who has never seen the tool fail will underestimate the risk of permissive settings.</p>
+<p>The permission gradient is infrastructure that every AI product taking real-world actions will need. The pattern is clear. The implementation details — which actions go on which rung, how users adjust the levels, how to avoid approval fatigue — are where the actual product design work lives.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="32-dp-08-task-length-doubled-every-seven-months.html">&larr; Task Length Doubled Every 7 Months</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="34-dp-10-hooks-not-hope.html">Hooks Not Hope &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/permission-gradient.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    PermissionGradientDiagram(canvas, container);
+  });
+</script>
+</body>
+</html>

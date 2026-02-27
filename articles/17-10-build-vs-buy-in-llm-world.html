@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Build vs. Buy in an LLM World</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">600 words</div><h1>Build vs. Buy in an LLM World</h1><div class="article-subtitle">Part 10 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
+<p>The old build vs. buy framework had clean logic. Building was expensive — hire engineers, burn months. Buying was cheap — pay a vendor, move faster. The calculus was time &amp; money, mostly about whether your use case was weird enough to justify custom work.</p>
+<p>LLMs scrambled this. Building got cheaper — wrapping an API takes days, not months. The hard engineering lives inside the foundation model; your code is mostly orchestration. But buying got complicated in ways the old framework doesn’t account for. What are you buying when every competitor has access to the same underlying models? The prompt is copyable. The model is a commodity.</p>
+<p>Three questions matter now. First: where does value live? In traditional software, it lived in code. In LLM software, it’s migrated — to data (what you feed the model), to prompts (how you instruct it), to orchestration (how you chain calls &amp; handle failures), to domain expertise (what you know that competitors don’t), &amp; to distribution (where you reach users). Most of these aren’t “built” in any traditional sense. They’re accumulated &amp; discovered through iteration.</p>
+<p>Second: what’s proprietary? Foundation models aren’t — everyone uses the same ones. API wrappers are barely defensible. Domain-specific prompts are somewhat proprietary but not impossible to reverse-engineer. Curated data pipelines are harder to replicate. Integrated workflows sit at the top — requiring deep user understanding, tight system coupling, &amp; organizational knowledge competitors can’t easily copy. The proprietary surface has shifted: code matters less, data &amp; workflows matter more.</p>
+<p>Third: what’s the cost structure? Raw models mean low fixed cost but ongoing variable cost. Buying a wrapper adds markup on that same variable cost. Buying infrastructure means higher fixed cost but lower variable. The cheapest long-term path often isn’t the fastest short-term path.</p>
+<h2 id="the-wrapper-tax-when-to-build-vs.-buy">The Wrapper Tax &amp; When to Build vs. Buy</h2>
+<p>Many AI products today are thin wrappers around foundation model APIs — a prompt, some retrieval, a nice UI, &amp; a markup on tokens. This worked early when any productized interface felt magical. It’s getting harder: users learn they can call ChatGPT directly, foundation providers keep moving up the stack, &amp; competition drives prices toward cost. The wrapper tax is justified when the vendor has deep domain expertise, proprietary data, or workflow integration you’d struggle to build. It’s waste when you could do the same thing yourself in a weekend.</p>
+<p>Build when data is your moat — don’t let a vendor sit between you &amp; your core asset. Build when you need deep integration with existing systems. Build when margins matter at scale. Buy when you’re still validating whether the feature works at all. Buy when AI enhances rather than defines your product. Buy when the vendor has genuine advantages you can’t replicate.</p>
+<p>Most companies end up hybrid, &amp; this isn’t indecision — it’s rational allocation. Start with vendors for speed, learn what works, identify where value lives, build the parts that matter while continuing to buy the commodity parts.</p>
+<p>Vendor lock-in looks different here. Model lock-in is low — switching requires prompt adjustments, not rewrites. Data lock-in can be high if a vendor accumulates your usage data. Workflow lock-in is the real trap — processes, teams, &amp; UX designed around a vendor’s specific features make switching costs escalate fast. The cost timeline follows a predictable arc: year one the vendor is cheaper, year two depends on scale, year three you’re probably overpaying for high-volume features. Do the math for your specific situation, &amp; keep redoing it.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="16-11-when-not-to-use-an-llm.html">&larr; When Not to Use an LLM</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="18-12-the-architecture-tax.html">The Architecture Tax &rarr;</a>
+</nav>
+  
+</body>
+</html>

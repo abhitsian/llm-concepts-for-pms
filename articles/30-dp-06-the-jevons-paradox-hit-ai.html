@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Jevons Paradox Hit AI</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">583 words</div><h1>The Jevons Paradox Hit AI</h1><div class="article-subtitle">Part 6 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=i6ZbVm2ZcWbXEWpVCsJCB,teBtpCKLi680spzgkepFFg">View diagram: The Jevons Paradox</a>
+<figcaption aria-hidden="true">The Jevons Paradox</figcaption>
+</figure>
+<p>In 1865, William Stanley Jevons noticed something counterintuitive about coal: as steam engines got more efficient, total coal consumption went up, not down. Cheaper energy per unit meant ppl found more uses for energy. Simon Willison pointed out the same dynamic playing out in AI inference. The per-token cost of running large language models dropped roughly 10x per year from 2023 onward. Total industry spending on inference climbed every quarter.</p>
+<p>The mechanism is straightforward. When a GPT-4-class API call cost $0.03 per 1K tokens, you thought carefully about when to call it. When equivalent capability cost $0.001, you stopped thinking about it. You added it to more features. You let the agent loop five times instead of one. You ran speculative calls in parallel &amp; kept the best result. You stuffed 100K tokens of context into every request cuz the marginal cost of a longer prompt became negligible.</p>
+<p>Each of those decisions was individually rational. The unit economics improved. But the volume exploded.</p>
+<h2 id="where-the-money-actually-went">Where the Money Actually Went</h2>
+<p>The concrete pattern looked like this across 2024 &amp; 2025. Teams that budgeted $5K/month for API costs when using GPT-4 switched to cheaper models, briefly saw their bills drop to $2K, then watched costs climb to $15K within six months. The cheaper model enabled agent architectures that weren’t economically viable before — multi-step reasoning chains, retry loops with reflection, parallel candidate generation with ranking passes. Features that product managers had rejected as too expensive suddenly penciled out on a per-call basis, so they got built. The aggregate bill ballooned.</p>
+<p>Coding assistants showed this clearly. Early Copilot-style tools made one completion call per keystroke pause. By late 2025, AI coding tools were running background indexing across entire repositories, spinning up multiple agent threads to explore different implementation approaches, &amp; executing test suites in loops to validate their own output. The cost per individual inference dropped. The number of inferences per developer-hour increased by orders of magnitude.</p>
+<p>Enterprise search followed the same arc. What started as “add an AI summarization layer” became “re-index everything with embeddings, run retrieval-augmented generation on every query, generate follow-up questions automatically, &amp; synthesize across multiple document collections.” Each step was cheap. The pipeline was expensive.</p>
+<h2 id="what-this-means-for-planning">What This Means for Planning</h2>
+<p>The planning error is assuming that model cost improvements translate to budget savings. They translate to capability expansion. If your 2026 product roadmap says “AI costs will decrease as models get cheaper,” you’re probably wrong about the total line item. You’ll build more AI-powered features cuz they become feasible. You’ll use more sophisticated (and token-hungry) architectures cuz they become affordable. You’ll serve more AI-enhanced requests cuz users will expect the features everywhere.</p>
+<p>The correct planning model treats cheaper inference the way you’d treat cheaper compute in the cloud era — as an enabler of more usage, not a source of savings. Budget for the capabilities you’ll build, not the per-unit cost you’ll pay. Set explicit ceilings on total AI spend &amp; make product decisions against those ceilings, rather than assuming the per-token trend line is your financial forecast.</p>
+<p>The Jevons Paradox isn’t a failure of efficiency. It’s what efficiency actually looks like when demand is elastic. AI inference demand turned out to be extremely elastic. Every cost reduction unlocked new use cases, &amp; the new use cases consumed more total compute than the old ones did at higher prices. Plan accordingly.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="29-dp-05-subagents-and-the-swarm.html">&larr; Subagents & the Swarm</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="31-dp-07-vibe-coding-and-the-skill-inversion.html">Vibe Coding & the Skill Inversion &rarr;</a>
+</nav>
+  
+</body>
+</html>

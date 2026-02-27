@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hooks Not Hope</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">594 words</div><h1>Hooks, Not Hope</h1><div class="article-subtitle">Part 10 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=MOLIcA_Fx4T6lHvJgBjnn,nALtASHAWZqn-jkexMQgUw">View diagram: Hooks Not Hope</a>
+<figcaption aria-hidden="true">Hooks Not Hope</figcaption>
+</figure>
+<p>The first generation of AI guardrails lived in prompts. “Do not produce harmful content.” “Always validate your output.” “Check your work before responding.” These are instructions to a probabilistic system, which means they work most of the time &amp; fail unpredictably. The shift to hooks — programmatic pre- &amp; post-execution checks that wrap AI actions in deterministic validation — represents the maturation from hoping the model behaves to enforcing that it does.</p>
+<p>Claude Code’s hook system illustrates the pattern concretely. Before the agent writes a file, a pre-hook can run the linter on the proposed changes. Before it commits, a pre-hook runs the test suite. After a tool call returns, a post-hook validates the output against expected schemas. These checks don’t rely on the model’s judgment. They run as code, outside the model’s control, &amp; they gate whether the action proceeds. The model can be as confident as it wants about its output — if the linter fails, the write doesn’t land.</p>
+<p>This matters cuz prompt-based guardrails degrade under exactly the conditions where guardrails matter most. Complex multi-step tasks, long context windows, unusual edge cases — these are the situations where the model is most likely to produce flawed output &amp; least likely to catch its own mistakes through self-reflection. Telling a model to “double-check for SQL injection vulnerabilities” is worth less than running a static analysis tool on the generated code. One is a suggestion. The other is a gate.</p>
+<h2 id="the-pattern-beyond-code">The Pattern Beyond Code</h2>
+<p>The hooks pattern generalizes far beyond coding tools. Any AI product that takes actions in the real world — sending messages, modifying data, executing transactions, updating records — benefits from wrapping those actions in programmatic validation. An AI email assistant should run drafted responses through a compliance checker before sending. An AI data pipeline should validate output schemas &amp; row counts rather than trusting the model’s transformation logic.</p>
+<p>The key architectural insight is separation of concerns. The AI model handles the creative, generative, judgment-heavy parts of a task — deciding what code to write, what email to draft, what data transformation to apply. The hooks handle the deterministic, verifiable parts — does this code pass tests, does this email comply with policy, does this data match the expected schema. Mixing these responsibilities by asking the model to do both is where systems fail.</p>
+<p>Pre-hooks are particularly valuable cuz they prevent bad actions rather than detecting them after the fact. A post-hook that catches a failed test after the code is written still requires a fix-and-retry cycle. A pre-hook that validates the approach before execution can save the entire cycle. The best hook architectures combine both: pre-hooks to catch predictable failure modes early, post-hooks to validate that the completed action produced the expected result.</p>
+<h2 id="implementation-reality">Implementation Reality</h2>
+<p>The practical challenge is deciding what to hook &amp; how strictly. Every hook adds latency. Every validation gate slows the agent loop. Over-hooking creates the same problem as over-prompting with confirmations — the system becomes so cautious it stops being useful. The design skill is identifying the high-consequence actions where deterministic validation provides genuine safety, &amp; letting lower-consequence actions flow through with lighter checks.</p>
+<p>Hope scales poorly. Code scales well. The organizations building reliable AI products are the ones wrapping AI actions in programmatic validation rather than relying on prompt instructions to keep the system in bounds. The model generates, the hooks verify, &amp; that separation is what makes AI systems trustworthy enough to deploy.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="33-dp-09-the-permission-gradient.html">&larr; The Permission Gradient</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="35-dp-11-slop-and-the-quality-collapse.html">Slop & the Quality Collapse &rarr;</a>
+</nav>
+  
+</body>
+</html>

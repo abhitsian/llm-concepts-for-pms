@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Same Input, Different Output</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">591 words</div><h1>Same Input, Different Output</h1><div class="article-subtitle">Part 4 of the LLM Concepts for Product Managers Series</div><div class="divider">╌╌╌╌</div><hr />
+<p>Run the same query twice. Get two different answers. Do it again, get a third. This breaks ppl’s brains when they first build with LLMs, cuz it violates the most basic assumption in software engineering — that given the same input, you get the same output. Determinism is the bedrock of testable systems. &amp; LLMs just throw it away.</p>
+<p>The reason is mechanical. LLMs generate text by sampling from probability distributions — at each step calculating the likelihood of every possible next token &amp; sampling from that distribution. Run the same prompt again, the model might pick a different token at step 47, &amp; that small divergence cascades into a meaningfully different response. You can dial this down with temperature settings, but you can’t eliminate it. The math doesn’t allow for perfect repetition.</p>
+<h2 id="what-breaks">What Breaks</h2>
+<p>Traditional testing assumes you can define inputs, specify expected outputs, &amp; verify the system produces them every time. None of this works with LLMs. You can’t write a test that says “given this prompt, return exactly this string.” When a user reports a wrong answer, your team can’t re-run the query &amp; see it — they might get a fine one, &amp; now everyone’s confused about whether there was ever a problem. Users who got a great answer yesterday &amp; a mediocre one today for the same question perceive the product as unreliable, even if both answers were technically acceptable.</p>
+<p>The instinct is to fight this — lock it down, force determinism, make it behave like normal software. That instinct is wrong.</p>
+<h2 id="designing-for-variation">Designing for Variation</h2>
+<p>The shift is from identity to equivalence. The question isn’t “did we get the same output?” but “did we get an equivalently good output?” You’re working with ranges, not points. Good output isn’t a single correct answer but a zone of acceptable answers.</p>
+<p>In some contexts, variation is a feature. The regenerate button exists cuz sometimes the second answer is better. Creative tools would be worse if they produced identical outputs. The trick is knowing when variation serves the user &amp; when it undermines them.</p>
+<p>For testing, this means statistical testing over deterministic assertion — “acceptable 95% of the time” across many runs. Semantic evaluation using LLM-as-judge when wording differs. Behavioral testing that checks properties rather than exact strings — “the model should refuse harmful requests” is testable even with variation. Regression baselines tracking quality metrics over time rather than comparing exact outputs.</p>
+<p>Design patterns help with the UX side. Showing multiple options turns variation into a feature. Easy regeneration makes variation acceptable. Saving outputs users like gives control. Highlighting what changed when regenerating helps users understand the nature of the variation.</p>
+<p>Some teams go all-in on reproducibility — locking model versions, fixing seeds, caching responses. It works until the provider updates infrastructure or deprecates your pinned version. Perfect reproducibility creates brittle systems that shatter the moment any dependency shifts.</p>
+<p>That said, regulated industries need auditability, financial calculations need consistency, legal documents can’t vary arbitrarily. The answer isn’t forcing the LLM to be deterministic — it’s deterministic post-processing on LLM outputs, caching approved responses, or not using LLMs for components requiring consistency. Use an LLM to draft the document &amp; a deterministic system to finalize it.</p>
+<p>Variation isn’t a bug — it’s a property of how these systems work. The products that handle it well will feel more capable &amp; more trustworthy than the ones that fight it unsuccessfully or ignore it entirely.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="09-03-the-prompt-is-the-product.html">&larr; The Prompt Is the Product</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="11-07-the-temperature-dial.html">The Temperature Dial &rarr;</a>
+</nav>
+  
+</body>
+</html>

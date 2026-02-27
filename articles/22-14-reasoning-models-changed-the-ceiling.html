@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reasoning Models Changed the Ceiling</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">581 words</div><h1>Reasoning models changed the ceiling</h1><div class="article-subtitle">Part 14 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=ariekfbdPiEQB9p_PoAiA,rbcBJ-izJsFDtr3QvTApeA">View diagram: Standard vs Reasoning Models</a>
+<figcaption aria-hidden="true">Standard vs Reasoning Models</figcaption>
+</figure>
+<p>For most of their short history, LLMs have been pattern matchers — fast, fluent, &amp; capable at tasks that boil down to “given this input, what would a knowledgeable person produce.” But they hit a ceiling on multi-step reasoning. Ask one to work through a logic puzzle with six constraints or debug a race condition across three systems, &amp; you’d watch it produce something structured correctly, with a wrong step buried in the middle that cascaded into a confidently incorrect answer. The model was pattern-matching what thinking looks like.</p>
+<p>Reasoning models changed this. The core idea: let the model think before it answers. OpenAI’s o1 &amp; o3, DeepSeek R1, Claude with extended thinking, &amp; Gemini’s thinking models all generate a hidden scratchpad — working through problems step by step, checking logic, backtracking — before producing visible output. This is test-time compute scaling: instead of making the model smarter through more training data, you give it more compute at the moment it needs to answer. The training teaches it how to reason; inference-time compute lets it actually do it.</p>
+<p>The tradeoff is direct. Reasoning models are slower &amp; more expensive, but they solve problems standard models cannot — multi-step math, logic with interacting constraints, code where early architecture decisions constrain what’s possible later. The ceiling moved from “LLMs can’t do this reliably” to “LLMs can do this if you give them time to think.”</p>
+<h2 id="the-routing-problem">The routing problem</h2>
+<p>For PMs, this creates a new decision: how much thinking each task deserves. A FAQ lookup doesn’t need reasoning. A financial analysis comparing three scenarios across multiple time horizons does. Your product might route different tasks to different tiers — fast &amp; cheap for simple generation, slow &amp; expensive for genuine reasoning. This routing is a product design problem. Get it wrong one way &amp; you burn money on reasoning tokens for tasks that don’t benefit. Get it wrong the other way &amp; your product fails on the tasks where users need it most.</p>
+<p>The cost structure surprises ppl used to standard LLM pricing. With reasoning models, you pay for thinking tokens the user never sees — the output might be one paragraph, but the model generated 10,000 tokens of internal reasoning to produce it. Cost per query can be 10-50x higher, &amp; the output looks the same length. ROI has to be grounded in the value of getting the answer right, not the volume of text produced.</p>
+<p>Reasoning also introduces real latency — not maskable with streaming, cuz the model needs to think before generating. Some models delay the first token by seconds or tens of seconds. Users will wait for a thoughtful answer to a hard question in ways they won’t wait for a greeting, so your UX needs to signal that thinking is happening. The temptation to route everything through reasoning “just to be safe” makes your product slow &amp; expensive for the 80% of queries that are straightforward.</p>
+<p>The mental model shift: capability is now a function of how much compute you spend at inference time. The ceiling slides up as you spend more, &amp; the question is where the value curve flattens for your use case. Mapping your product’s task distribution against that curve — where reasoning earns its cost &amp; where it doesn’t — is the optimization problem reasoning models hand to every PM building on LLMs.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="21-13-agents-are-loops-not-features.html">&larr; Agents Are Loops, Not Features</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="23-17-your-ai-can-see-now.html">Your AI Can See Now &rarr;</a>
+</nav>
+  
+</body>
+</html>

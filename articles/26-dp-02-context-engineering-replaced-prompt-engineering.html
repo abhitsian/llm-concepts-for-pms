@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Context Engineering Replaced Prompt Engineering</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">540 words</div><h1>Context Engineering Replaced Prompt Engineering</h1><div class="article-subtitle">Part 2 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=59JU0VRiME8DYAFq1ivYT,ucdxjixnrfhvArdofaiUog">View diagram: Context Engineering</a>
+<figcaption aria-hidden="true">Context Engineering</figcaption>
+</figure>
+<p>Simon Willison put it cleanly: the term “prompt engineering” undersells the actual work. What ppl building production LLM systems spend their time on isn’t crafting the perfect sentence to whisper to the model. It’s assembling the right context — retrieval results, tool outputs, conversation history, system instructions, examples, schema definitions — so that by the time the model sees the prompt, the hard problem is already solved. The discipline that matters is context engineering, &amp; the name change isn’t semantic. It reflects a fundamental shift in where the effort goes.</p>
+<p>Early prompt engineering was artisanal. You’d fiddle with phrasing, try “think step by step,” rearrange your few-shot examples, &amp; measure the difference. It worked cuz context windows were tiny &amp; the prompt was basically all the model had to work with. When your entire budget is 4,000 tokens, every word carries weight, &amp; prompt craft genuinely moves the needle.</p>
+<p>Then context windows blew up. GPT-4 shipped with 128k tokens. Claude went to 200k. Gemini pushed past a million. Suddenly the constraint wasn’t “how do I phrase this” — it was “what do I put in this massive window, in what order, &amp; how do I keep it relevant?” The prompt became one component of a much larger context assembly pipeline, &amp; the engineering shifted from wordsmithing to systems design.</p>
+<h2 id="the-assembly-pipeline">The Assembly Pipeline</h2>
+<p>A modern LLM application constructs its context dynamically on every call. A user asks a question about their codebase. The system retrieves relevant files via embeddings search, pulls in the repo’s README &amp; style guide, appends recent conversation turns for continuity, injects tool definitions so the model knows what it can call, &amp; layers on system instructions that encode the product’s personality &amp; constraints. The “prompt” the user typed might be 20 tokens. The full context hitting the model might be 50,000.</p>
+<p>Building this pipeline well is genuine engineering. You need retrieval systems that surface the right documents, not just similar ones. You need truncation strategies for when context exceeds the window. You need ordering logic, cuz models attend to the beginning &amp; end of context more than the middle. You need to decide what’s static (system instructions) versus dynamic (retrieved chunks) versus ephemeral (tool results from the current turn). Each of these decisions directly shapes output quality.</p>
+<h2 id="why-product-teams-should-care">Why Product Teams Should Care</h2>
+<p>This matters for product teams cuz it changes the hiring profile &amp; the investment thesis. The bottleneck in your AI product isn’t a prompt artist — it’s the infrastructure that fetches, ranks, filters, &amp; arranges information before the model runs. It’s your retrieval quality. It’s your chunking strategy. It’s whether your system instructions stay coherent as the product evolves &amp; the context gets denser.</p>
+<p>The shift also explains why “just use a better model” is necessary but insufficient. A better model with bad context still produces bad output. A slightly worse model with precisely assembled context often outperforms. The input matters at least as much as the engine, &amp; for most production systems, the input is a pipeline — not a string someone typed into a playground.</p>
+<p>Prompt engineering was real. Context engineering ate it.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="25-dp-01-the-loop-is-the-product.html">&larr; The Loop Is the Product</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="27-dp-03-thinking-became-a-dial.html">Thinking Became a Dial &rarr;</a>
+</nav>
+  
+</body>
+</html>

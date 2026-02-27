@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tokens Are the New API Calls</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">556 words</div><h1>Tokens Are the New API Calls</h1><div class="article-subtitle">Part 1 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
+<p>For decades, software economics rested on a beautiful asymmetry: build once, copy infinitely at near-zero cost. AI products shatter this. Every interaction with an LLM costs money — every query, every response, every clever feature you build on top of a foundation model burns tokens, &amp; tokens cost real dollars.</p>
+<p>A token is roughly three-quarters of a word. When a user sends a message &amp; gets a response, your application consumes tokens on both sides — input &amp; output. Simple enough, but it reshapes almost every product decision. Feature design, pricing, unit economics, growth loops — all of it looks different when your product has perpetual marginal cost that scales with usage.</p>
+<p>The obvious cost is the conversation itself. But the real expense hides in the machinery around it. Context stuffing is the big one — system prompts, user history, retrieved documents, &amp; various instructions all get injected before the user’s message even reaches the model. A user types twenty words; your application sends two thousand. Then there’s retry logic, orchestration chains where one model extracts, another validates, a third formats. Evaluation costs sneak in too — automated quality checks on outputs consume their own tokens. The cost of verifying a response can approach the cost of generating it.</p>
+<p>The metric that matters isn’t cost per token. It’s cost per valuable interaction. A thousand cheap tokens on a useless response is worse than ten thousand on one that solves the user’s problem. PMs need to instrument everything — track not just raw consumption but the relationship between token spend &amp; user outcomes. This unit economics modeling should happen before you build, not after you launch with negative margins.</p>
+<h2 id="constraint-as-strategy">Constraint as Strategy</h2>
+<p>In traditional software, adding features is cheap — mostly engineering time, then near-zero marginal cost. In AI products, every feature touching the model has ongoing cost proportional to usage. Feature prioritization becomes about the ratio of user value to token cost.</p>
+<p>But constraints create opportunities. Efficiency becomes a genuine competitive moat. If you can deliver the same quality response using half the tokens — through better prompts, smarter context management, more targeted retrieval — your margins are structurally better than competitors who brute-force their way to quality. Vertical focus matters more too, cuz a product that deeply understands one domain can use shorter prompts &amp; tighter retrieval than a horizontal product trying to handle everything.</p>
+<p>Pricing is where this comes to a head. Flat-rate means you eat cost variance. Usage-based makes ppl afraid to use the product. Most successful AI products land on hybrids, but the really interesting play is value-based: if your AI saves a lawyer ten hours of document review, charging a percentage of that saved time makes the token cost almost irrelevant. Value-based pricing requires you to actually measure &amp; demonstrate value, which brings everything back to instrumentation.</p>
+<p>The shift from zero-marginal-cost software to perpetual-marginal-cost AI isn’t a temporary phase. Models will get cheaper, but ppl will stuff more tokens into longer contexts, chain more calls, build more elaborate pipelines. PMs who internalize this dynamic early — tracking unit economics, optimizing efficiency, choosing pricing models that align cost with value — will have a structural advantage over teams that treat AI costs as someone else’s problem.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="06-00f-the-llm-landscape.html">&larr; The LLM Landscape</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="08-02-hallucinations-arent-bugs.html">Hallucinations Aren't Bugs &rarr;</a>
+</nav>
+  
+</body>
+</html>

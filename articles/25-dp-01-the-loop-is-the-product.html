@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Loop Is the Product</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">578 words</div><h1>The Loop Is the Product</h1><div class="article-subtitle">Part 1 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=syGETXDb_ArfqeozDfUkV,af0cN-jKhmwCyxssE3Do0w">View diagram: The Agent Loop</a>
+<figcaption aria-hidden="true">The Agent Loop</figcaption>
+</figure>
+<p>The core of every AI agent you’ve seen demo’d — Claude Code, Cursor, Devin, Replit Agent — is roughly 50 lines of code. Think. Act. Observe. Repeat. The model looks at its context, decides what to do next, calls a tool or writes some output, reads the result, &amp; loops back. That’s it. The TAOR loop is the atom of agentic software, &amp; every agent in production is built on some version of it.</p>
+<p>This is worth sitting with for a moment. The architecture that powers tools billing millions in ARR is a while loop with an LLM call inside it. There’s no exotic graph structure, no novel algorithm. The model receives a prompt, produces a function call, the harness executes it, appends the result to context, &amp; calls the model again. When the model decides it’s done — or when the harness decides for it — the loop terminates.</p>
+<p>So if the loop is trivially simple, why do these products feel so different from each other?</p>
+<h2 id="the-harness-is-where-the-product-lives">The Harness Is Where the Product Lives</h2>
+<p>The differentiator is everything around the loop. When does the agent stop? What tools does it have access to? How does it recover from errors? What gets injected into context before each iteration? How is the user kept informed? These are product decisions, not model decisions, &amp; they account for almost all of the quality gap between a weekend prototype &amp; a shipping agent.</p>
+<p>Claude Code, for instance, exposes filesystem tools, shell execution, &amp; search — scoped carefully with permission gates so the agent can do real work without bricking your repo. Cursor wraps a similar loop but optimizes for tight editor integration, fast partial completions, &amp; a UX where the human stays in the driver’s seat. Devin leans toward autonomy, giving the agent a full environment &amp; letting it run longer loops with less human checkpointing. Same underlying pattern. Radically different product surfaces.</p>
+<p>The harness also handles the inglorious work of failure recovery. Models hallucinate tool calls. APIs time out. Files don’t exist where the model expected them. A production agent needs retry logic, context truncation strategies, graceful degradation paths, &amp; cost guardrails that kill runaway loops before they burn through your API budget. None of this is glamorous. All of it is load-bearing.</p>
+<h2 id="boring-infrastructure-interesting-products">Boring Infrastructure, Interesting Products</h2>
+<p>There’s a pattern in platform shifts where the core primitive is dead simple &amp; all the value accrues to the orchestration layer. Web apps are just HTTP request/response cycles. Mobile apps are just event loops rendering views. The simplicity of the primitive doesn’t diminish the engineering — it redirects it.</p>
+<p>The TAOR loop is the same kind of primitive. Understanding it matters for product teams cuz it reframes where to invest. Swapping in a better model gives you a bump. Building a better harness — smarter stopping conditions, richer tool integration, tighter feedback loops with the user — gives you a moat. The model is a commodity input. The loop is interchangeable. The harness is the product.</p>
+<p>Every few months a new foundation model drops &amp; the benchmarks reshuffle. The agents that win won’t be the ones with the best model. They’ll be the ones with the best opinions about when to stop, what to try next, &amp; how to recover when things go sideways. The magic, as it turns out, is boring infrastructure.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="24-18-the-interface-broke-free.html">&larr; The Interface Broke Free</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="26-dp-02-context-engineering-replaced-prompt-engineering.html">Context Engineering Replaced Prompt Engineering &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/agent-loop.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    AgentLoopDiagram(canvas, container);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Memory Problem Nobody Solved</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">547 words</div><h1>The Memory Problem Nobody Solved</h1><div class="article-subtitle">Part 14 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
+<figure>
+<a class="diagram-link" href="https://excalidraw.com/#json=ecwC29jFRUaZGdFdOAmyL,GHk6VzmaY6fm5s2gibYyBA">View diagram: The Memory Problem</a>
+<figcaption aria-hidden="true">The Memory Problem</figcaption>
+</figure>
+<p>Every few months a new product announces “memory” for its AI — the ability to remember your preferences, your past conversations, your context. &amp; every time, what they’ve actually built is a workaround for the fact that large language models are fundamentally stateless. The model processes whatever is in the context window &amp; nothing else. There is no learning between sessions. No accumulation of understanding. No genuine recall. Each conversation starts from zero, &amp; everything the model appears to “know” about you was explicitly loaded into the prompt before generation began.</p>
+<p>This matters because the gap between what users expect from “memory” &amp; what current systems deliver is enormous. When ppl hear that an AI remembers them, they assume something like human memory — imperfect but organic, building a model of who you are over time, surfacing relevant context without being asked. What they get is retrieval-augmented generation pulling fragments from a vector store, or a compressed summary of previous interactions injected into the system prompt.</p>
+<h2 id="the-workarounds-their-failure-modes">The Workarounds &amp; Their Failure Modes</h2>
+<p>The current approaches each break in characteristic ways. Context compaction — summarizing previous conversations to fit more history into the context window — loses information by design. The system decides what’s important enough to keep, &amp; it’s frequently wrong. Details that seemed minor in conversation twelve become critical in conversation forty, but they were compressed away long ago.</p>
+<p>RAG-based memory retrieves relevant chunks from stored interactions based on embedding similarity. It works well when the current query is semantically close to the stored information it needs. It fails when the connection is lateral or implicit — when what you need isn’t similar to what you’re asking about but is related in ways that require understanding your full history. Vector similarity is a proxy for relevance, &amp; proxies miss.</p>
+<p>Summary injection — maintaining a running profile of the user that gets updated after each session — drifts from reality over time. Each summary is a lossy compression of the previous summary plus new information. After enough iterations, the profile reflects what the summarization model thinks is important about you, which may diverge substantially from what’s actually true. It’s a game of telephone played with your own context.</p>
+<h2 id="what-real-memory-would-require">What Real Memory Would Require</h2>
+<p>Genuine memory would need something architecturally different from retrieval bolted onto stateless prediction. It would need persistent, updateable representations that influence generation without occupying context window space. It would need the ability to form connections between information encountered at different times — not just retrieving stored text but integrating it into an evolving model of the user &amp; their domain. It would need graceful degradation, where older or less-relevant information fades rather than being abruptly truncated.</p>
+<p>No production system does this today. The team that solves it — truly solves it, not another retrieval wrapper — changes the competitive landscape entirely, cuz persistent memory is the foundation for AI that improves with use rather than simply being available for use. Every current product that depends on long-term user relationships is building on a substrate that doesn’t actually remember. The workarounds are impressive engineering, but they’re still workarounds, &amp; users eventually notice the seams.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="37-dp-13-async-agents-changed-the-clock.html">&larr; Async Agents Changed the Clock</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="39-dp-15-the-harness-designed-to-shrink.html">The Harness Designed to Shrink &rarr;</a>
+</nav>
+  
+</body>
+</html>

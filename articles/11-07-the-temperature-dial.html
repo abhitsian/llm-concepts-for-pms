@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Temperature Dial</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">514 words</div><h1>The Temperature Dial</h1><div class="article-subtitle">Part 7 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
+<p>Somewhere in your AI product’s configuration, there’s a number between 0 &amp; 2 that’s quietly shaping the product’s entire personality. It’s probably set to 0.7 or 1.0, chosen by an engineer during a prototype sprint &amp; never revisited. This number is called temperature, &amp; it controls how the model samples from its probability distribution over next tokens. Low settings (0.0-0.3) make the model grab the highest-probability token almost every time — consistent, predictable, safe. Medium range (0.5-0.8) introduces randomness while staying coherent. Past 1.0, the model reaches for surprising tokens, producing output that’s creative, unexpected, &amp; sometimes incoherent. At zero, it’s fully deterministic.</p>
+<h2 id="the-tradeoff-curve">The Tradeoff Curve</h2>
+<p>Creativity &amp; consistency sit on opposite ends of a spectrum, &amp; temperature positions you along it. Every setting is a bet about what your users need from a particular interaction. Low temperature belongs with factual Q&amp;A, code generation, data extraction — anything where correctness is the point. Medium works for conversational AI, general assistance, explanations. High fits creative writing, brainstorming, game dialogue. Mismatch is common &amp; costly: high temperature on factual queries produces creative hallucinations, low temperature on creative tasks produces boring repetition. Neither is a model problem. Both are product configuration problems.</p>
+<p>The best AI products stop treating temperature as a single global setting. They run different temperatures for different features — code generator running cold, brainstorming assistant running hot. Some expose it as user control. Others build adaptive systems that start cold for factual questions &amp; warm up when the conversation turns creative. More engineering investment, but the experience improvements are substantial.</p>
+<p>Temperature’s influence extends beyond creativity. It changes regeneration behavior — low temperature makes “regenerate” produce nearly identical output, frustrating users expecting variety. It changes error patterns: low temperature produces systematic, debuggable mistakes; high temperature scatters errors randomly. Very high temperatures degrade instruction following, &amp; higher settings tend to produce longer, more verbose output that affects reading time &amp; token costs.</p>
+<p>There’s a perceptual effect worth understanding. Lower temperature often makes AI feel smarter, even when it isn’t. At low settings, the model produces confident, definitive answers. Users consistently perceive confidence as intelligence, even when the confident answer is no more accurate than an uncertain one. Lowering temperature creates an illusion of increased capability — useful if your product needs to feel authoritative, but you trade away the exploration that higher settings provide.</p>
+<p>All of which means temperature is a product strategy question. How consistent should experiences be? How creative should suggestions be? Where does the reliability-novelty tradeoff land for your specific users? These decisions should be made consciously, tested with users, &amp; iterated on data. You can A/B test temperature — measure satisfaction scores, regeneration rates, time on task. The findings tend to be humbling: ppl say they want creativity but engage more with consistent outputs. Task type matters more than stated preference. The gap between what ppl say they want &amp; what they respond to is esp wide here, which makes testing not just useful but necessary.</p><div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="10-04-same-input-different-output.html">&larr; Same Input, Different Output</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="12-05-context-is-all-you-have.html">Context Is All You Have &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/temperature.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    TemperatureDiagram(canvas, container);
+  });
+</script>
+</body>
+</html>
