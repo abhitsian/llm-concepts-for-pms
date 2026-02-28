@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">600 words</div><h1>Build vs. Buy in an LLM World</h1><div class="article-subtitle">Part 10 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
 <p>The old build vs. buy framework had clean logic. Building was expensive — hire engineers, burn months. Buying was cheap — pay a vendor, move faster. The calculus was time &amp; money, mostly about whether your use case was weird enough to justify custom work.</p>
@@ -26,6 +26,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="18-12-the-architecture-tax.html">The Architecture Tax &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/build-vs-buy.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    BuildVsBuyDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

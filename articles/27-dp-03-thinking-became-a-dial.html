@@ -10,10 +10,7 @@
   <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">577 words</div><h1>Thinking Became a Dial</h1><div class="article-subtitle">Part 3 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=8DiGcqoAmXY0zdBV54FHp,VSAIXWRzJqrDZntvjTpVOg">View diagram: Thinking Became a Dial</a>
-<figcaption aria-hidden="true">Thinking Became a Dial</figcaption>
-</figure>
+
 <p>When OpenAI shipped o1, something shifted in what LLMs could do. The model didn’t just predict the next token faster or with better calibration — it spent time reasoning before answering, producing chains of internal thought that let it solve problems previous models couldn’t touch. Math competition problems. Multi-step logic puzzles. Code that required planning three functions ahead. Then DeepSeek R1 proved the technique wasn’t proprietary magic: you could train reasoning into open-weight models with reinforcement learning. Thinking became a capability anyone could build on, &amp; almost immediately, it became a product decision.</p>
 <p>The key mental model: thinking tokens are a resource, like compute or bandwidth. When a reasoning model works through a hard problem, it generates internal tokens — sometimes thousands of them — before producing its visible answer. Those tokens cost money &amp; take time. A straightforward factual lookup doesn’t need 10,000 tokens of deliberation. A gnarly debugging session across multiple files might need exactly that. The product question is when to spend &amp; when to save.</p>
 <h2 id="the-cost-quality-curve">The Cost-Quality Curve</h2>

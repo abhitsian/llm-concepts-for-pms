@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">553 words</div><h1>When Not to Use an LLM</h1><div class="article-subtitle">Part 11 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
 <p>Every problem looks like an LLM problem right now. Text involved? LLM. Any intelligence required? Throw an LLM at it. This is expensive thinking — not just in token costs, but architecturally &amp; organizationally. LLMs are general-purpose, &amp; general-purpose means not optimized for anything specific. For a surprising number of problems teams are solving with LLMs today, specialized solutions exist that are faster, cheaper, &amp; more reliable.</p>
@@ -24,6 +24,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="17-10-build-vs-buy-in-llm-world.html">Build vs. Buy in an LLM World &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/when-not-to-use.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    WhenNotToUseDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

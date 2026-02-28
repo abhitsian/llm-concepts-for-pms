@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">799 words</div><h1>The API Layer</h1><div class="article-subtitle">Part 0b of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=fY0jXaP00ziKm5TMTUSxy,fWlzd4AqROy1MuVKs7HXGg">View diagram: The API Layer</a>
-<figcaption aria-hidden="true">The API Layer</figcaption>
-</figure>
+
 <p>When a user types something into your AI feature &amp; hits enter, what actually happens? Not the product-level abstraction — the mechanical reality. Your product sends a message over the internet to someone else’s computer. That computer runs the message through a model. The model generates a response. The response comes back. You display it. That round trip is an API call, &amp; understanding it is the foundation of every product decision you’ll make in this space.</p>
 <p>An API — Application Programming Interface — is how software talks to other software. In this case, your application is talking to a model provider: OpenAI, Anthropic, Google, or whoever’s model you’re using. Think of it like calling a contractor. You describe the job, the contractor does the work, they send you the result, &amp; you get a bill. Every single time. There’s no retainer, no flat fee, no “unlimited usage” plan at the infrastructure level. Every interaction is a discrete transaction with a discrete cost.</p>
 <h2 id="anatomy-of-a-call">Anatomy of a Call</h2>
@@ -29,6 +26,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="03-00c-training-vs-inference.html">Training vs. Inference &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/api-layer.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ApiLayerDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

@@ -10,10 +10,7 @@
   <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">616 words</div><h1>Embeddings &amp; the Shape of Meaning</h1><div class="article-subtitle">Part 0d of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=50vIye0fz3iX-rexbfc5U,-VTmxYvJ4l_hcqlHfKFDzA">View diagram: Embeddings &amp; Semantic Search</a>
-<figcaption aria-hidden="true">Embeddings &amp; Semantic Search</figcaption>
-</figure>
+
 <p>Take the phrase “happy dog.” Now take “joyful puppy.” Different words, same meaning. Now take “tax policy.” Completely unrelated. You know this instantly, but computers have historically been terrible at it. Keyword search would tell you “happy dog” &amp; “joyful puppy” have zero words in common &amp; therefore aren’t related. This is the gap that embeddings close.</p>
 <p>An embedding is what you get when you ask an AI model to convert text into a list of numbers — a vector. These aren’t random numbers. They encode meaning, not specific words. “Happy dog” &amp; “joyful puppy” end up as nearly identical vectors cuz they mean nearly the same thing. “Tax policy” ends up somewhere entirely different. Texts that are semantically close become numerically close; texts that are unrelated become numerically distant. The model has, in effect, given meaning a shape — a position in high-dimensional space where proximity equals similarity.</p>
 <p>This unlocks something traditional search never could: search by concept instead of keyword. A customer typing “can’t log in” won’t match a help article titled “authentication troubleshooting” — no overlapping words. But their embeddings sit close together, cuz the meaning overlaps even though the words don’t. This is called semantic search, &amp; it’s why modern AI products can find relevant information in ways that feel almost spookily good. It’s not magic. It’s geometry — measuring the distance between meanings.</p>

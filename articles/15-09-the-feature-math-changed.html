@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">559 words</div><h1>The Feature Math Changed</h1><div class="article-subtitle">Part 9 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
 <p>Traditional software has a specific cost structure: high build cost, near-zero run cost. An engineer spends two weeks building a feature, &amp; serving it to a million users costs almost nothing incremental. The math rewards building cuz you amortize the fixed investment across effectively infinite usage.</p>
@@ -26,6 +26,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="16-11-when-not-to-use-an-llm.html">When Not to Use an LLM &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/feature-math.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    FeatureMathDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

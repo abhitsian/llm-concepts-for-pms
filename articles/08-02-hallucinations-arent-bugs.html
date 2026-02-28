@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">581 words</div><h1>Hallucinations Aren’t Bugs</h1><div class="article-subtitle">Part 2 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
 <p>LLMs don’t retrieve facts from a database. They predict what text is most plausible given the input — sequences of tokens that are statistically likely to follow from what came before. Sometimes the most plausible-sounding continuation is factually accurate, &amp; sometimes it isn’t. Hallucination isn’t the model failing. It’s the model doing exactly what it was designed to do.</p>
@@ -25,6 +25,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="09-03-the-prompt-is-the-product.html">The Prompt Is the Product &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/hallucinations.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    HallucinationsDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

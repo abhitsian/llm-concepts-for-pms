@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">602 words</div><h1>Task Length Doubled Every Seven Months</h1><div class="article-subtitle">Part 8 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=f-Sugg4xYdXNSyfcPq8Go,GFdAXt4fE-U20dBFo3Zraw">View diagram: Task Length Doubling</a>
-<figcaption aria-hidden="true">Task Length Doubling</figcaption>
-</figure>
+
 <p>METR, the AI evaluation nonprofit, tracked something more useful than standard benchmarks: the length &amp; complexity of real-world software tasks that AI coding tools could complete autonomously. Their finding was that this capability roughly doubled every seven months. The metric wasn’t accuracy on a fixed test set — it was the size of the problem an AI agent could handle end-to-end without human intervention.</p>
 <p>This matters far more than benchmark scores cuz it maps directly to product planning decisions. A benchmark tells you a model scored 87% on HumanEval. The METR trajectory tells you that a task requiring four hours of human work today might be within AI capability in fourteen months. That’s a different kind of information entirely — it’s a planning input, not an evaluation metric.</p>
 <p>The doubling wasn’t about the AI getting smarter at the same tasks. It was about the expanding frontier of task complexity the tools could handle reliably. In early 2024, AI coding agents could manage single-function implementations with clear specifications. By late 2024, they were handling multi-file changes with test generation. By mid-2025, they were completing features that involved understanding existing codebases, making coordinated changes across multiple components, &amp; validating their own work through test execution.</p>
@@ -31,6 +28,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="33-dp-09-the-permission-gradient.html">The Permission Gradient &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/task-length.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    TaskLengthDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

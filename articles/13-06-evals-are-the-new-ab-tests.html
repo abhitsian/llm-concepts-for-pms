@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">599 words</div><h1>Evals Are the New A/B Tests</h1><div class="article-subtitle">Part 6 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
 <p>How do you know if your AI is good? Not benchmark-good — good for your users, good enough to ship. With traditional products you’d A/B test it: variant A, variant B, measure outcomes, ship the winner. But AI outputs vary on every run, quality is subjective, &amp; you can’t just count clicks. Traditional software has clear quality signals — does it work, does it return the right value. AI has fuzzy signals on spectrums. Is this summary good? Depends on context, on the user, on what they were trying to accomplish. Without clear metrics, you can’t improve, compare alternatives, or catch regressions. You’re flying blind.</p>
@@ -25,6 +25,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="14-08-streaming-changed-everything.html">Streaming Changed Everything &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/evals.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    EvalsDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

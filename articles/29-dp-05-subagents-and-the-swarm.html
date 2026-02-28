@@ -10,10 +10,7 @@
   <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">588 words</div><h1>Subagents &amp; the Swarm</h1><div class="article-subtitle">Part 5 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=LMnM9KP-7iHSZbzAGVnUq,O2crMjhaNQNCMtudJ4etag">View diagram: Subagents and the Swarm</a>
-<figcaption aria-hidden="true">Subagents and the Swarm</figcaption>
-</figure>
+
 <p>Claude Code, when faced with a complex task, does something interesting: it spawns subagents. A research subagent searches the codebase &amp; gathers context. A code review subagent examines a diff for issues. An exploration subagent maps out a module’s dependencies. Each subagent runs with its own scoped tools &amp; isolated context window, works its focused subtask, &amp; returns results to the parent orchestrator. The parent synthesizes everything &amp; continues. This is the swarm pattern, &amp; it’s becoming the dominant architecture for capable AI systems.</p>
 <p>The intuition behind it is straightforward. A single agent with one massive context window trying to do everything at once hits practical limits fast. Context gets cluttered with irrelevant information from earlier steps. The model loses track of its own plan. Token costs balloon as the full history rides along on every call. Subagents solve this by decomposition — each one sees only what it needs, operates in a clean context, &amp; returns a compressed result. The parent never has to hold the full detail of every subtask simultaneously.</p>
 <h2 id="orchestration-is-the-new-programming">Orchestration Is the New Programming</h2>

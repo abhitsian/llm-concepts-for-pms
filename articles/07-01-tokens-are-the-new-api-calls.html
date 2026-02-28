@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">556 words</div><h1>Tokens Are the New API Calls</h1><div class="article-subtitle">Part 1 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
 <p>For decades, software economics rested on a beautiful asymmetry: build once, copy infinitely at near-zero cost. AI products shatter this. Every interaction with an LLM costs money — every query, every response, every clever feature you build on top of a foundation model burns tokens, &amp; tokens cost real dollars.</p>
@@ -25,6 +25,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="08-02-hallucinations-arent-bugs.html">Hallucinations Aren't Bugs &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/tokens-cost.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    TokensCostDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

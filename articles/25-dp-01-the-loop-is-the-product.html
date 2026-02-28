@@ -10,10 +10,7 @@
   <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">578 words</div><h1>The Loop Is the Product</h1><div class="article-subtitle">Part 1 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=syGETXDb_ArfqeozDfUkV,af0cN-jKhmwCyxssE3Do0w">View diagram: The Agent Loop</a>
-<figcaption aria-hidden="true">The Agent Loop</figcaption>
-</figure>
+
 <p>The core of every AI agent you’ve seen demo’d — Claude Code, Cursor, Devin, Replit Agent — is roughly 50 lines of code. Think. Act. Observe. Repeat. The model looks at its context, decides what to do next, calls a tool or writes some output, reads the result, &amp; loops back. That’s it. The TAOR loop is the atom of agentic software, &amp; every agent in production is built on some version of it.</p>
 <p>This is worth sitting with for a moment. The architecture that powers tools billing millions in ARR is a while loop with an LLM call inside it. There’s no exotic graph structure, no novel algorithm. The model receives a prompt, produces a function call, the harness executes it, appends the result to context, &amp; calls the model again. When the model decides it’s done — or when the harness decides for it — the loop terminates.</p>
 <p>So if the loop is trivially simple, why do these products feel so different from each other?</p>

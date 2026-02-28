@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">587 words</div><h1>Vibe Coding &amp; the Skill Inversion</h1><div class="article-subtitle">Part 7 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=e3SjXOxl6g-Iycj4mLAqo,QLeo2XI3jxo1QgNyv0BDpA">View diagram: Vibe Coding vs Vibe Engineering</a>
-<figcaption aria-hidden="true">Vibe Coding vs Vibe Engineering</figcaption>
-</figure>
+
 <p>Andrej Karpathy coined “vibe coding” to describe a way of programming where you describe what you want, accept what the AI produces, &amp; move on without really reading the output. Simon Willison drew the line that matters: vibe coding is accepting AI output without understanding it. Vibe engineering is using the same AI tools while maintaining professional judgment about what they produce. The distinction looks subtle. The consequences diverge fast.</p>
 <p>The skill inversion happened cuz AI tools made the production of code trivially easy while making the evaluation of code no easier at all. Writing a function went from a 20-minute task to a 30-second prompt. But reviewing whether that function handles edge cases correctly, fits the existing architecture, introduces security vulnerabilities, or creates subtle performance problems — that still requires the same expertise it always did. Possibly more, since AI-generated code tends to be plausible-looking, syntactically clean, &amp; confidently wrong in ways that are harder to spot than typical junior developer mistakes.</p>
 <p>The productivity data split along this fault line. Experienced developers who used AI tools as accelerators — generating boilerplate, exploring approaches, handling routine transformations — while continuing to read, evaluate, &amp; revise the output saw genuine 2-3x throughput gains on well-scoped tasks. They knew what correct looked like before the AI produced anything, so they could quickly accept good output &amp; catch bad output.</p>
@@ -30,6 +27,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="32-dp-08-task-length-doubled-every-seven-months.html">Task Length Doubled Every 7 Months &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/vibe-coding.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    VibeCodingDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

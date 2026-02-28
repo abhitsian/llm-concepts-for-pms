@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">591 words</div><h1>Same Input, Different Output</h1><div class="article-subtitle">Part 4 of the LLM Concepts for Product Managers Series</div><div class="divider">╌╌╌╌</div><hr />
 <p>Run the same query twice. Get two different answers. Do it again, get a third. This breaks ppl’s brains when they first build with LLMs, cuz it violates the most basic assumption in software engineering — that given the same input, you get the same output. Determinism is the bedrock of testable systems. &amp; LLMs just throw it away.</p>
@@ -29,6 +29,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="11-07-the-temperature-dial.html">The Temperature Dial &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/same-input-diff-output.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    SameInputDiffOutputDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

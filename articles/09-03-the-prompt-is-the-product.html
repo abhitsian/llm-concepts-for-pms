@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">585 words</div><h1>The Prompt Is the Product</h1><div class="article-subtitle">Part 3 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
 <p>Thousands of companies are building thousands of different products on the same handful of foundation models. Same weights, same architecture, same training data — yet the products feel completely different. A customer support bot, a legal research tool, &amp; a creative writing assistant might all run on the same model, but the experience of using them has almost nothing in common. The differentiator isn’t the model. It’s the prompt — how you instruct, constrain, &amp; contextualize. Everything else is plumbing.</p>
@@ -24,6 +24,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="10-04-same-input-different-output.html">Same Input, Different Output &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/prompt-product.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    PromptProductDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

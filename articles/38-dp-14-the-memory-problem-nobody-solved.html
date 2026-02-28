@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">547 words</div><h1>The Memory Problem Nobody Solved</h1><div class="article-subtitle">Part 14 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=ecwC29jFRUaZGdFdOAmyL,GHk6VzmaY6fm5s2gibYyBA">View diagram: The Memory Problem</a>
-<figcaption aria-hidden="true">The Memory Problem</figcaption>
-</figure>
+
 <p>Every few months a new product announces “memory” for its AI — the ability to remember your preferences, your past conversations, your context. &amp; every time, what they’ve actually built is a workaround for the fact that large language models are fundamentally stateless. The model processes whatever is in the context window &amp; nothing else. There is no learning between sessions. No accumulation of understanding. No genuine recall. Each conversation starts from zero, &amp; everything the model appears to “know” about you was explicitly loaded into the prompt before generation began.</p>
 <p>This matters because the gap between what users expect from “memory” &amp; what current systems deliver is enormous. When ppl hear that an AI remembers them, they assume something like human memory — imperfect but organic, building a model of who you are over time, surfacing relevant context without being asked. What they get is retrieval-augmented generation pulling fragments from a vector store, or a compressed summary of previous interactions injected into the system prompt.</p>
 <h2 id="the-workarounds-their-failure-modes">The Workarounds &amp; Their Failure Modes</h2>
@@ -29,6 +26,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="39-dp-15-the-harness-designed-to-shrink.html">The Harness Designed to Shrink &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/memory-problem.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    MemoryProblemDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">571 words</div><h1>MCP Won Because It Was Boring</h1><div class="article-subtitle">Part 4 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=O6kiYqo6jwKIQoOEfPDjn,RmtvoTsSs7e4ow_OOxK7ng">View diagram: MCP: USB-C for AI</a>
-<figcaption aria-hidden="true">MCP: USB-C for AI</figcaption>
-</figure>
+
 <p>Model Context Protocol is USB-C for AI tools. That analogy does most of the explanatory work &amp; also explains why it won. MCP defines a standard way for an AI application (the client) to discover &amp; call tools exposed by external services (the servers). A Postgres MCP server exposes query tools. A GitHub MCP server exposes repo operations. A filesystem MCP server exposes read &amp; write. The client doesn’t need custom integration code for each service — it speaks MCP, &amp; any conforming server just works.</p>
 <p>Anthropic published MCP as an open specification in late 2024. Within months, the ecosystem grew faster than anyone expected. Cursor, Windsurf, Cline, &amp; other AI coding tools adopted it. Thousands of community-built servers appeared — for Slack, Linear, Notion, databases, APIs, local dev tools, &amp; everything in between. OpenAI, which initially stayed on the sidelines, eventually added MCP support to its own products. The protocol became a de facto standard not through mandate but through adoption.</p>
 <h2 id="why-boring-wins">Why Boring Wins</h2>
@@ -29,6 +26,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="29-dp-05-subagents-and-the-swarm.html">Subagents & the Swarm &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/mcp-boring.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    McpBoringDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

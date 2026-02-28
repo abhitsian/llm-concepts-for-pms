@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">600 words</div><h1>Tools Gave Models Hands</h1><div class="article-subtitle">Part 16 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=PjzuoyEKWk4hug8711H-X,n6sz2OnkftGqtF-wZgWgdw">View diagram: How Tool Use Works</a>
-<figcaption aria-hidden="true">How Tool Use Works</figcaption>
-</figure>
+
 <p>For years, LLMs were brains in jars. Text in, text out. They could reason &amp; summarize but couldn’t act — no database lookups, no messages sent, no files written. A real limitation, but also an unappreciated safety property: a system that only produces words has a bounded blast radius.</p>
 <p>Function calling changed this. Instead of responding with natural language, the model emits a structured JSON blob — a request to call a specific function with specific parameters. Your application intercepts it, executes the function, &amp; feeds the result back. The model never executes anything itself — it expresses intent in structured format &amp; a surrounding system carries out the action. This indirection is what makes it powerful. The model can now query a database, reason about results, draft an email, &amp; send it. The gap between “talks about things” &amp; “does things” collapses.</p>
 <p>The PM question shifts from “what should the AI say” to “what should the AI be allowed to do” — &amp; that second question is substantially harder. Saying the wrong thing is embarrassing; doing the wrong thing is destructive. When a model can send emails, modify records, transfer money, or execute code, every failure mode carries operational consequences. The design challenge becomes about permission, scope, &amp; containment.</p>
@@ -28,6 +25,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="21-13-agents-are-loops-not-features.html">Agents Are Loops, Not Features &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/tools-hands.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ToolsHandsDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

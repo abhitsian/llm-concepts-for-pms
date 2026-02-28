@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">620 words</div><h1>Open Models &amp; the Race to Zero</h1><div class="article-subtitle">Part 15 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=iys-pN_k649EGhrsGGm-s,IDVUZJsqeSjHnG-yz1sPiw">View diagram: Inference Cost Deflation</a>
-<figcaption aria-hidden="true">Inference Cost Deflation</figcaption>
-</figure>
+
 <p>Inference costs have been falling at roughly 10x per year since GPT-3 launched. A query that cost six cents in 2022 costs fractions of a cent today. GPT-4 level capability — about $30 per million tokens at debut — now runs $1-3 for equivalent quality from competing providers. This isn’t Moore’s Law gently working through server hardware — it’s a collapse driven by competition, architectural efficiency gains, &amp; open-weight models pushing the floor lower with every release.</p>
 <p>The deflation curve changes the viability threshold for every AI feature you’ve considered. The feature math from Article 09 — cost per invocation times frequency, measured against value — is a moving target now. A feature that was economically unviable last quarter might pencil out today. PMs should revisit their killed-feature graveyards periodically, cuz the economic veto that buried those ideas has a shelf life.</p>
 <h2 id="open-weight-models-are-closing-the-gap">Open-weight models are closing the gap</h2>
@@ -29,6 +26,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="20-16-tools-gave-models-hands.html">Tools Gave Models Hands &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/race-to-zero.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    RaceToZeroDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

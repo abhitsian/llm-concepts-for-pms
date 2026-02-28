@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">586 words</div><h1>The Architecture Tax</h1><div class="article-subtitle">Part 12 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
 <p>Every LLM architecture choice carries an ongoing tax — not the one-time implementation cost in sprint planning, but a per-request, per-user, per-day levy that compounds quietly until someone looks at the bill &amp; asks what happened. A hundred dollars a day in retrieval costs seems fine when you’re excited about the prototype. Then usage grows 10x, the architecture is load-bearing, &amp; changing it is expensive.</p>
@@ -24,6 +24,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="19-15-open-models-and-the-race-to-zero.html">Open Models & the Race to Zero &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/architecture-tax.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ArchitectureTaxDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

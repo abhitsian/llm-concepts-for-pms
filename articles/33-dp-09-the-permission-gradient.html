@@ -10,10 +10,7 @@
   <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">602 words</div><h1>The Permission Gradient</h1><div class="article-subtitle">Part 9 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=U_XlHNvSytJ4YsIJzBzCm,45GQKcEq7XHvzU4u5sH7OA">View diagram: The Permission Gradient</a>
-<figcaption aria-hidden="true">The Permission Gradient</figcaption>
-</figure>
+
 <p>Claude Code’s permission model established what is becoming the default template for AI tool trust: read freely, write with approval, execute with confirmation, push with explicit consent. Each tier escalates the consequence of failure &amp; correspondingly escalates the level of human oversight. This layered approach reflects something fundamental about how AI agents should interact with real systems — the degree of autonomy should scale with the reversibility of the action.</p>
 <p>Reading a file can’t break anything. Writing a file can introduce bugs but is easily reverted. Executing a command can change system state in ways that are harder to undo. Pushing code to a shared repository affects other people. The permission tiers map directly to these consequence levels, &amp; that mapping is the core design insight.</p>
 <p>The two failure modes in AI permissions are obvious in retrospect. Blanket “allow all” treats every AI action as equally safe, which works fine until the agent runs <code>rm -rf</code> on the wrong directory or pushes broken code to main. Blanket “confirm everything” treats every action as equally dangerous, which buries the user in approval dialogs until they start clicking “yes” without reading — which is functionally the same as allow-all, just with extra steps &amp; more annoyance.</p>

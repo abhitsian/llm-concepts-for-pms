@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">606 words</div><h1>The Interface Broke Free</h1><div class="article-subtitle">Part 18 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=iYZfl3WfrRuE-niCMz2WO,XeCDnN6qv7tl03SBq6_kGg">View diagram: The Interface Progression</a>
-<figcaption aria-hidden="true">The Interface Progression</figcaption>
-</figure>
+
 <p>For two years, nearly every AI product looked the same — a text box at the bottom, messages scrolling up. Chat won early cuz it maps directly to how LLMs work &amp; ppl already knew the pattern. But it was a concession to the technology’s shape, not a reflection of what users needed. Chat is sequential, puts the full burden of articulation on the user, &amp; makes AI feel like a detour from actual work. Most ppl don’t want to talk to their software. They want their software to work.</p>
 <p>The first real departure was the copilot pattern — AI embedded in the context of existing work rather than isolated in its own window. GitHub Copilot sits inside the editor, sees the code around your cursor, &amp; offers completions without being asked. You hit tab or you don’t. Interaction cost drops to nearly zero. Google Docs, Notion, &amp; Figma followed the same direction — weaving suggestions into surfaces where work already happens. The insight: context is worth more than conversation. An AI that can see what you’re doing beats a smarter AI that’s blind to your state. Copilots trade open-ended flexibility for something more constrained but far more practical — situated assistance.</p>
 <h2 id="from-visible-to-invisible">From visible to invisible</h2>
@@ -27,6 +24,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="25-dp-01-the-loop-is-the-product.html">The Loop Is the Product &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/interface-free.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    InterfaceFreeDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

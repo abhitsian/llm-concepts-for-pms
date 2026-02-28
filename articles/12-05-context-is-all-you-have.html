@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">599 words</div><h1>Context Is All You Have</h1><div class="article-subtitle">Part 5 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
 <p>Your AI doesn’t remember anything. Yesterday’s conversation is gone. Last week’s preferences, forgotten. Every interaction starts from zero, &amp; the only thing the model knows is whatever you stuff into its context window before it generates a response. When it feels like the AI “remembers” earlier conversation, that content is still sitting in the window, re-read with every new response. When the conversation ends or the context overflows, it’s gone.</p>
@@ -27,6 +27,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="13-06-evals-are-the-new-ab-tests.html">Evals Are the New A/B Tests &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/context-window.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ContextWindowDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

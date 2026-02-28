@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">540 words</div><h1>Context Engineering Replaced Prompt Engineering</h1><div class="article-subtitle">Part 2 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=59JU0VRiME8DYAFq1ivYT,ucdxjixnrfhvArdofaiUog">View diagram: Context Engineering</a>
-<figcaption aria-hidden="true">Context Engineering</figcaption>
-</figure>
+
 <p>Simon Willison put it cleanly: the term “prompt engineering” undersells the actual work. What ppl building production LLM systems spend their time on isn’t crafting the perfect sentence to whisper to the model. It’s assembling the right context — retrieval results, tool outputs, conversation history, system instructions, examples, schema definitions — so that by the time the model sees the prompt, the hard problem is already solved. The discipline that matters is context engineering, &amp; the name change isn’t semantic. It reflects a fundamental shift in where the effort goes.</p>
 <p>Early prompt engineering was artisanal. You’d fiddle with phrasing, try “think step by step,” rearrange your few-shot examples, &amp; measure the difference. It worked cuz context windows were tiny &amp; the prompt was basically all the model had to work with. When your entire budget is 4,000 tokens, every word carries weight, &amp; prompt craft genuinely moves the needle.</p>
 <p>Then context windows blew up. GPT-4 shipped with 128k tokens. Claude went to 200k. Gemini pushed past a million. Suddenly the constraint wasn’t “how do I phrase this” — it was “what do I put in this massive window, in what order, &amp; how do I keep it relevant?” The prompt became one component of a much larger context assembly pipeline, &amp; the engineering shifted from wordsmithing to systems design.</p>
@@ -30,6 +27,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="27-dp-03-thinking-became-a-dial.html">Thinking Became a Dial &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/context-engineering.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ContextEngineeringDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

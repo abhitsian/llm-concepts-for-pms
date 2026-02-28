@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">582 words</div><h1>Async Agents Changed the Clock</h1><div class="article-subtitle">Part 13 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=rlYVYckgpzTRlplVYee2-,M13Rd1cNZprK1n5ZFxUzlg">View diagram: Async Agents</a>
-<figcaption aria-hidden="true">Async Agents</figcaption>
-</figure>
+
 <p>Claude Code’s background agents, Devin, OpenAI’s Codex — they share a property that breaks the interaction model most AI products were built on. They don’t need you watching. You describe a task, fire it off, &amp; come back later to a pull request, a report, or a completed workflow. The human isn’t in the loop during execution. The human is the reviewer after the fact.</p>
 <p>This sounds like a minor UX shift. It’s a fundamental architectural change. For the past three years, the dominant model for human-AI interaction has been synchronous co-piloting. You type, the model responds. You edit, the model adjusts. The feedback loop is tight, measured in seconds. The human maintains control through continuous presence — guiding, correcting, steering in real time. Async agents dissolve that loop entirely. The model operates on its own timeline, making hundreds of intermediate decisions without human input, &amp; presents a finished artifact for review.</p>
 <h2 id="from-co-pilot-to-reviewer">From Co-Pilot to Reviewer</h2>
@@ -30,6 +27,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="38-dp-14-the-memory-problem-nobody-solved.html">The Memory Problem Nobody Solved &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/async-agents.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    AsyncAgentsDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

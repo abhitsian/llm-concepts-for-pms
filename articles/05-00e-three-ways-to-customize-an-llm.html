@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">945 words</div><h1>Three Ways to Customize an LLM</h1><div class="article-subtitle">Part 0e of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=GQtF0GzHWIQDPSFuJOIr5,IyoHj9Sg1Tcg3DynFadNjw">View diagram: Three Ways to Customize an LLM</a>
-<figcaption aria-hidden="true">Three Ways to Customize an LLM</figcaption>
-</figure>
+
 <p>You’ve got a foundation model that knows a lot about the world in general &amp; nothing about your business in particular. It doesn’t know your return policy, your product catalog, your brand voice, or the twelve edge cases your support team handles every day. The model is generic. Your product can’t be. So you need to close the gap — &amp; there are exactly three ways to do it, roughly ordered by cost &amp; effort: prompt engineering, retrieval-augmented generation, &amp; fine-tuning. Understanding when to use which one is one of the highest-leverage decisions you’ll make as a PM.</p>
 <p>Let’s make this concrete. Say you’re building a customer support bot for an e-commerce company. Customers ask about orders, returns, sizing, shipping times. The base model has never seen your FAQ, doesn’t know your 30-day return window, &amp; has no idea that you ship from two warehouses with different lead times. Here’s how each approach closes that gap.</p>
 <p><strong>Prompt engineering</strong> means changing the instructions. You write a system prompt — a block of text the user never sees — telling the model who it is, how to behave, what to say &amp; what not to say. For your support bot, that might be: “You are a helpful customer service agent for Acme Store. Be concise &amp; friendly. Our return window is 30 days. Never promise expedited shipping unless the customer has a Premium account. If you don’t know the answer, say so &amp; offer to connect them with a human.” This is free, takes minutes to change, &amp; is where every project should start. It’s like giving someone very detailed instructions before they begin a task. The downside: prompts are fragile. A model update can break behavior that was working yesterday. Different models respond differently to the same prompt. And there’s a ceiling — you can shape tone &amp; set guardrails, but you can’t teach the model facts it doesn’t have through instructions alone. Your prompt can say “our return window is 30 days,” but what about the other 500 policy details customers ask about? You’d run out of context space long before you ran out of policies.</p>
@@ -28,6 +25,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="06-00f-the-llm-landscape.html">The LLM Landscape &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/customize-llm.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    CustomizeLlmDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

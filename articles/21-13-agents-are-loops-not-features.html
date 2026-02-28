@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">601 words</div><h1>Agents Are Loops, Not Features</h1><div class="article-subtitle">Part 13 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=uE6PIxOZWapP-nXslbuB-,7whnQyHkAIWq1iSiPSX-8A">View diagram: The Agent Loop</a>
-<figcaption aria-hidden="true">The Agent Loop</figcaption>
-</figure>
+
 <p>Strip away the marketing language &amp; an agent is a loop. An LLM makes a call, reads the result, decides what to do next, makes another call, &amp; keeps going until it’s done or hits a boundary. Plan, execute, observe, adjust, repeat. The power comes from the loop, not from some new category of intelligence — &amp; understanding the loop changes how you think about cost, failure, trust, &amp; product design.</p>
 <p>A standard LLM interaction is a single shot — one prompt, one response, one bill. An agent might make that same kind of call ten or twenty times per task, each pass consuming tokens to reason about prior results &amp; formulate the next action. Your cost per task becomes a distribution with a long tail. A coding agent fixing a simple bug might take three loops &amp; cost cents. The same agent on an ambiguous refactoring might spiral through forty loops, backtrack twice, &amp; burn dollars before arriving at something useful — or nothing useful at all.</p>
 <p>The failure modes are what separate agents from everything prior in LLM product design. An agent that takes a wrong turn early &amp; then spends fifteen iterations building on it is expensive &amp; potentially destructive. They can loop indefinitely without stopping conditions, get stuck retrying the same failing approach with minor variations, or confidently execute a plan where step two was wrong — meaning every subsequent step is wasted work on a bad foundation. You need circuit breakers: hard limits on iterations, token budgets, timeouts. Circuit breakers mean some tasks fail partway through, &amp; how you communicate partial failure to a user is a product design problem, not an engineering afterthought.</p>
@@ -27,6 +24,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="22-14-reasoning-models-changed-the-ceiling.html">Reasoning Models Changed the Ceiling &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/agents-loops.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    AgentsLoopsDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

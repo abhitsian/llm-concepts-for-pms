@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">583 words</div><h1>The Jevons Paradox Hit AI</h1><div class="article-subtitle">Part 6 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=i6ZbVm2ZcWbXEWpVCsJCB,teBtpCKLi680spzgkepFFg">View diagram: The Jevons Paradox</a>
-<figcaption aria-hidden="true">The Jevons Paradox</figcaption>
-</figure>
+
 <p>In 1865, William Stanley Jevons noticed something counterintuitive about coal: as steam engines got more efficient, total coal consumption went up, not down. Cheaper energy per unit meant ppl found more uses for energy. Simon Willison pointed out the same dynamic playing out in AI inference. The per-token cost of running large language models dropped roughly 10x per year from 2023 onward. Total industry spending on inference climbed every quarter.</p>
 <p>The mechanism is straightforward. When a GPT-4-class API call cost $0.03 per 1K tokens, you thought carefully about when to call it. When equivalent capability cost $0.001, you stopped thinking about it. You added it to more features. You let the agent loop five times instead of one. You ran speculative calls in parallel &amp; kept the best result. You stuffed 100K tokens of context into every request cuz the marginal cost of a longer prompt became negligible.</p>
 <p>Each of those decisions was individually rational. The unit economics improved. But the volume exploded.</p>
@@ -31,6 +28,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="31-dp-07-vibe-coding-and-the-skill-inversion.html">Vibe Coding & the Skill Inversion &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/jevons-paradox.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    JevonsParadoxDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">571 words</div><h1>Slop &amp; the Quality Collapse</h1><div class="article-subtitle">Part 11 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=dH1mLKwk6XBL1j_1Kn290,ORoJ5cCNc-zuo7ynO93oig">View diagram: Slop and the Quality Collapse</a>
-<figcaption aria-hidden="true">Slop and the Quality Collapse</figcaption>
-</figure>
+
 <p>“Slop” entered the vocabulary in 2024 the same way “spam” did in the ’90s — a single word crystallizing something everyone already felt. AI-generated content that’s technically correct, syntactically fluent, &amp; spiritually empty. You know it when you see it. The hollow intensifiers: “groundbreaking,” “game-changing,” “revolutionary.” The false binaries: “Not X. It’s Y.” The fragment triplets meant to sound punchy: “Fast. Cheap. Reliable.” The performative throat-clearing: “Let’s be honest,” “Here’s the thing.” Emoji scattered like confetti across professional communication. The same twelve phrases recycled across millions of outputs until they lose all meaning.</p>
 <p>Slop isn’t wrong. That’s what makes it dangerous. A sloppy AI email contains accurate information, proper grammar, &amp; zero soul. It reads like it was written by a system that learned language from the distribution of tokens rather than from having something to say — cuz that’s exactly what happened.</p>
 <h2 id="why-models-produce-it">Why Models Produce It</h2>
@@ -30,6 +27,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="36-dp-12-the-normalization-of-deviance.html">The Normalization of Deviance &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/slop-quality.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    SlopQualityDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

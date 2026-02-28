@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">554 words</div><h1>The Normalization of Deviance</h1><div class="article-subtitle">Part 12 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=fjuB3VJPtdEZieRBg3ldx,MKUtdg5D0rm7J3lbsMtIDQ">View diagram: The Normalization of Deviance</a>
-<figcaption aria-hidden="true">The Normalization of Deviance</figcaption>
-</figure>
+
 <p>Before the Challenger disaster in 1986, NASA engineers knew the O-ring seals on the solid rocket boosters behaved unpredictably in cold weather. They’d seen anomalies on previous launches. But each time, the shuttle flew &amp; returned safely. The anomaly became expected, then acceptable, then invisible. Sociologist Diane Vaughan called this “the normalization of deviance” — when a practice that violates accepted standards becomes routine cuz nothing bad has happened yet. Simon Willison borrowed the concept for AI product development, &amp; the parallel is uncomfortably precise.</p>
 <p>Teams shipping AI features without evals. Deploying prompt changes straight to production without version control. Letting models make customer-facing decisions without audit trails. Skipping human review on AI-generated content cuz “it’s been fine so far.” Each of these is a recognized bad practice. Each of them works, repeatedly, until the day it doesn’t. &amp; by then the shortcuts aren’t individual choices — they’re institutional habits embedded in deployment pipelines, team norms, &amp; product roadmaps that assume the current level of risk is the actual level of risk.</p>
 <h2 id="why-probabilistic-systems-make-this-worse">Why Probabilistic Systems Make This Worse</h2>
@@ -29,6 +26,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="37-dp-13-async-agents-changed-the-clock.html">Async Agents Changed the Clock &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/normalization-deviance.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    NormalizationDevianceDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

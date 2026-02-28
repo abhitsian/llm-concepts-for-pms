@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">594 words</div><h1>Hooks, Not Hope</h1><div class="article-subtitle">Part 10 of Design Patterns of the AI Era</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=MOLIcA_Fx4T6lHvJgBjnn,nALtASHAWZqn-jkexMQgUw">View diagram: Hooks Not Hope</a>
-<figcaption aria-hidden="true">Hooks Not Hope</figcaption>
-</figure>
+
 <p>The first generation of AI guardrails lived in prompts. “Do not produce harmful content.” “Always validate your output.” “Check your work before responding.” These are instructions to a probabilistic system, which means they work most of the time &amp; fail unpredictably. The shift to hooks — programmatic pre- &amp; post-execution checks that wrap AI actions in deterministic validation — represents the maturation from hoping the model behaves to enforcing that it does.</p>
 <p>Claude Code’s hook system illustrates the pattern concretely. Before the agent writes a file, a pre-hook can run the linter on the proposed changes. Before it commits, a pre-hook runs the test suite. After a tool call returns, a post-hook validates the output against expected schemas. These checks don’t rely on the model’s judgment. They run as code, outside the model’s control, &amp; they gate whether the action proceeds. The model can be as confident as it wants about its output — if the linter fails, the write doesn’t land.</p>
 <p>This matters cuz prompt-based guardrails degrade under exactly the conditions where guardrails matter most. Complex multi-step tasks, long context windows, unusual edge cases — these are the situations where the model is most likely to produce flawed output &amp; least likely to catch its own mistakes through self-reflection. Telling a model to “double-check for SQL injection vulnerabilities” is worth less than running a static analysis tool on the generated code. One is a suggestion. The other is a gate.</p>
@@ -30,6 +27,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="35-dp-11-slop-and-the-quality-collapse.html">Slop & the Quality Collapse &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/hooks-not-hope.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    HooksNotHopeDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">592 words</div><h1>The LLM Landscape</h1><div class="article-subtitle">Part 0f of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=ORSn-egbAiHcfpHR2g1tV,P96QcLkkeuQrZDYHwFCO3w">View diagram: The LLM Landscape</a>
-<figcaption aria-hidden="true">The LLM Landscape</figcaption>
-</figure>
+
 <p>Not all LLMs come from the same place, &amp; where they come from shapes nearly every product decision you’ll make — cost, privacy, reliability, switching cost. The landscape breaks into two categories that a PM needs to internalize: frontier models &amp; open-weight models.</p>
 <p>Frontier models are the best available at any given moment. They’re built by well-funded labs, accessible only through APIs, &amp; you never touch the underlying model. You send data to their servers, they run inference, you pay per token. The three providers PMs encounter most are OpenAI, Anthropic, &amp; Google. OpenAI (GPT-4, o3) is the household name — biggest distribution, strongest brand, the one your CEO has already tried. Anthropic (Claude) has built a reputation for safety, reasoning, &amp; long context handling, &amp; has become esp popular with developer teams. Google (Gemini) is natively multimodal &amp; deeply integrated with Google Cloud, which matters if your company already lives in that ecosystem. Each has slightly different strengths, pricing, &amp; terms of service, but functionally they’re competing on the same frontier — the best general-purpose intelligence money can rent.</p>
 <p>Open-weight models are a different animal. Their weights are publicly downloadable, meaning you can run them on your own hardware or through cheaper third-party API providers. The major ones: Meta’s Llama 4 — the largest open model family, backed by Meta’s massive distribution machine. DeepSeek’s R1 — a Chinese lab that matched frontier-level reasoning at roughly 90% less cost &amp; genuinely shook the industry when it dropped. Alibaba’s Qwen 3 — strong multilingual performance, the default choice across Asian markets. Mistral — French, efficient, EU-aligned, favored by companies navigating European data regulation. These aren’t hobbyist experiments. Companies run them in production at serious scale.</p>
@@ -28,6 +25,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="07-01-tokens-are-the-new-api-calls.html">Tokens Are the New API Calls &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/llm-landscape.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    LlmLandscapeDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

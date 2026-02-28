@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">614 words</div><h1>Your AI Can See Now</h1><div class="article-subtitle">Part 17 of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=4nTWeAZjPLXluBVWqpvUu,ZfqIyfK24t5w3nMKDkKUgg">View diagram: Multimodal Inputs</a>
-<figcaption aria-hidden="true">Multimodal Inputs</figcaption>
-</figure>
+
 <p>The “L” in LLM stands for language, &amp; for a while that label was accurate. Text in, text out. But the most capable models shipped recently broke that contract. GPT-4V, Claude, Gemini — they accept images, PDFs, charts, screenshots, handwritten notes, &amp; in some cases audio &amp; video as native inputs. The text box has been joined by a camera, a microphone, &amp; a file uploader. The term is multimodal, &amp; the product implications run deep.</p>
 <p>In practice, you can send a photo of a whiteboard &amp; get structured text. Screenshot a UI &amp; get code that reproduces it. Upload a quarterly report chart &amp; get trend analysis. Photograph handwritten notes &amp; get clean transcription. The vision &amp; language capabilities are integrated — the model reasons across both simultaneously, so “what’s wrong with this UI layout?” becomes answerable. Every surface in your product that currently accepts only text becomes a candidate for richer input: receipt photos for expense tools, product defect images for support, scanned contracts for legal workflows, designer mockups turned into working front-end code. Each of these used to require a separate ML pipeline. Multimodal models collapse them into one capability behind the same API you already use for text.</p>
 <h2 id="voice-cost">Voice &amp; cost</h2>
@@ -28,6 +25,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="24-18-the-interface-broke-free.html">The Interface Broke Free &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/multimodal.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    MultimodalDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

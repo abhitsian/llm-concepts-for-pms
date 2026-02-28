@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">598 words</div><h1>Training vs. Inference</h1><div class="article-subtitle">Part 0c of LLM Concepts for PMs</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=tE8In6K-NSRvnliCbud7g,sBKJDZZQmsohTGYGW_WeLA">View diagram: Training vs Inference</a>
-<figcaption aria-hidden="true">Training vs Inference</figcaption>
-</figure>
+
 <p>Every LLM has exactly two phases in its life, &amp; if you conflate them you will make bad product decisions for months before anyone catches it. The first phase is training. The second is inference. One builds the brain, the other uses it.</p>
 <p>Training is what happens before you ever touch the model. Someone — OpenAI, Anthropic, Meta — feeds billions of pages of text into massive GPU clusters &amp; lets them run for weeks or months. The model learns statistical patterns: which tokens tend to follow which, in what contexts, with what frequencies. This is staggeringly expensive — tens of millions to billions of dollars per run. You don’t do this. You don’t pay for this directly. The model providers absorb it &amp; amortize it across every customer.</p>
 <p>Inference is what happens every time a user asks your product a question &amp; the model generates a response. One query in, one completion out. This is the phase you live in as a PM. This is the cost that shows up on your monthly bill, priced per token, scaling with every user &amp; every request. Training costs are fixed &amp; sunk. Inference costs grow with usage — which is why token economics (see article 01) matter so much.</p>
@@ -28,6 +25,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="04-00d-embeddings-and-the-shape-of-meaning.html">Embeddings & the Shape of Meaning &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/training-inference.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    TrainingInferenceDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

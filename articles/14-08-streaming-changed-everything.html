@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">559 words</div><h1>Streaming Changed Everything</h1><div class="article-subtitle">Part 8 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
 <p>ChatGPT could have shown you the complete response after it finished generating. Instead, it streams tokens as they’re produced — words appearing one by one, like watching someone type. This design choice set the standard for every AI chat interface that followed, not cuz of what it does technically but cuz of what it does psychologically.</p>
@@ -26,6 +26,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="15-09-the-feature-math-changed.html">The Feature Math Changed &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/streaming.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    StreamingDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>

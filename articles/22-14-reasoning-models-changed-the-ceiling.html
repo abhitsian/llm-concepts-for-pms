@@ -7,13 +7,10 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">581 words</div><h1>Reasoning models changed the ceiling</h1><div class="article-subtitle">Part 14 of the LLM Concepts for Product Managers series</div><div class="divider">╌╌╌╌</div><hr />
-<figure>
-<a class="diagram-link" href="https://excalidraw.com/#json=ariekfbdPiEQB9p_PoAiA,rbcBJ-izJsFDtr3QvTApeA">View diagram: Standard vs Reasoning Models</a>
-<figcaption aria-hidden="true">Standard vs Reasoning Models</figcaption>
-</figure>
+
 <p>For most of their short history, LLMs have been pattern matchers — fast, fluent, &amp; capable at tasks that boil down to “given this input, what would a knowledgeable person produce.” But they hit a ceiling on multi-step reasoning. Ask one to work through a logic puzzle with six constraints or debug a race condition across three systems, &amp; you’d watch it produce something structured correctly, with a wrong step buried in the middle that cascaded into a confidently incorrect answer. The model was pattern-matching what thinking looks like.</p>
 <p>Reasoning models changed this. The core idea: let the model think before it answers. OpenAI’s o1 &amp; o3, DeepSeek R1, Claude with extended thinking, &amp; Gemini’s thinking models all generate a hidden scratchpad — working through problems step by step, checking logic, backtracking — before producing visible output. This is test-time compute scaling: instead of making the model smarter through more training data, you give it more compute at the moment it needs to answer. The training teaches it how to reason; inference-time compute lets it actually do it.</p>
 <p>The tradeoff is direct. Reasoning models are slower &amp; more expensive, but they solve problems standard models cannot — multi-step math, logic with interacting constraints, code where early architecture decisions constrain what’s possible later. The ceiling moved from “LLMs can’t do this reliably” to “LLMs can do this if you give them time to think.”</p>
@@ -28,6 +25,14 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="23-17-your-ai-can-see-now.html">Your AI Can See Now &rarr;</a>
 </nav>
-  
+  <script src="../js/bezier-core.js"></script>
+<script src="../js/diagrams/reasoning-models.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ReasoningModelsDiagram(canvas, container);
+  });
+</script>
 </body>
 </html>
