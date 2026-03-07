@@ -110,17 +110,49 @@
     ]},
   ];
 
-  // Detect if we're on an article page or the index
+  var BOOK_SLUGS = {
+    1: 'llm-concepts',
+    2: 'design-patterns',
+    3: 'how-it-works',
+    4: 'the-earnings-call'
+  };
+
+  var BOOK_NAMES = {
+    1: 'LLM Concepts for PMs',
+    2: 'Design Patterns',
+    3: 'How It Actually Works',
+    4: 'The Earnings Call'
+  };
+
+  // Detect page type
   var path = window.location.pathname;
   var isArticle = path.indexOf('/articles/') !== -1;
-  var basePath = isArticle ? '../' : '';
-  var articlesPath = isArticle ? '' : 'articles/';
+  var isBook = path.indexOf('/books/') !== -1;
+  var isCompany = path.indexOf('/companies/') !== -1;
+  var isBookshelf = !isArticle && !isBook && !isCompany;
 
-  // Find current article slug
+  // Determine base paths
+  var basePath = (isArticle || isBook || isCompany) ? '../' : '';
+
+  // Find current article slug and its series
   var currentSlug = '';
+  var currentSeries = 0;
   if (isArticle) {
     var match = path.match(/\/([^/]+)\.html$/);
     if (match) currentSlug = match[1];
+    // Find which series this article belongs to
+    ARTICLES.forEach(function(group) {
+      group.items.forEach(function(item) {
+        if (item[0] === currentSlug) currentSeries = group.series;
+      });
+    });
+  }
+
+  // Find current book slug
+  var currentBookSlug = '';
+  if (isBook) {
+    var bookMatch = path.match(/\/([^/]+)\.html$/);
+    if (bookMatch) currentBookSlug = bookMatch[1];
   }
 
   // --- Build header ---
@@ -149,18 +181,27 @@
     '<button class="sidebar-close" id="sidebar-close" aria-label="Close navigation">&times;</button>' +
     '</div><div class="sidebar-scroll">';
 
+  // On company pages, show earnings call articles (series 4)
+  // On article pages, show only current book's articles
+  var showSeries = isCompany ? 4 : (currentSeries > 0 ? currentSeries : 0);
+
   var lastSeries = 0;
   ARTICLES.forEach(function(group) {
+    // If on an article page, only show articles from same series
+    if (showSeries > 0 && group.series !== showSeries) return;
+
     if (group.series !== lastSeries) {
-      var seriesLabel = group.series === 1 ? 'LLM Concepts for PMs' : group.series === 2 ? 'Design Patterns of the AI Era' : group.series === 3 ? 'How It Actually Works' : 'The Earnings Call';
-      sidebarHTML += '<div class="sidebar-series">' + seriesLabel + '</div>';
+      var seriesLabel = BOOK_NAMES[group.series] || '';
+      var bookSlug = BOOK_SLUGS[group.series] || '';
+      sidebarHTML += '<a class="sidebar-series" href="' + basePath + 'books/' + bookSlug + '.html" style="display:block;text-decoration:none;">' + seriesLabel + '</a>';
       lastSeries = group.series;
     }
     sidebarHTML += '<div class="sidebar-section">' + group.section + '</div>';
     group.items.forEach(function(item) {
       var slug = item[0], title = item[1];
       var activeClass = slug === currentSlug ? ' sidebar-link-active' : '';
-      sidebarHTML += '<a class="sidebar-link' + activeClass + '" href="' + basePath + articlesPath + slug + '.html">' + title + '</a>';
+      var linkBase = (isBook || isCompany) ? '../articles/' : (isArticle ? '' : 'articles/');
+      sidebarHTML += '<a class="sidebar-link' + activeClass + '" href="' + linkBase + slug + '.html">' + title + '</a>';
     });
   });
   sidebarHTML += '</div>';
