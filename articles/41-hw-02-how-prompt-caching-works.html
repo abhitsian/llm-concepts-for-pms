@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Prompt Caching Works</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">643 words</div><h1>How Prompt Caching Works</h1><div class="article-subtitle">Part 2 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>An engineer on a customer support product notices something odd in the API bill. Every call sends the same 4,000-token system prompt — company policies, tone guidelines, product catalog context — followed by a short user message. They're paying to process those identical 4,000 tokens thousands of times a day. The system prompt never changes. The model re-reads it every single time. Prompt caching exists to eliminate exactly this waste.</p>
+<p>Here's what's happening under the hood. When an LLM processes your prompt, it doesn't just read the text — it converts each token into a rich internal representation through dozens of transformer layers. This is called the <em>prefill</em> phase, &amp; it's computationally expensive. For a 4,000-token system prompt, the model computes attention across all those tokens, building up a massive set of intermediate states called the KV cache (key-value cache). Prompt caching stores this computed KV cache so that when the same prefix appears again, the model skips straight to processing the new tokens.</p>
+<h2 id="prefix-matching">Prefix Matching</h2>
+<p>The critical detail is that caching works on <em>prefixes</em> — it matches from the beginning of the prompt forward. If your first 4,000 tokens are identical between calls, those get cached. But if you change even a single token at position 100, everything after position 99 becomes a cache miss. This is why prompt architecture matters: stable content must come first, variable content last.</p>
+<p>Anthropic's implementation caches automatically when the same prefix appears in subsequent calls, with a minimum cacheable length of 1,024 tokens. The first call pays full price &amp; writes to the cache. Subsequent calls within the TTL — typically five minutes — get cached tokens at roughly 90% off. OpenAI takes a similar approach but with different mechanics &amp; pricing tiers. The discount is significant enough to reshape how you design prompts.</p>
+<p>The TTL matters more than ppl realize. A five-minute window means your cache stays warm only if requests arrive frequently enough. A product handling one request per minute keeps the cache hot. A product handling one request per hour pays full price every time cuz the cache expires between calls. High-traffic products benefit enormously; low-traffic products barely notice the feature exists.</p>
+<h2 id="designing-for-the-cache">Designing for the Cache</h2>
+<p>Once you understand prefix matching, prompt design becomes partly an exercise in cache optimization. Put your system prompt first — it's the most stable content. Then any shared context like RAG documents or conversation history that's common across requests. Put user-specific &amp; turn-specific content last, cuz that's what changes between calls.</p>
+<p>This sounds simple, but it conflicts with how many ppl naturally build prompts. A common pattern is to interleave system instructions with user context — "here's the user's account info, now here are the rules for handling it, now here's their question." That interleaving destroys cache efficiency cuz the variable user info appears early in the prompt, invalidating everything after it. Restructuring the prompt to front-load stable content &amp; back-load variable content can cut costs dramatically without changing the model's behavior at all.</p>
+<p>For multi-turn conversations, the cache compounds. Each turn adds new messages, but the entire preceding conversation is a shared prefix. If a user sends five messages in a session, messages one through four are cached by the time message five arrives. The model only pays full compute for the newest turn. This makes long conversations progressively cheaper per turn — the opposite of what you'd naively expect.</p>
+<h2 id="the-bill-is-a-design-artifact">The Bill Is a Design Artifact</h2>
+<p>The strategic insight for PMs is that your API bill is now partly a function of your prompt architecture, not just your call volume. Two products making the same number of API calls with the same model can have wildly different costs depending on how they structure their prompts. One team that front-loads stable content &amp; maintains request frequency might pay 80% less than another team sending equivalent prompts in a cache-hostile order.</p>
+<p>This means prompt design reviews should include someone who understands the caching mechanics — esp for high-volume products. The structure of your prompt isn't just about what the model sees. It's about what the model has to <em>recompute</em>, &amp; that distinction directly hits the budget.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="40-hw-01-how-thinking-tokens-work.html">&larr; How Thinking Tokens Work</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="42-hw-03-how-compaction-works.html">How Compaction Works &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/prompt-caching.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    PromptCachingDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

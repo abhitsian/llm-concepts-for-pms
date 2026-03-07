@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Computer Use Works</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">651 words</div><h1>How Computer Use Works</h1><div class="article-subtitle">Part 16 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>An engineer needs to file an expense report in her company's ancient internal tool — a web app from 2011 with no API, no integrations, no webhooks. She's been dreading it for a week. She opens Claude, shares her screen, &amp; says "fill out my expense report using the receipts in my email." The model takes a screenshot, finds the browser tab, clicks into the first field, &amp; starts typing. It's slow. It's a little clumsy. But twenty minutes later the report is done &amp; she didn't touch the keyboard once.</p>
+<p>This is computer use — the ability for an AI model to operate a computer the way a human does, through the graphical interface. Not by calling APIs. Not by running scripts. By looking at the screen, understanding what it sees, &amp; clicking buttons.</p>
+<h2 id="the-screenshot-action-loop">The Screenshot-Action Loop</h2>
+<p>The mechanism is a tight loop with five steps, repeated over &amp; over. First, the system takes a screenshot of the current screen state. Second, the model analyzes the screenshot — performing what amounts to OCR, layout understanding, &amp; spatial reasoning to figure out what's on screen &amp; where. Third, the model decides the next action: click at specific x,y coordinates, type a string of text, scroll up or down, press a keyboard shortcut. Fourth, the action is executed via OS-level automation — tools like <code>xdotool</code> on Linux or accessibility APIs on macOS that simulate real mouse &amp; keyboard input. Fifth, a new screenshot is taken &amp; the loop begins again.</p>
+<p>Each iteration of this loop requires a full model inference pass. The screenshot is a large image — thousands of tokens of visual context. The model has to reason about what it sees, what it's trying to accomplish, &amp; what the next step should be. This makes the process fundamentally slow. A human can click three buttons in two seconds. The model needs six to ten seconds per action cuz each one requires screenshot capture, image processing, reasoning, &amp; execution.</p>
+<h2 id="gui-not-api">GUI, Not API</h2>
+<p>This is the key distinction that makes computer use different from tool use. When a model calls the Slack API to send a message, it's using a structured, documented interface designed for programmatic access. It's fast, reliable, &amp; predictable. When a model uses computer use to send a Slack message, it's opening the Slack app, finding the right channel in the sidebar, clicking the message input field, typing the message, &amp; hitting enter — exactly like a human would.</p>
+<p>Why would you ever want the slower, less reliable approach? Cuz most software doesn't have APIs. That internal expense tool, the legacy CRM, the government benefits portal, the niche desktop application that only works on Windows — none of these offer programmatic access. They were built for humans with mice &amp; keyboards. Computer use lets the model meet the software where it is, esp the long tail of enterprise tools that will never get an API.</p>
+<h2 id="the-limitations-are-real">The Limitations Are Real</h2>
+<p>Computer use today is fragile in ways that matter. UI changes break workflows — if a button moves or a page layout shifts, the model's learned patterns stop working. Dynamic content like animations, loading spinners, &amp; pop-ups confuse the visual reasoning. Multi-step workflows accumulate errors — a 95% success rate per step means a 60% success rate over ten steps. The cost is significant too. Each screenshot consumes thousands of tokens of context, &amp; a single task might require dozens of screenshots. A workflow that takes a human three minutes might cost a dollar or more in inference.</p>
+<p>Speed is the most visible limitation. Ppl who try computer use for the first time are struck by how <em>deliberate</em> the model is — it moves like someone who's never used the app before, carefully reading each label, pausing to think about where to click next. It lacks the muscle memory that makes humans fast at repetitive GUI tasks.</p>
+<p>For PMs, computer use is the universal fallback. You design your AI automation layer with structured APIs &amp; tool integrations wherever possible — those are faster, cheaper, &amp; more reliable. But when you hit a system with no API, computer use is the last mile. It's the difference between "we can automate 80% of the workflow" &amp; "we can automate all of it." That last 20% is where computer use earns its keep, cuz those are exactly the tedious manual tasks ppl most want automated.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="54-hw-15-how-gpt4o-imagegen-got-100m-signups.html">&larr; How GPT-4o Image Generation Got 100M Signups</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="56-hw-17-why-chinese-labs-dominate-the-leaderboard.html">Why Chinese Labs Dominate the Leaderboard &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/computer-use.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ComputerUseDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

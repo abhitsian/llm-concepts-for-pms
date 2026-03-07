@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How DeepSeek Trained R1 for $5.5M</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">659 words</div><h1>How DeepSeek Trained R1 for $5.5M</h1><div class="article-subtitle">Part 9 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>In January 2025, the AI world woke up to a paper from a Chinese hedge fund's research lab. DeepSeek R1 matched OpenAI's o1 on major reasoning benchmarks — math, code, science — at a reported training cost of $5.5 million. For context, estimates for training GPT-4 range from $50M to $100M+. The industry narrative that frontier models required frontier budgets cracked overnight. Here's how they did it.</p>
+<h2 id="architecture-that-cheats-the-math">Architecture That Cheats the Math</h2>
+<p>R1 is built on DeepSeek-V3, which uses a Mixture-of-Experts (MoE) architecture. The model has 671 billion total parameters, but only 37 billion are active for any given token. Think of it as a building with 256 specialist offices — for each query, a routing mechanism sends the work to just 8 of them. You get the knowledge capacity of a 671B model with the compute cost of a 37B one. This alone slashes training &amp; inference costs dramatically compared to dense models where every parameter fires on every token.</p>
+<p>Then there's Multi-head Latent Attention (MLA) — DeepSeek's custom attention mechanism. Standard transformers store key-value pairs for every token in context, &amp; this KV-cache grows linearly with sequence length. MLA compresses keys &amp; values into a low-dimensional latent space before storing them, cutting memory usage by roughly 90%. This means you can train with longer contexts on fewer GPUs, &amp; at inference time you can serve more users per machine. It's an architectural innovation that converts directly into dollars saved.</p>
+<h2 id="reinforcement-learning-without-the-bloat">Reinforcement Learning Without the Bloat</h2>
+<p>The reasoning ability in R1 comes from reinforcement learning — the model learns to think step-by-step by being rewarded for correct answers. The standard approach (PPO, used by OpenAI) requires training a separate reward model that's often as large as the policy model itself. That's two massive models in GPU memory during training. DeepSeek used GRPO — Group Relative Policy Optimization — which eliminates the reward model entirely. Instead, it generates multiple answers for each problem, scores them against ground-truth, &amp; uses the relative ranking within each group as the training signal. Same quality of learning signal, half the memory footprint.</p>
+<p>What made R1 genuinely surprising was what emerged from this RL training. The model spontaneously developed reasoning behaviors — self-verification, backtracking, breaking problems into sub-steps — without being explicitly taught any of these patterns. DeepSeek called this the model's "aha moment." The RL objective just said "get the right answer," &amp; the model discovered structured reasoning as the strategy to do it.</p>
+<h2 id="hardware-constraints-as-a-forcing-function">Hardware Constraints as a Forcing Function</h2>
+<p>DeepSeek trained on NVIDIA H800 GPUs — the export-restricted chips that are weaker than the H100s available to American labs. Lower memory bandwidth, slower interconnects. This constraint forced every architectural decision toward efficiency. FP8 mixed precision training — using 8-bit floating point for most operations — squeezed more compute out of each chip. The MoE architecture meant less communication between GPUs cuz only a fraction of parameters needed updating per step. The $5.5M figure is compute cost alone — it doesn't include researcher salaries, failed experiments, or the R&amp;D that produced V3 as a foundation — but the raw efficiency is still remarkable.</p>
+<p>The final move was distillation. DeepSeek took R1's reasoning ability &amp; distilled it into smaller models ranging from 1.5B to 70B parameters. The distilled models inherited much of the reasoning capability at a fraction of the serving cost. The 32B distilled model, esp, hit a sweet spot — strong enough for most reasoning tasks, small enough to run on modest hardware.</p>
+<p>For PMs, the DeepSeek story reframes the entire competitive landscape. The moat in AI isn't how much compute you can afford — it's how cleverly you use what you have. A team with architectural insight &amp; hardware constraints produced a model that embarrassed organizations spending 10x more. This means the frontier isn't stable. Any lab with a genuine architectural innovation can leapfrog incumbents, &amp; the cost of "good enough" reasoning is dropping faster than anyone's pricing models assumed. Plan accordingly: the model you're paying premium prices for today will have a cheaper equivalent sooner than your contract renewal date.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="47-hw-08-how-multi-token-prediction-works.html">&larr; How Multi-Token Prediction Works</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="49-hw-10-how-openclaw-became-an-os-for-ai.html">How OpenClaw Became an OS for AI &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/deepseek-r1.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    DeepseekR1Diagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

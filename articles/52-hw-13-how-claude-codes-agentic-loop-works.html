@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Claude Code&#x27;s Agentic Loop Works</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">651 words</div><h1>How Claude Code's Agentic Loop Works</h1><div class="article-subtitle">Part 13 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>An engineer types a single sentence into her terminal: "Add pagination to the users API endpoint." She walks away to get coffee. When she comes back, Claude Code has read the existing codebase, identified the relevant files, written the pagination logic, updated the tests, run them, noticed a failing assertion, fixed the bug, re-run the tests, &amp; committed the change. Twelve tool calls. Zero human intervention between the first prompt &amp; the final result. The mechanism behind this is the agentic loop — &amp; it's the same pattern powering every autonomous AI product being built today.</p>
+<h2 id="the-loop">The Loop</h2>
+<p>The agentic loop is deceptively simple. Five steps, repeated: <strong>Read</strong> the user's request (or the current state of the task). <strong>Think</strong> about what to do next. <strong>Act</strong> by calling a tool — read a file, edit code, run a shell command, search the codebase. <strong>Observe</strong> the result of that action. <strong>Decide</strong> whether the task is complete or whether to loop back to step two. That's it. The model keeps cycling through think-act-observe until it determines the job is done.</p>
+<p>What makes Claude Code's implementation interesting is the tool palette. The model can read any file in the repository, write &amp; edit files with surgical precision, execute arbitrary shell commands, search code with grep &amp; glob patterns, &amp; spawn subagents — smaller, scoped instances of itself — to handle subtasks in parallel. When you ask it to refactor a module, it might spawn one subagent to understand the current architecture &amp; another to check the test suite, then synthesize both results before making changes. The loop isn't just linear — it branches.</p>
+<h2 id="context-is-the-constraint">Context Is the Constraint</h2>
+<p>The agentic loop's biggest enemy is the context window. Every tool call adds to the conversation: the command you ran, its output, the file you read, the diff you produced. A complex task can burn through 200K tokens of context fast — esp when shell commands return verbose output or when the model reads large files. When context fills up, the model has to compact: summarizing earlier parts of the conversation to make room for new information. This is like a surgeon being told to forget the first three hours of a ten-hour operation. It works, mostly, but information loss is real.</p>
+<p>This is why agentic coding tools behave differently from chat. In a chat interface, the human manages context — asking focused questions, providing relevant snippets. In an agentic loop, the model manages its own context, deciding what to read, what to remember, &amp; what to compress. Good agents are parsimonious with context: they read only what they need, they search before they scan, &amp; they keep tool outputs focused. Bad agents read entire files when they need one function, dump verbose logs into context, &amp; run out of room before they finish.</p>
+<h2 id="the-permission-gradient">The Permission Gradient</h2>
+<p>Autonomy without guardrails is dangerous. Claude Code implements a permission system that creates a gradient from safe to risky. Reading files? Always allowed. Writing files? Allowed in most configurations. Running shell commands? The model asks before executing anything destructive. Installing packages, deleting files, running deployment scripts — these require explicit human approval. The permission system isn't just safety theater; it's what makes the loop viable for real work. Without it, no engineer would let an autonomous agent loose in their codebase.</p>
+<p>The design insight is that the permission boundary is configurable. Teams can pre-approve specific tools &amp; commands, creating a "sandbox" where the agent operates freely while requiring approval for anything outside it. This lets the loop run uninterrupted for routine tasks — exactly the workflow that makes agentic coding fast — while catching the edge cases that need human judgment.</p>
+<p>For PMs, the agentic loop is <em>the</em> pattern to understand. Every AI coding tool, customer support bot, research assistant, &amp; workflow automator uses some version of read-think-act-observe. The differences between products are in the tool palette (what can the agent do?), the permission model (what is it allowed to do?), &amp; the context management strategy (how does it remember what it's doing?). If you're building any product where AI acts autonomously, you're building an agentic loop. The question isn't whether to use this pattern — it's how well you implement each piece of it.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="51-hw-12-how-diffusion-llms-work.html">&larr; How Diffusion LLMs Work</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="53-hw-14-how-mcp-won-in-8-days.html">How MCP Won in 8 Days &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/claude-code-loop.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ClaudeCodeLoopDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

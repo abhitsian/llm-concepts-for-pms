@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Manhattan-Sized Data Center</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">639 words</div><h1>The Manhattan-Sized Data Center</h1><div class="article-subtitle">Part 7 of The Earnings Call series</div><div class="divider">╌╌╌╌</div><hr />
+<p>There's a moment on every earnings call when the CFO reads the capex number &amp; analysts start doing math in their heads. In 2024 &amp; early 2025, those numbers stopped making sense by any historical standard.</p>
+<p>Meta's Mark Zuckerberg, Q4 2024 earnings call:</p>
+<blockquote><p>"We are building a 2-gigawatt-plus data center that is so large it would cover a significant part of Manhattan."</p></blockquote>
+<p>A data center the size of a borough. Meta's capex guidance for 2025: $60–65 billion, up from $39 billion in 2024. By end of 2025, Meta expects to operate more than 1.3 million GPUs. Not servers — GPUs. The sheer physical scale of what's being built has no precedent in the history of computing infrastructure.</p>
+<h2>The Hundred-Billion-Dollar Bets</h2>
+<p>Amazon's Andy Jassy, speaking with the conviction of someone who watched AWS become the most profitable business unit on earth:</p>
+<blockquote><p>"AI is probably the biggest technology shift and opportunity since the internet."</p></blockquote>
+<p>The "vast majority" of Amazon's $100 billion-plus planned capex is directed at AI infrastructure. AWS AI revenue is running at a "multi-billion-dollar run rate growing at triple-digit percentages." Jassy isn't hedging. He's not saying "we're exploring." He's allocating more capital to AI than most countries spend on their entire military.</p>
+<p>Microsoft's Satya Nadella reported the AI business at $13 billion annual run rate, up 175% year over year. Azure grew 31%, with 13 percentage points of that growth coming from AI workloads alone. That means AI is responsible for nearly half of Azure's growth — not a feature bolted on top, but a structural driver of the cloud business.</p>
+<h2>The Supply Side</h2>
+<p>On the other side of this equation sits NVIDIA. Jensen Huang on the Blackwell ramp, Q4 FY2025:</p>
+<blockquote><p>"We successfully and incredibly ramped up Grace Blackwell, delivering some $11 billion of revenues last quarter."</p></blockquote>
+<p>Zero to $11 billion in a single quarter. One of the fastest product ramps in semiconductor history. Blackwell didn't just launch — it scaled to the kind of revenue most chip companies never reach in their entire lifecycle, in ninety days.</p>
+<p>Then Broadcom's Hock Tan dropped the number that made his stock gap up 20% after hours:</p>
+<blockquote><p>"We expect this to represent an AI revenue serviceable addressable market of $60 billion to $90 billion in fiscal 2027 alone."</p></blockquote>
+<p>Three hyperscale customers — likely Google, Meta, &amp; ByteDance — are building custom AI accelerators with Broadcom. The market for custom silicon is exploding cuz the hyperscalers don't just want GPUs anymore. They want chips designed specifically for their workloads, their architectures, their scale.</p>
+<h2>The Arms Race Math</h2>
+<p>Add it up. Meta: $65 billion. Microsoft: $80 billion-plus. Amazon: $100 billion-plus. Google: $75 billion-plus. That's over $300 billion in AI infrastructure spend in 2025 alone. From four companies. In a single year.</p>
+<p>For context, the entire US spent $102 billion building the Interstate Highway System — adjusted for inflation. These four tech companies are spending three times that, in twelve months, on data centers &amp; chips.</p>
+<p>The strategic logic is straightforward, even if the numbers are staggering. Each company believes that AI compute will be the bottleneck of the next decade, &amp; whoever has the most capacity wins. It's a land grab — except the land is measured in megawatts &amp; GPU clusters instead of acres.</p>
+<p>For PMs, the implication is uncomfortable but important: <strong>the infrastructure layer is being built by companies willing to spend more in a year than most industries generate in a decade.</strong> The barrier to entry isn't the model anymore — it's the physical plant. The Manhattan-sized data center isn't a metaphor. It's a competitive moat made of concrete, copper, &amp; cooling systems. The companies that can afford to build at this scale are writing the rules of the AI era, &amp; the capex numbers on their earnings calls are the clearest signal of who they think is going to win.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="65-ec-06-850-million-data-points.html">&larr; 850 Million Data Points</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="67-ec-08-reasoning-consumes-100x-more-compute.html">Reasoning Consumes 100x More Compute &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/capex-surge.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    CapexSurgeDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

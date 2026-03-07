@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why Inference Costs Dropped 100x</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">672 words</div><h1>Why Inference Costs Dropped 100x</h1><div class="article-subtitle">Part 19 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A startup founder pulls up her API billing dashboard from March 2023. She was paying $30 per million input tokens &amp; $60 per million output tokens for GPT-4. The same quality of response — arguably better — now costs her $2.50 input &amp; $10 output with GPT-4o. If she uses DeepSeek V3, it's $0.27 &amp; $1.10. She's spending less per month on AI inference than on her team's coffee. Two years ago, every prompt felt like burning money. Now she lets her agents run in loops without flinching.</p>
+<p>A 100x drop in the cost of intelligence in roughly two years. Nothing in computing history — not Moore's Law, not cloud storage, not bandwidth — has deflated this fast. Here's what drove it.</p>
+<h2 id="architectural-efficiency">Architectural Efficiency</h2>
+<p>The biggest single driver was Mixture-of-Experts. Dense transformer models activate every parameter for every token — GPT-4 reportedly uses around 1.8 trillion parameters, all of them firing on every single word you type. MoE models like DeepSeek V3 &amp; Mixtral have a similar total parameter count but only activate a fraction per token — routing each input to the most relevant "expert" sub-networks. DeepSeek V3 has 671 billion parameters but activates roughly 37 billion per token. That's an 18x reduction in compute per inference pass with minimal quality loss.</p>
+<p>Speculative decoding made generation faster. The idea: use a tiny, cheap draft model to predict the next several tokens, then have the full model verify them in a single forward pass. If the draft model guesses right — which it does 70-80% of the time for common patterns — you've generated multiple tokens for the cost of one verification step. This doesn't reduce per-token cost but dramatically increases throughput, meaning more requests served per GPU per second.</p>
+<h2 id="hardware-and-quantization">Hardware &amp; Quantization</h2>
+<p>The GPU improvements were real but incremental. NVIDIA's H100 was roughly 3x faster than A100 for transformer inference. The B200 pushed further. Google's TPU v5 &amp; custom ASICs from companies like Groq — which uses a deterministic architecture optimized specifically for LLM inference — added competitive pressure on price per token.</p>
+<p>Quantization — running models at lower numerical precision — delivered surprising gains. Training happens in FP16 or BF16 (16-bit floating point), but inference can often run in FP8 or even INT4 (4-bit integers) with minimal quality degradation. A model that requires 32GB of GPU memory in FP16 might fit in 8GB at INT4. Smaller memory footprint means you can serve more concurrent requests per GPU, &amp; cheaper GPUs can run bigger models. The quality trade-off is measurable but small — most users can't tell the difference between a FP16 &amp; an INT4 response.</p>
+<h2 id="competition-and-caching">Competition &amp; Caching</h2>
+<p>Then there's the market dynamics. DeepSeek's pricing — fractions of a cent per token — forced every provider to cut margins. When a Chinese lab offers frontier-competitive performance at one-tenth the price, US labs can't maintain premium pricing without losing developer mindshare. The result was a race to the bottom that benefited everyone building on top of these models.</p>
+<p>Prompt caching was the silent efficiency multiplier. When many requests share a common system prompt or context prefix — which they do in most production applications — the provider can cache the key-value computations for the shared portion &amp; reuse them across requests. Anthropic's prompt caching reduces costs by up to 90% for cached tokens. This isn't a model improvement; it's an infrastructure optimization that compounds with scale.</p>
+<p>Batching optimizations rounded out the picture. Serving systems got better at grouping multiple requests together, sharing computation across them, &amp; maximizing GPU utilization. Early LLM serving was embarrassingly inefficient — GPUs sitting idle between requests, memory fragmented, no request pipelining. Frameworks like vLLM introduced paged attention &amp; continuous batching that pushed GPU utilization from 30% to 80%+.</p>
+<p>For PMs, the 100x cost drop is a Jevons paradox in real time. When coal got cheaper in the 1800s, total coal consumption didn't fall — it exploded, cuz cheaper energy unlocked use cases that were previously uneconomical. The same is happening with inference. Products that were too expensive to build at $60/million tokens — real-time agents, speculative generation, multiple-draft workflows, always-on AI assistants — are now trivially affordable. The winning products aren't the ones rationing expensive intelligence. They're the ones designed to lavish cheap intelligence on every user interaction.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="57-hw-18-the-200-month-tier-war.html">&larr; The $200/Month Tier War</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="59-hw-20-how-on-device-llms-work.html">How On-Device LLMs Work &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/inference-costs.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    InferenceCostsDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Thinking Tokens Work</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">618 words</div><h1>How Thinking Tokens Work</h1><div class="article-subtitle">Part 1 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A PM watches a reasoning model tackle a complex coding question. The response takes twelve seconds instead of two. The answer is significantly better — catching an edge case the standard model missed. But the API bill shows 8,000 tokens consumed for a response that's only 200 tokens long. The other 7,800 tokens were thinking tokens — invisible work the model did before it ever started writing the visible answer.</p>
+<p>Here's the mechanism. When you call a reasoning model — OpenAI's o1, Claude with extended thinking, DeepSeek R1 — the model enters a hidden generation phase before producing output. It writes to an internal scratchpad: breaking the problem into steps, attempting a solution path, checking its own logic, noticing an error, backtracking, trying a different approach. This scratchpad can run thousands of tokens long. You never see most of it. But you pay for every single token generated.</p>
+<h2 id="the-internal-scratchpad">The Internal Scratchpad</h2>
+<p>Standard LLMs generate tokens left to right, committing to each word as they go. If token 50 was a mistake, there's no mechanism to go back &amp; fix it — the model just keeps building on a flawed foundation. Thinking tokens change this. The scratchpad gives the model space to explore, evaluate, &amp; revise before any output becomes final. It's the difference between a writer who publishes each sentence as they type it &amp; one who drafts, edits, &amp; rewrites before hitting send.</p>
+<p>The technical term is <em>test-time compute scaling</em>. During training, you scale by adding more data &amp; compute to make the model smarter. Test-time compute scaling means spending more compute <em>at inference</em> — when the model is actually answering your question — to get better results from the same model. The model doesn't change. It just thinks harder.</p>
+<p>The scratchpad isn't random exploration. Models trained with reinforcement learning — esp DeepSeek R1, which used GRPO — learn structured reasoning patterns. They decompose problems, verify intermediate steps, &amp; explicitly flag when something doesn't add up. R1's training showed that models can discover chain-of-thought reasoning on their own when given the right incentives, without being taught step-by-step templates.</p>
+<h2 id="the-cost-latency-tradeoff">The Cost-Latency Tradeoff</h2>
+<p>Thinking tokens aren't free along any dimension. They cost money — you're billed per token, visible or not. They cost time — generating 10,000 thinking tokens adds seconds of latency before the user sees anything. For a simple factual question like "what's the capital of France," spending 5,000 tokens deliberating is pure waste. For a multi-step math proof or a complex refactoring task, those thinking tokens are the difference between a correct answer &amp; a hallucinated one.</p>
+<p>This creates a new dial that didn't exist before. Claude's extended thinking lets developers set a <code>budget_tokens</code> parameter — a ceiling on how many thinking tokens the model can use. Set it low for simple queries, high for hard ones. Some implementations let the model decide how much to think based on problem difficulty. Others let users toggle thinking on &amp; off explicitly.</p>
+<h2 id="the-routing-problem">The Routing Problem</h2>
+<p>The real product design challenge isn't whether thinking tokens work — they clearly do. It's deciding which queries deserve them. Route everything through a reasoning model &amp; your costs explode while most users wait longer for answers that didn't need deliberation. Route nothing through reasoning &amp; you miss the hard problems where thinking is the whole point.</p>
+<p>Smart products are building classifiers that estimate query complexity upfront — a lightweight model or heuristic that decides in milliseconds whether to send a request to the fast path or the thinking path. This routing layer is becoming as important as the model itself, cuz it determines the cost-quality curve your users actually experience.</p>
+<p>For PMs, the key insight is that thinking tokens turned model intelligence into a runtime resource you allocate per query, not a fixed property you select once. The model you chose is only half the decision. How much you let it think — &amp; for whom — is the other half. That's a product problem, not an engineering one.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="39-dp-15-the-harness-designed-to-shrink.html">&larr; The Harness Designed to Shrink</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="41-hw-02-how-prompt-caching-works.html">How Prompt Caching Works &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/thinking-tokens.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ThinkingTokensDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

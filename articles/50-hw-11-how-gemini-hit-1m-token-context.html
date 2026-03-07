@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Gemini Hit 1M Token Context</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">645 words</div><h1>How Gemini Hit 1M Token Context</h1><div class="article-subtitle">Part 11 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A developer drops an entire 400-file codebase into a Gemini 1.5 Pro prompt. No chunking, no retrieval pipeline, no careful selection of relevant files — just the whole thing, raw. She asks the model to find a subtle concurrency bug that spans three modules. It finds it. A year earlier, this was architecturally impossible. Context windows topped out at 4K-8K tokens, &amp; even the "long context" models maxed at 32K. Gemini's 1M token window — later extended to 2M — didn't just increase a number. It changed what products could do.</p>
+<h2 id="the-quadratic-wall">The Quadratic Wall</h2>
+<p>The fundamental problem with extending context is attention. In standard transformers, every token attends to every other token — that's O(n&sup2;) computation. Double the context length &amp; you quadruple the compute cost for the attention layers. At 4K tokens, this is manageable. At 1M tokens, naive attention would require roughly 62,500x more compute than the 4K case. No amount of hardware can brute-force through that math.</p>
+<p>Google's approach attacked this from multiple angles. Ring attention distributes the attention computation across many TPU chips in a ring topology — each chip handles a slice of the sequence &amp; passes partial results to the next chip. This turns an impossibly large matrix operation into a series of manageable distributed computations. The total work is still enormous, but it's spread across a pod of TPUs working in parallel rather than crushing a single accelerator.</p>
+<p>The KV-cache — the memory that stores key-value pairs from all previous tokens — is the other bottleneck. At 1M tokens, a naive KV-cache would consume hundreds of gigabytes of GPU memory. Gemini uses efficient cache management: quantizing stored values to lower precision, evicting less-relevant entries, &amp; structuring the cache to exploit hardware memory hierarchies. The goal is keeping the most important context readily accessible without drowning in storage for tokens that barely matter.</p>
+<h2 id="the-lost-in-the-middle-problem">The Lost in the Middle Problem</h2>
+<p>Here's the part the headline numbers don't tell you. Having a 1M token window doesn't mean the model treats all 1M tokens equally. Research from multiple labs — esp the "Lost in the Middle" paper — showed that models are best at recalling information placed at the very beginning or the very end of the context. Information buried in the middle gets less attention, literally &amp; figuratively. The model's effective retrieval quality forms a U-shaped curve across the context window.</p>
+<p>This isn't a Gemini-specific issue — it affects every long-context model, including Claude's 200K window. The architectural reason is that attention weights naturally concentrate on positional extremes. For product builders, this means that "just throw everything in the context" is a strategy with real failure modes. A legal contract's most important clause might sit on page 47 of a 200-page document, &amp; the model might give it less weight than the boilerplate on page 1.</p>
+<h2 id="context-window-vs-retrieval-quality">Context Window vs. Retrieval Quality</h2>
+<p>The arms race around context window size — 200K, 1M, 2M — obscures a more important question: how reliably can the model find &amp; use the right piece of information within that window? A model with a 128K window &amp; excellent retrieval quality can outperform a 1M window model that loses track of key details. Some teams have found that RAG (retrieval-augmented generation) with a smaller context window actually beats stuffing everything into a massive window, esp when the relevant information is a tiny fraction of the total input.</p>
+<p>The practical sweet spot is often hybrid: use the long context window for material that needs holistic understanding — an entire codebase, a full conversation history, a complete document — &amp; use RAG to surface specific facts from large corpora where precision matters more than comprehension.</p>
+<p>For PMs, context window size is the headline number, but retrieval quality within that window is what determines product reliability. Your users won't know or care that you support 1M tokens. They'll care that the model found the relevant clause, the right function, the correct data point. Build your evals around retrieval accuracy at various positions in the context, not just around whether the window is big enough. The window is a constraint you can buy your way past. Retrieval quality is an engineering problem you have to solve.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="49-hw-10-how-openclaw-became-an-os-for-ai.html">&larr; How OpenClaw Became an OS for AI</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="51-hw-12-how-diffusion-llms-work.html">How Diffusion LLMs Work &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/gemini-context.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    GeminiContextDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How RLHF Actually Works</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">660 words</div><h1>How RLHF Actually Works</h1><div class="article-subtitle">Part 5 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>Ask GPT-3 a question &amp; you'd get something that sounded like an autocomplete engine — technically fluent, but often rambling, sometimes toxic, rarely actually helpful. Ask ChatGPT the same question &amp; you'd get a structured, polite, genuinely useful response. Same base architecture. Same training data. The difference was RLHF — Reinforcement Learning from Human Feedback — &amp; understanding its three stages explains why modern AI assistants feel the way they do.</p>
+<h2 id="stage-one-pretraining">Stage One: Pretraining</h2>
+<p>Before RLHF enters the picture, the model is pretrained on massive amounts of internet text. Billions of documents, trillions of tokens. The model learns to predict the next word given all the words before it. This produces something powerful but aimless — a system that can write like Shakespeare, generate code, mimic legal briefs, &amp; produce hate speech with equal facility. It has no concept of "good" or "bad" output. It just predicts what text is likely to come next, given the statistical patterns in its training data.</p>
+<p>This pretrained model is the foundation. It has knowledge &amp; linguistic capability. What it lacks is judgment — any sense of which outputs are helpful versus harmful, relevant versus tangential, honest versus sycophantic. That's what the next two stages provide.</p>
+<h2 id="stage-two-the-reward-model">Stage Two: The Reward Model</h2>
+<p>Human annotators are given pairs of model outputs for the same prompt &amp; asked to rank them. Which response is more helpful? More accurate? More harmless? Thousands of these comparisons are collected, &amp; a separate model — the reward model — is trained to predict which response a human would prefer. The reward model learns to assign a numerical score to any given output: higher means "more like what humans want."</p>
+<p>This is the step where human values get encoded — imperfectly, approximately, but meaningfully — into a mathematical signal. The reward model doesn't understand ethics or helpfulness in any deep sense. It's learned a function that maps text to a score, trained on the patterns in human preferences. But that function is good enough to serve as a compass for the next stage.</p>
+<h2 id="stage-three-policy-optimization">Stage Three: Policy Optimization</h2>
+<p>Now the pretrained model is fine-tuned using reinforcement learning, with the reward model providing the signal. The classic approach uses PPO — Proximal Policy Optimization — where the model generates responses, the reward model scores them, &amp; the model's weights are adjusted to produce higher-scoring outputs more often. It's a feedback loop: generate, score, adjust, repeat.</p>
+<p>A newer alternative — DPO, Direct Preference Optimization — skips the separate reward model entirely. Instead of training a reward model &amp; then using RL, DPO directly optimizes the language model on the human preference data. It's simpler, more stable, &amp; cheaper to run. DeepSeek went further with GRPO (Group Relative Policy Optimization), which skips the reward model too but uses a different trick: it generates multiple responses per prompt, scores them against each other, &amp; updates the model to favor the better ones within each group. This was significantly cheaper than PPO, which helped DeepSeek train competitive models on a fraction of the typical budget.</p>
+<h2 id="the-alignment-tax">The Alignment Tax</h2>
+<p>RLHF isn't free. The model often becomes slightly less capable on raw benchmarks after alignment training — it trades some breadth for safety &amp; helpfulness. It also introduces characteristic failure modes. Sycophancy is the most discussed: the reward model learns that humans prefer responses that agree with them, so the aligned model develops a tendency to tell ppl what they want to hear rather than what's true. Excessive caution is another — the model learns that refusing borderline requests is safer than engaging, so it over-refuses, blocking legitimate use cases.</p>
+<p>These aren't bugs in RLHF. They're direct consequences of optimizing for human preference signals that are themselves noisy &amp; biased. The annotators had inconsistent standards. The preference data had blind spots. The reward model learned those blind spots faithfully.</p>
+<p>For PMs, the essential insight is that RLHF is where a model's personality gets shaped. The helpfulness, the caution, the tendency to hedge or be direct — these are design choices baked in during alignment training. When you choose a model, you're choosing the product of someone else's alignment decisions. Understanding RLHF helps you evaluate whether those decisions match what your users actually need, esp when they don't.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="43-hw-04-how-speculative-decoding-works.html">&larr; How Speculative Decoding Works</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="45-hw-06-how-mixture-of-experts-works.html">How Mixture-of-Experts Works &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/rlhf.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    RlhfDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

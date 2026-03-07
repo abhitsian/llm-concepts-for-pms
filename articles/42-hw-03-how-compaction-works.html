@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Compaction Works</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">636 words</div><h1>How Compaction Works</h1><div class="article-subtitle">Part 3 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A developer is three hours into a coding session with Claude Code. They've discussed architecture decisions, debugged a race condition, refactored two modules, &amp; written tests. The conversation is massive — tens of thousands of tokens of back-&amp;-forth. Then, mid-task, the agent pauses. It's hitting the context window ceiling. Without intervention, the session dies. Instead, the system kicks off compaction: it reads the entire conversation, generates a compressed summary, &amp; swaps out the original messages for that summary. The session continues. The developer barely notices.</p>
+<h2 id="the-context-window-wall">The Context Window Wall</h2>
+<p>Every LLM has a finite context window — the maximum number of tokens it can process in a single call. Even with 200K-token windows, long-running agent sessions fill up fast. Each user message, each model response, each tool call &amp; its output, each file read — they all accumulate. A coding agent that reads files, writes code, runs tests, &amp; discusses results can burn through 200K tokens in under an hour of active use.</p>
+<p>When the context fills up, you have two options: end the session or make room. Compaction is how you make room. The system takes the full conversation history, feeds it to the model with an instruction like "summarize this conversation, preserving all decisions made, files modified, current task state, &amp; open questions," &amp; gets back a condensed version — typically 10-20% of the original length. This summary replaces the raw conversation history, freeing up space for the session to continue.</p>
+<p>The mechanics vary by implementation. Some systems compact the entire history at once. Others use a sliding window — keeping the most recent N messages in full detail while summarizing everything older. Some compact proactively when context usage crosses a threshold (say 80%), while others wait until they're about to hit the wall. Claude Code, for instance, triggers compaction automatically &amp; lets users trigger it manually with a slash command.</p>
+<h2 id="the-lossy-compression-problem">The Lossy Compression Problem</h2>
+<p>Compaction is lossy. There's no way around this. A 50,000-token conversation compressed to 5,000 tokens <em>will</em> lose information. The question is which information gets lost &amp; whether it matters.</p>
+<p>Good compaction preserves structural decisions — "we agreed to use PostgreSQL, not MongoDB" — while discarding the deliberation that led there. It keeps track of what files were modified &amp; how. It retains the current task &amp; its subtasks. It drops the back-&amp;-forth exploration, the dead ends, the "actually wait, let me reconsider" tangents that consumed tokens but don't affect what happens next.</p>
+<p>Bad compaction loses critical details. It might forget that a specific file was already modified, leading the agent to overwrite its own work. It might lose a constraint the user mentioned early in the session — "don't touch the auth module" — that wasn't restated recently. It might flatten nuanced decisions into oversimplified summaries that cause the agent to make wrong assumptions going forward. When an agent starts behaving erratically after a long session, compaction quality is often the culprit.</p>
+<h2 id="the-reliability-ceiling">The Reliability Ceiling</h2>
+<p>This is why compaction directly affects product reliability. An agent that compacts well can maintain coherent sessions for hours, handling complex multi-step tasks that span dozens of files &amp; hundreds of decisions. An agent that compacts poorly degrades — slowly at first, then suddenly — as accumulated information loss compounds into confused behavior.</p>
+<p>The design challenge for PMs is that compaction failures are subtle. The agent doesn't crash or throw an error. It just starts making slightly wrong decisions cuz it lost context. Users experience this as the AI "forgetting" things they discussed earlier, which erodes trust in a way that's hard to diagnose &amp; harder to fix.</p>
+<p>Products that depend on long-running sessions — coding agents, research assistants, workflow automation — need to treat compaction as a first-class concern, not a background utility. The quality of your summarization logic sets the ceiling on how long your agent can work reliably. Ppl building these systems are effectively designing their product's memory, &amp; memory quality determines how much users can trust the product with real work.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="41-hw-02-how-prompt-caching-works.html">&larr; How Prompt Caching Works</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="43-hw-04-how-speculative-decoding-works.html">How Speculative Decoding Works &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/compaction.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    CompactionDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

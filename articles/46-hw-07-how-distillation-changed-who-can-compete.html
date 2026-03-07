@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Distillation Changed Who Can Compete</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">668 words</div><h1>How Distillation Changed Who Can Compete</h1><div class="article-subtitle">Part 7 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A startup founder reads the DeepSeek R1 paper &amp; pauses at a table of benchmark results. The distilled 70B model — trained by learning from R1's outputs, not from scratch — outperforms models that cost orders of magnitude more to develop. The distilled 7B model beats ppl's fine-tuned versions of Llama that are ten times its size. Something fundamental shifted, &amp; it's not about who has the most GPUs anymore.</p>
+<h2 id="how-distillation-works">How Distillation Works</h2>
+<p>The idea is simple. You have a large, expensive "teacher" model that's very good at some task. You want a small, cheap "student" model that's nearly as good. Instead of training the student on raw data — the way you'd train any model from scratch — you train it on the teacher's outputs. The student learns not just the right answers, but the teacher's <em>distribution</em> over all possible answers — the full probability landscape, including which wrong answers are almost right &amp; which are way off.</p>
+<p>This is the key insight. When a teacher model processes a math problem, its output isn't just "42." It's a probability distribution: 42 has 85% probability, 41 has 8%, 43 has 5%, &amp; everything else shares the remaining 2%. That distribution contains information that the raw correct answer alone doesn't — it encodes the teacher's uncertainty, the relationships between similar answers, the structure of the problem space. Training on these "soft labels" transfers knowledge far more efficiently than training on hard correct/incorrect labels from a dataset.</p>
+<p>The result: a 7B-parameter student trained via distillation can match or beat a 70B-parameter model trained from scratch on the same benchmarks. The student inherits a compressed version of the teacher's reasoning patterns without needing the teacher's size. It's like an apprentice learning a craft by watching a master — the apprentice doesn't need to rediscover every technique independently. They learn the refined version directly.</p>
+<h2 id="why-this-broke-the-economics">Why This Broke the Economics</h2>
+<p>Before distillation went mainstream, building a good model meant assembling a massive dataset, buying thousands of GPUs, &amp; spending months (and tens or hundreds of millions of dollars) training from scratch. The capital barrier was the moat. Only a handful of organizations — OpenAI, Google, Anthropic, Meta — could play the game, cuz only they had the resources to pretrain frontier models.</p>
+<p>Distillation changed the entry requirements. You don't need to pretrain a frontier model yourself — you need access to one's outputs. Run a million prompts through a powerful teacher, collect its responses (with their probability distributions), &amp; use that as training data for a smaller model. The cost drops from nine figures to six. The timeline drops from months to weeks. The GPU requirement drops from thousands to dozens.</p>
+<p>DeepSeek demonstrated this at scale with R1. They trained the full R1 model with reinforcement learning — an expensive, complex process. Then they distilled R1's reasoning capabilities into a family of smaller models ranging from 1.5B to 70B parameters. These distilled models outperformed comparably-sized models that were trained without the benefit of a reasoning teacher. The expensive RL training happened once. The distillation step was comparatively cheap, &amp; it produced a whole lineup of models.</p>
+<h2 id="the-moat-question">The Moat Question</h2>
+<p>This has direct consequences for how you think about competitive advantage. If anyone can distill a frontier model's capabilities into a smaller, cheaper model, the frontier model itself isn't a durable moat. OpenAI trains GPT-5. Within weeks, ppl are distilling its reasoning patterns into open-weight models that run on a single GPU. The lead that cost billions to develop gets partially replicated for a fraction of the cost.</p>
+<p>The moat moves up the stack. It's not the model — it's the data flywheel that trains better teachers over time. It's the user base generating feedback that improves alignment. It's the product surface that makes the model useful in a specific domain. It's the integrations, the trust, the workflow fit that keep users coming back even when a cheaper model appears.</p>
+<p>For PMs, the strategic takeaway is stark: if your product's value proposition is "we use a good model," distillation ensures that advantage has a short half-life. The model is the commodity. Everything you build around it — esp the things that get better with usage — is where durable differentiation lives.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="45-hw-06-how-mixture-of-experts-works.html">&larr; How Mixture-of-Experts Works</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="47-hw-08-how-multi-token-prediction-works.html">How Multi-Token Prediction Works &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/distillation.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    DistillationDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

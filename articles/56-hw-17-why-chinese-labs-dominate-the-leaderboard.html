@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why Chinese Labs Dominate the Leaderboard</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">668 words</div><h1>Why Chinese Labs Dominate the Leaderboard</h1><div class="article-subtitle">Part 17 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A PM at a US AI startup checks the latest LMSYS Chatbot Arena rankings in January 2025 &amp; does a double take. DeepSeek R1 is sitting at the top, matching or beating OpenAI's o1 on math &amp; reasoning. Qwen 2.5 from Alibaba is outperforming GPT-4o on several coding benchmarks. A year earlier, these names barely registered. Now they're trading the top spot with labs that have ten times the compute budget. The US export controls were supposed to prevent exactly this.</p>
+<h2 id="innovation-over-brute-force">Innovation Over Brute Force</h2>
+<p>The conventional wisdom was simple: bigger clusters of better GPUs produce better models. The US restricted China's access to NVIDIA's top chips — no A100s, no H100s. The assumption was that this would create an insurmountable gap. Instead, it created a constraint that forced architectural innovation.</p>
+<p>DeepSeek's V3 model used a Mixture-of-Experts architecture with a twist — Multi-head Latent Attention (MLA) — that dramatically reduced the memory &amp; compute required per token. Instead of activating all 671 billion parameters for every token, MLA activates only the relevant experts, meaning the effective compute cost is closer to a 37B dense model. They trained V3 on H800 GPUs — the export-compliant version of H100s, roughly 30% slower on AI workloads — &amp; still matched frontier performance. The total training cost was reportedly under $6 million. For context, GPT-4's training cost was estimated at over $100 million.</p>
+<p>This wasn't a fluke. Qwen took a similar approach with efficient attention mechanisms &amp; aggressive mixture-of-experts scaling. Yi &amp; Baichuan pushed distillation techniques that let smaller models inherit capabilities from larger ones. The common thread: when you can't win on raw compute, you win on architecture &amp; training efficiency.</p>
+<h2 id="the-talent-pipeline">The Talent Pipeline</h2>
+<p>Architecture doesn't design itself. Chinese labs benefited from a deep talent pipeline that the US inadvertently helped build. Thousands of top ML researchers trained at US universities — Stanford, CMU, Berkeley — &amp; worked at Google Brain, Meta FAIR, &amp; OpenAI. Many returned to China, esp as US immigration policy made staying harder &amp; Chinese tech salaries became competitive. They brought world-class research intuition &amp; an intimate understanding of how frontier models are built.</p>
+<p>The result is labs like DeepSeek — a relatively small team backed by the quantitative trading firm High-Flyer — that punch absurdly above their weight. Their technical reports read like top-tier research papers cuz the ppl writing them were publishing at NeurIPS &amp; ICML before they ever joined a Chinese startup.</p>
+<h2 id="open-weights-as-strategy">Open Weights as Strategy</h2>
+<p>Perhaps the most consequential strategic choice: Chinese labs open-sourced aggressively. DeepSeek V3, DeepSeek R1, Qwen 2.5 — all released as open-weight models. This wasn't altruism. It was a calculated move to build ecosystem dominance. When developers worldwide can download &amp; run your model, you set the standard. You attract contributors who improve your architecture. You create switching costs cuz ppl build tooling around your model format.</p>
+<p>Open-sourcing also neutralized the US labs' distribution advantage. OpenAI &amp; Anthropic have APIs, brand recognition, &amp; enterprise sales teams. But when a developer in Berlin or Bangalore can run DeepSeek R1 locally for free — with performance matching o1 — the API subscription becomes a harder sell. The open-source strategy turned a compute disadvantage into a distribution advantage.</p>
+<h2 id="what-this-means-for-product-builders">What This Means for Product Builders</h2>
+<p>The government funding dimension matters too. AI is a stated national priority in China, with direct subsidies, compute clusters built by state-backed companies, &amp; procurement contracts that guarantee revenue. This isn't fundamentally different from how the US funds defense AI, but the coordination is tighter &amp; the bureaucratic friction is lower.</p>
+<p>The leaderboard convergence happened two to three years faster than most forecasters predicted. The gap between the best US model &amp; the best Chinese model — which was enormous in 2023 — effectively closed by early 2025.</p>
+<p>For PMs, the strategic implication is clear: the AI race is no longer a US monopoly. This means more model options, faster price drops driven by competition, &amp; the urgent need to architect for model-switching. If your product is hardwired to a single provider, you're one DeepSeek release away from being locked into the expensive option. The winners will be the products that treat models as interchangeable commodities &amp; compete on the application layer instead.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="55-hw-16-how-computer-use-works.html">&larr; How Computer Use Works</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="57-hw-18-the-200-month-tier-war.html">The $200/Month Tier War &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/chinese-labs.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ChineseLabsDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All These Models Are the Same</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">657 words</div><h1>All These Models Are the Same</h1><div class="article-subtitle">Part 9 of The Earnings Call series</div><div class="divider">╌╌╌╌</div><hr />
+<p>Salesforce's Marc Benioff, Q3 FY2026 earnings call, said the quiet part out loud:</p>
+<blockquote><p>"All these large language models are the same. We just want the lowest cost one, then we plug it in."</p></blockquote>
+<p>The most provocative statement in enterprise AI. Not from some contrarian blogger — from the CEO of the world's largest CRM company. A man who's spent $30 billion on acquisitions building a software empire is now telling you that the foundation model layer is a commodity. The value, in Benioff's worldview, lives in the data layer, the workflow layer, the customer relationship layer — exactly what Salesforce sells. The model is interchangeable. The system of record is not.</p>
+<h2>The Decade-Long View</h2>
+<p>Netflix's Greg Peters offered maybe the most refreshingly contrarian take of the entire AI hype cycle, Q4 2024:</p>
+<blockquote><p>"Our thinking about AI hasn't really changed over a decade and a half or more."</p></blockquote>
+<p>While every other CEO was breathlessly announcing their AI strategy, Peters essentially shrugged. Netflix has been an AI/ML company since its recommendation engine launched. Generative AI is an evolution in their toolkit, not a revolution in their business model. The company that serves 260 million subscribers doesn't need to pivot to AI — it's been running on AI since before the term was trendy.</p>
+<p>Airbnb's Brian Chesky took the opposite approach, but arrived at the same conclusion about where value lives:</p>
+<blockquote><p>"By layering AI over the entire Airbnb experience, we believe we're building something that's impossible to replicate."</p></blockquote>
+<p>The moat isn't the model. It's the proprietary data — millions of listings, hundreds of millions of reviews, years of traveler behavior — that the model operates on. Anyone can access GPT-4 or Claude. Nobody else has Airbnb's dataset. The AI amplifies the data advantage; it doesn't replace it.</p>
+<h2>The Surprising Users</h2>
+<p>CrowdStrike's George Kurtz shared a counterintuitive finding about their Charlotte AI product:</p>
+<blockquote><p>"We certainly geared it toward that level one analyst, but we're actually finding that the level three analysts are using it even more because they understand how to prompt it."</p></blockquote>
+<p>This one's worth sitting with. CrowdStrike built an AI assistant assuming junior analysts would benefit most — automate the routine, free up the entry-level workers. Instead, senior analysts adopted it harder cuz they know how to wield it. They understand the domain deeply enough to craft precise prompts, interpret nuanced outputs, &amp; integrate AI into sophisticated threat-hunting workflows. The tool didn't replace expertise — it amplified it. The ppl who knew the most got the most out of it.</p>
+<p>This pattern repeats across every enterprise AI deployment. The leverage goes to the skilled, not the unskilled. AI is a power tool, &amp; power tools are most dangerous — &amp; most productive — in expert hands.</p>
+<h2>The Trillion-Dollar Question</h2>
+<p>The strategic tension underneath all these quotes is the defining debate of the AI era. If models are commodities — as Benioff insists — then the moat moves to data, distribution, &amp; workflow integration. Whoever owns the customer relationship &amp; the proprietary dataset wins, regardless of which model they plug in. Swap GPT-4 for Claude for Gemini for Llama — doesn't matter. The value is in the plumbing, not the engine.</p>
+<p>But if models keep differentiating — in reasoning depth, multimodal capability, speed, reliability, specialization — then the model layer still matters enormously. OpenAI is betting on this. Anthropic is betting on this. Every foundation model company is betting that their model will be meaningfully better in ways that justify premium pricing &amp; lock-in.</p>
+<p>Both camps can't be right. Or rather, both might be right <em>simultaneously</em> — commoditization at the base tier, differentiation at the frontier. The commodity models handle the 80% of tasks where any decent LLM will do. The frontier models handle the 20% where reasoning quality, safety, or specialization actually moves the needle. That split — esp for PMs choosing which models to build on — is the most consequential architectural decision in enterprise software right now.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="67-ec-08-reasoning-consumes-100x-more-compute.html">&larr; Reasoning Consumes 100x More Compute</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="69-ec-10-the-physical-world-doesnt-care.html">The Physical World Doesn't Care &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/model-commodity.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ModelCommodityDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

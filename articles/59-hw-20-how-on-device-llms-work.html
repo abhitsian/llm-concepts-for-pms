@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How On-Device LLMs Work</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">662 words</div><h1>How On-Device LLMs Work</h1><div class="article-subtitle">Part 20 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A user dictates a text message on her iPhone. She pauses mid-sentence to rephrase something awkward. Before she finishes the thought, Apple Intelligence has already suggested the better phrasing — appearing instantly, with no loading spinner, no network request, no cloud round-trip. She's on an airplane with no WiFi. The model is running entirely on the A17 Pro chip in her pocket.</p>
+<p>On-device LLMs are language models that run directly on phones, laptops, &amp; edge devices instead of remote servers. Apple Intelligence, Google's Gemini Nano, Qualcomm's AI Engine — all of them execute inference locally, using the device's own processor &amp; memory. The model weights live on your phone. The computation happens on your phone. Your data never leaves your phone.</p>
+<h2 id="fitting-a-model-in-your-pocket">Fitting a Model in Your Pocket</h2>
+<p>The fundamental constraint is size. A frontier cloud model like GPT-4o might use hundreds of billions of parameters, requiring hundreds of gigabytes of memory &amp; a cluster of GPUs. A phone has 6-8GB of RAM shared between the operating system, apps, &amp; the model. You need to fit everything — model weights, runtime state, KV cache — into a fraction of that.</p>
+<p>Quantization is the primary technique. During training, model weights are stored as 16-bit floating point numbers. For on-device inference, those weights get compressed to 4-bit integers — sometimes even lower. A 7-billion parameter model at 16-bit precision takes roughly 14GB of memory. At 4-bit quantization, it shrinks to about 3.5GB. The quality loss from this compression is measurable on benchmarks but often imperceptible in practical use, esp for tasks like text completion, summarization, &amp; classification.</p>
+<p>Distillation is the other critical technique. Instead of trying to cram a huge model onto a phone, you train a small model — 1 to 3 billion parameters — to mimic the behavior of a much larger teacher model. The student model learns the teacher's output distribution, effectively inheriting capabilities that a model of its size would never develop from raw training data alone. Apple's on-device model is reportedly a ~3B parameter distilled model that punches well above its weight on the specific tasks Apple cares about.</p>
+<h2 id="the-silicon-advantage">The Silicon Advantage</h2>
+<p>Modern phones aren't running these models on their general-purpose CPU. They use dedicated neural engine hardware — specialized silicon designed for the matrix multiplications that dominate transformer inference. Apple's Neural Engine on the A17 Pro can perform 35 trillion operations per second. Qualcomm's Hexagon NPU in the Snapdragon 8 Gen 3 hits similar numbers. These chips are optimized specifically for the low-precision integer math that quantized models use, making them far more efficient per watt than running the same model on the CPU or GPU.</p>
+<p>The result is inference that feels instant. On-device models typically generate tokens in 10-30 milliseconds — faster than cloud models, cuz there's no network latency, no queue, no waiting for a server to spin up. For real-time tasks like autocomplete, smart replies, &amp; voice transcription, this speed advantage is the whole point.</p>
+<h2 id="the-hybrid-architecture">The Hybrid Architecture</h2>
+<p>On-device models are less capable than cloud models. A 3B parameter model running in 4-bit precision simply cannot match a 200B+ parameter model running in full precision on a GPU cluster. It will make more errors on complex reasoning, produce less nuanced creative writing, &amp; struggle with long-context tasks. The trade-off is explicit: you sacrifice capability for speed, privacy, &amp; cost.</p>
+<p>The smart approach — &amp; what Apple, Google, &amp; others are actually building — is a hybrid architecture. Simple, latency-sensitive, or privacy-critical tasks run on-device: autocomplete, message suggestions, photo descriptions, notification summaries. Complex tasks that need frontier capability get routed to the cloud. Some systems use speculative decoding across this boundary — the on-device model drafts a response, &amp; the cloud model verifies or corrects it, reducing the amount of cloud compute needed.</p>
+<p>For PMs, on-device LLMs transform the product design space. Your intelligence architecture is now a three-variable optimization problem: latency, privacy, &amp; cost. On-device gives you zero-latency, fully-private, zero-marginal-cost inference — but at lower capability. Cloud gives you frontier capability — but at the cost of latency, privacy exposure, &amp; per-query billing. The products that win will be the ones that route intelligently between these two tiers, matching each user task to the right compute substrate without the user ever noticing the seam.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="58-hw-19-why-inference-costs-dropped-100x.html">&larr; Why Inference Costs Dropped 100x</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="60-ec-01-the-day-chegg-lost-half-its-value.html">The Day Chegg Lost Half Its Value &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/on-device.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    OnDeviceDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

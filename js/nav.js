@@ -58,6 +58,56 @@
       ["38-dp-14-the-memory-problem-nobody-solved", "The Memory Problem Nobody Solved"],
       ["39-dp-15-the-harness-designed-to-shrink", "The Harness Designed to Shrink"],
     ]},
+    { section: "Mechanisms", series: 3, items: [
+      ["40-hw-01-how-thinking-tokens-work", "How Thinking Tokens Work"],
+      ["41-hw-02-how-prompt-caching-works", "How Prompt Caching Works"],
+      ["42-hw-03-how-compaction-works", "How Compaction Works"],
+      ["43-hw-04-how-speculative-decoding-works", "How Speculative Decoding Works"],
+    ]},
+    { section: "Training & Architecture", series: 3, items: [
+      ["44-hw-05-how-rlhf-actually-works", "How RLHF Actually Works"],
+      ["45-hw-06-how-mixture-of-experts-works", "How Mixture-of-Experts Works"],
+      ["46-hw-07-how-distillation-changed-who-can-compete", "How Distillation Changed Who Can Compete"],
+      ["47-hw-08-how-multi-token-prediction-works", "How Multi-Token Prediction Works"],
+    ]},
+    { section: "Breakthroughs", series: 3, items: [
+      ["48-hw-09-how-deepseek-trained-r1-for-5m", "How DeepSeek Trained R1 for $5.5M"],
+      ["49-hw-10-how-openclaw-became-an-os-for-ai", "How OpenClaw Became an OS for AI"],
+      ["50-hw-11-how-gemini-hit-1m-token-context", "How Gemini Hit 1M Token Context"],
+      ["51-hw-12-how-diffusion-llms-work", "How Diffusion LLMs Work"],
+    ]},
+    { section: "Products & Interface", series: 3, items: [
+      ["52-hw-13-how-claude-codes-agentic-loop-works", "How Claude Code's Agentic Loop Works"],
+      ["53-hw-14-how-mcp-won-in-8-days", "How MCP Won in 8 Days"],
+      ["54-hw-15-how-gpt4o-imagegen-got-100m-signups", "How GPT-4o Image Generation Got 100M Signups"],
+      ["55-hw-16-how-computer-use-works", "How Computer Use Works"],
+    ]},
+    { section: "The Race", series: 3, items: [
+      ["56-hw-17-why-chinese-labs-dominate-the-leaderboard", "Why Chinese Labs Dominate the Leaderboard"],
+      ["57-hw-18-the-200-month-tier-war", "The $200/Month Tier War"],
+      ["58-hw-19-why-inference-costs-dropped-100x", "Why Inference Costs Dropped 100x"],
+      ["59-hw-20-how-on-device-llms-work", "How On-Device LLMs Work"],
+    ]},
+    { section: "The Disruption", series: 4, items: [
+      ["60-ec-01-the-day-chegg-lost-half-its-value", "The Day Chegg Lost Half Its Value"],
+      ["61-ec-02-our-corpus-became-more-essential", "Our Corpus Became More Essential"],
+    ]},
+    { section: "The Workforce", series: 4, items: [
+      ["62-ec-03-we-stopped-hiring", "We Stopped Hiring"],
+      ["63-ec-04-before-asking-for-headcount", "Before Asking for Headcount, Prove AI Can't"],
+    ]},
+    { section: "The Returns", series: 4, items: [
+      ["64-ec-05-2-billion-in-2-billion-back", "$2 Billion In, $2 Billion Back"],
+      ["65-ec-06-850-million-data-points", "850 Million Data Points"],
+    ]},
+    { section: "The Infrastructure", series: 4, items: [
+      ["66-ec-07-the-manhattan-sized-data-center", "The Manhattan-Sized Data Center"],
+      ["67-ec-08-reasoning-consumes-100x-more-compute", "Reasoning Consumes 100x More Compute"],
+    ]},
+    { section: "The Strategy", series: 4, items: [
+      ["68-ec-09-all-these-models-are-the-same", "All These Models Are the Same"],
+      ["69-ec-10-the-physical-world-doesnt-care", "The Physical World Doesn't Care"],
+    ]},
   ];
 
   // Detect if we're on an article page or the index
@@ -102,7 +152,7 @@
   var lastSeries = 0;
   ARTICLES.forEach(function(group) {
     if (group.series !== lastSeries) {
-      var seriesLabel = group.series === 1 ? 'LLM Concepts for PMs' : 'Design Patterns of the AI Era';
+      var seriesLabel = group.series === 1 ? 'LLM Concepts for PMs' : group.series === 2 ? 'Design Patterns of the AI Era' : group.series === 3 ? 'How It Actually Works' : 'The Earnings Call';
       sidebarHTML += '<div class="sidebar-series">' + seriesLabel + '</div>';
       lastSeries = group.series;
     }

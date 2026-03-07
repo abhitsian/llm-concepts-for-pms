@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The $200/Month Tier War</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">659 words</div><h1>The $200/Month Tier War</h1><div class="article-subtitle">Part 18 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A senior developer does the math on his AI usage. He's been paying $20/month for ChatGPT Plus but hitting rate limits constantly — esp when using o1 for complex debugging sessions. He switches to ChatGPT Pro at $200/month. His AI usage triples overnight. He stops rationing prompts, stops switching to free alternatives mid-task, stops breaking complex questions into smaller ones to stay under limits. The $200 pays for itself by Tuesday.</p>
+<p>In 2025, every major AI lab launched a premium tier in the $200/month range. OpenAI's ChatGPT Pro. Anthropic's Claude Max. Google pushed Gemini Advanced higher. The pricing wasn't a coincidence — it was a coordinated market discovery that a specific segment of users would happily pay ten times more for ten times the access.</p>
+<h2 id="the-economics-of-power-users">The Economics of Power Users</h2>
+<p>The $20/month tier was never meant to be profitable on heavy users. It was a growth play — get millions of ppl paying something, build habit, figure out margins later. The problem: power users burned through 10 to 100 times the tokens of casual users. A developer running extended thinking on every query, a researcher feeding in 100-page documents, a content professional generating thousands of words daily — these users were costing $50 to $200/month in compute while paying $20.</p>
+<p>The $200 tier solves this by segmenting the market. Casual users — the ones who ask ChatGPT a few questions a week — stay at $20 or free. They're cheap to serve &amp; they provide scale. Professional users — developers, researchers, analysts, writers — move to $200. They're expensive to serve but their willingness-to-pay is enormous cuz they're generating thousands of dollars of value per month from AI. A developer who saves two hours a day is capturing $50,000+ in annual productivity. Two hundred a month is a rounding error.</p>
+<h2 id="what-200-actually-buys">What $200 Actually Buys</h2>
+<p>The premium tiers aren't just "more of the same." They unlock qualitatively different experiences. Higher rate limits mean you never hit a wall mid-workflow. Priority access during peak usage means the model is always available when you need it — no "we're experiencing high demand" messages at 2 PM on a workday. Longer context windows let you feed in entire codebases or document collections. More reasoning compute means the model can think longer &amp; harder on difficult problems. Early access to new models means you're always on the frontier.</p>
+<p>The most valuable feature is the one nobody lists on the pricing page: the absence of friction. At $20, you learn to self-censor. You don't ask the "expensive" question cuz you might hit your limit. You copy-paste outputs into a local doc instead of asking follow-ups. You break a complex task into manual steps cuz you're hoarding tokens. At $200, that friction disappears. You use the tool the way it was designed to be used — aggressively, iteratively, without constraint.</p>
+<h2 id="the-bifurcation">The Bifurcation</h2>
+<p>What's emerging is a two-tier market that looks a lot like other professional software markets. The casual tier — free to $20 — serves consumers &amp; light users. The product experience is optimized for simplicity, broad appeal, &amp; low cost per user. The professional tier — $200 &amp; up — serves knowledge workers, developers, &amp; power users. The product experience is optimized for capability, depth, &amp; throughput.</p>
+<p>These tiers are starting to diverge in product design, not just pricing. The professional tier gets features like project workspaces, persistent memory across sessions, deeper tool integrations, &amp; usage analytics. The casual tier gets a cleaner, simpler interface with suggested prompts &amp; guardrails. Same model underneath, but the product wrapped around it is splitting into two different applications.</p>
+<p>For PMs, the $200 tier war reveals something important about AI product economics. The traditional SaaS playbook — one price, one product, optimize for seat count — doesn't work when usage variance is 100x between your lightest &amp; heaviest users. The winning strategy is aggressive segmentation: make the casual experience free or cheap to maximize reach, then capture the professional surplus with a premium tier priced against the value created, not the cost incurred. The $200 price point isn't about what inference costs. It's about what the user's time is worth.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="56-hw-17-why-chinese-labs-dominate-the-leaderboard.html">&larr; Why Chinese Labs Dominate the Leaderboard</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="58-hw-19-why-inference-costs-dropped-100x.html">Why Inference Costs Dropped 100x &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/tier-war.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    TierWarDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

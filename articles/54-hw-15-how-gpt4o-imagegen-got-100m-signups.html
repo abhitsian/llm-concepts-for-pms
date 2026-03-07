@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How GPT-4o Image Generation Got 100M Signups</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">643 words</div><h1>How GPT-4o Image Generation Got 100M Signups</h1><div class="article-subtitle">Part 15 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A product manager at a consumer app opens Twitter on a Tuesday morning in March 2025 &amp; every other post is a Studio Ghibli-style portrait. Her CEO, her college roommate, a senator — all rendered in soft watercolor anime. By Wednesday her group chat is sharing action-figure versions of themselves in plastic blister packaging. By Thursday OpenAI has 100 million new signups. She stares at her own app's growth curve &amp; wonders what just happened.</p>
+<p>What happened was GPT-4o's native image generation. Not DALL-E bolted onto ChatGPT as a separate tool. Not a "generate image" button that routes you to a different model. The same model that writes your emails now also draws pictures — natively, inside the same conversation, with the same context. You say "make me look like a Ghibli character" &amp; it just does it, cuz text &amp; image generation share the same neural architecture.</p>
+<h2 id="why-native-multimodal-matters">Why Native Multimodal Matters</h2>
+<p>DALL-E was a separate model. You'd describe what you wanted in text, the text model would translate your request into a prompt for the image model, &amp; the image model would generate pixels. Two models, two inference passes, a translation layer in between. The result was technically impressive but always felt like talking through an interpreter.</p>
+<p>GPT-4o is trained on text &amp; images together from the ground up. It doesn't translate between modalities — it thinks in both simultaneously. This is why it could suddenly render text inside images correctly, something DALL-E consistently botched. It understood composition, spatial relationships, &amp; style transfer at a level that a bolted-on pipeline never achieved. When you said "put me in a Ghibli scene walking through a forest," it understood what Ghibli <em>meant</em> aesthetically — the light diffusion, the exaggerated foliage, the gentle color palette — cuz it had seen those films &amp; read ppl describing them in the same training data.</p>
+<h2 id="the-viral-loop">The Viral Loop</h2>
+<p>The technical capability was necessary but not sufficient. The growth explosion came from a viral loop so tight it was almost unfair. Step one: you generate an image of yourself in a trending style. Step two: you post it on social media cuz it's fun &amp; flattering. Step three: everyone who sees it wants to make their own. Step four: they sign up for ChatGPT to do it. Step five: they post theirs. The cycle completes in minutes.</p>
+<p>This loop was so aggressive that OpenAI had to throttle generation within days. Sam Altman tweeted about GPUs "melting." Rate limits dropped for free-tier users, then for paid users. The demand curve wasn't a hockey stick — it was a vertical line. Every previous AI image generator had the same viral potential in theory, but none had the distribution. Midjourney required Discord. DALL-E required a separate interface. GPT-4o's image generation lived inside ChatGPT — the app already on 200 million ppl's phones. Zero friction from desire to generation.</p>
+<h2 id="the-distribution-was-the-product">The Distribution Was the Product</h2>
+<p>Here's what most ppl missed in the discourse. The images weren't dramatically better than what Midjourney or Flux could produce. In many cases the quality was comparable or even slightly worse on technical benchmarks. What was dramatically better was the <em>access</em>. No new app to download. No new account to create. No learning a prompt syntax or navigating a queue system. You opened the chat you already used &amp; typed in natural language. The model already knew your name from prior conversations. It already understood context.</p>
+<p>OpenAI also made a deliberate product choice: they let free-tier users generate images, esp in the early days. This meant the viral loop wasn't gated by a paywall. The $20/month plan got you more generations, but the hook was free. Classic freemium growth — let ppl taste it, then charge for volume.</p>
+<p>For PMs, the lesson isn't about image quality or multimodal architecture. It's about distribution &amp; friction. The best image generator in the world doesn't matter if it requires three extra steps to reach. GPT-4o's image generation won cuz it was <em>already there</em> — inside the product 200 million ppl were already using. The distribution channel wasn't marketing. It was the product itself. When you're building AI features, the question isn't "how good is the model?" It's "how many steps between the user's intent &amp; the result?"</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="53-hw-14-how-mcp-won-in-8-days.html">&larr; How MCP Won in 8 Days</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="55-hw-16-how-computer-use-works.html">How Computer Use Works &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/imagegen-viral.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ImagegenViralDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

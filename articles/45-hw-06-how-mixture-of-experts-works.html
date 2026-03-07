@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Mixture-of-Experts Works</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">651 words</div><h1>How Mixture-of-Experts Works</h1><div class="article-subtitle">Part 6 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A PM is evaluating providers &amp; encounters a puzzling claim. DeepSeek V3 has 671 billion parameters — roughly the same scale as GPT-4 — yet it's dramatically cheaper to run. The benchmark scores are competitive. The latency is comparable. How does a model that's supposedly the same size cost so much less? The answer is Mixture-of-Experts, &amp; it's the architectural trick that broke the assumption that bigger models must be more expensive models.</p>
+<h2 id="the-sparse-activation-trick">The Sparse Activation Trick</h2>
+<p>In a traditional "dense" model, every parameter participates in processing every token. If the model has 70 billion parameters, all 70 billion do work for each token that passes through. A Mixture-of-Experts model works differently. It splits the network's feed-forward layers — the biggest computational component — into many separate "expert" sub-networks. For each token, a lightweight router network decides which small subset of experts to activate. The rest sit idle.</p>
+<p>DeepSeek V3 illustrates this concretely. It has 256 expert sub-networks but activates only 8 per token. So while the model's total knowledge is stored across 671 billion parameters, any given token only touches about 37 billion. The model has the <em>capacity</em> of a 671B-parameter network — it can store as much knowledge &amp; nuance — but the <em>compute cost</em> of a 37B-parameter one. This is why it's cheap: you're paying for the compute of the active parameters, not the total parameters.</p>
+<p>Mixtral followed a similar pattern at a smaller scale: 8 experts, 2 active per token. GPT-4 is widely believed to use MoE as well, though OpenAI hasn't confirmed the specifics. The pattern is consistent — the frontier of cost-efficient AI runs on sparse architectures.</p>
+<h2 id="the-router-is-the-brain">The Router Is the Brain</h2>
+<p>The router network is small — just a linear layer that takes a token's representation &amp; outputs a score for each expert. The top-K experts by score get activated. This happens at every layer of the network, &amp; different tokens in the same sentence can route to entirely different experts. A token about Python syntax might activate different experts than a token about French grammar, even within the same response.</p>
+<p>Training the router is tricky. Left unconstrained, the model tends to develop "expert collapse" — routing most tokens to just a few popular experts while the rest are underutilized. This wastes capacity. To prevent it, training includes load-balancing losses that penalize uneven expert utilization, encouraging the model to spread tokens across experts. DeepSeek V3 used an auxiliary-loss-free approach that's even more elegant — it adds a bias term to the routing scores that adjusts dynamically, nudging underused experts to receive more traffic without distorting the main training signal.</p>
+<p>The experts don't specialize in the way you might expect. They're not neatly organized — one for math, one for poetry, one for code. The specialization emerges during training &amp; tends to be more abstract, operating at the level of token patterns rather than human-recognizable domains. Attempting to interpret which expert "does what" is an active research area, but the honest answer is that the routing patterns are complex &amp; not fully understood.</p>
+<h2 id="what-this-means-for-the-market">What This Means for the Market</h2>
+<p>MoE is the primary reason the cost-per-quality curve has dropped so steeply. Before MoE became mainstream, getting GPT-4-level quality meant paying GPT-4-level compute costs. With MoE, you get the quality that comes from storing knowledge across hundreds of billions of parameters while only paying to activate a fraction of them per token. The economics shifted from "quality requires proportional compute" to "quality requires proportional <em>storage</em>, but compute can be sparse."</p>
+<p>For PMs evaluating models, this means parameter count alone tells you almost nothing about cost. A 671B MoE model can be cheaper to serve than a 70B dense model, cuz what matters is active parameters per token, not total parameters. When a provider quotes you a price, understanding whether the model is dense or MoE tells you a lot about whether that price has room to drop further — &amp; whether a competitor could undercut it by simply using a sparser architecture. The model's size is no longer its cost. Its <em>active</em> size is.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="44-hw-05-how-rlhf-actually-works.html">&larr; How RLHF Actually Works</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="46-hw-07-how-distillation-changed-who-can-compete.html">How Distillation Changed Who Can Compete &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/mixture-experts.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    MixtureExpertsDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reasoning Consumes 100x More Compute</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">644 words</div><h1>Reasoning Consumes 100x More Compute</h1><div class="article-subtitle">Part 8 of The Earnings Call series</div><div class="divider">╌╌╌╌</div><hr />
+<p>January 2025. DeepSeek releases R1, a reasoning model reportedly trained for $5.5 million. The narrative goes viral instantly: if a Chinese lab can build a frontier-class model for a fraction of what OpenAI &amp; Google spend, who needs all those GPUs? NVIDIA's stock dips. The entire AI infrastructure thesis wobbles — for about 48 hours.</p>
+<p>Then Jensen Huang gets on the Q4 FY2025 earnings call &amp; reframes the entire conversation.</p>
+<blockquote><p>"AI is evolving beyond perception and generative AI into reasoning. Demand for Blackwell is amazing as reasoning AI adds another scaling law — increasing compute for training makes models smarter, and increasing compute for long thinking makes the answer smarter."</p></blockquote>
+<p>Then the kicker:</p>
+<blockquote><p>"Reasoning models can consume 100x more compute. In order to generate tokens, you need compute capacity, and that translates directly to growth, and that translates directly to revenues."</p></blockquote>
+<h2>The Jevons Paradox of AI</h2>
+<p>Huang's argument is elegant &amp; historically grounded. DeepSeek didn't reduce compute demand — it <em>increased</em> it. When training gets cheaper, more ppl train models. When inference gets cheaper, more ppl deploy them. When reasoning models think longer — chaining through multi-step logic, verifying their own work, exploring solution paths — they burn dramatically more inference compute per query.</p>
+<p>This is Jevons paradox, the 19th-century observation that making coal engines more efficient didn't reduce coal consumption — it made coal so useful that total consumption exploded. The same dynamic is playing out in AI compute. Every efficiency gain expands the addressable market. Every cost reduction unlocks use cases that were previously too expensive. The cheaper it gets, the more the world uses.</p>
+<p>The 100x number isn't hypothetical. A standard GPT-4-class completion might generate a few hundred tokens. A reasoning model working through a complex math problem or code debugging task might generate tens of thousands of "thinking tokens" — internal chain-of-thought steps that consume compute but never appear in the final output. The user sees a clean answer. The GPU cluster sees a hundred times the work.</p>
+<h2>The Supply Side Responds</h2>
+<p>AMD's Lisa Su on the Q4 2024 call, reading the same demand signals:</p>
+<blockquote><p>"We believe this places AMD on a steep long-term growth trajectory, led by the rapid scaling of our data center AI franchise from more than $5 billion of revenue in 2024 to tens of billions of dollars of annual revenue over the coming years."</p></blockquote>
+<p>From $5 billion to "tens of billions." AMD isn't hedging with "mid-single-digit growth" language. They're projecting a step-function increase cuz they see the same reasoning-driven demand curve that Huang described.</p>
+<p>TSMC — the company that actually fabricates these chips — raised its AI accelerator revenue CAGR projection from roughly 45% to 54–56% between 2024 and 2029. When the foundry revises upward, it's cuz the orders are already in the pipeline. TSMC doesn't speculate. It counts wafer starts.</p>
+<h2>What This Means for PMs</h2>
+<p>The insight here is deceptively simple: <strong>reasoning isn't free.</strong> Every "thinking token" burns compute. Every chain-of-thought step costs money. The better models get at reasoning — at breaking down complex problems, verifying their logic, exploring multiple solution paths — the more infrastructure the world needs to run them.</p>
+<p>This has direct product implications. If you're building features that rely on reasoning models — code generation, complex analysis, multi-step planning — your cost structure looks fundamentally different from a simple chat completion. A reasoning query might cost 10x–100x more than a standard one. Your pricing model, your rate limiting, your infrastructure planning all have to account for this.</p>
+<p>The capex surge isn't a bubble &amp; it isn't temporary. It's structural. The hyperscalers aren't spending $300 billion on AI infrastructure cuz of hype — they're spending it cuz reasoning models are creating a new compute demand curve that makes the generative AI wave look like a warm-up act. DeepSeek didn't kill the GPU trade. It proved why it's just getting started.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="66-ec-07-the-manhattan-sized-data-center.html">&larr; The Manhattan-Sized Data Center</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="68-ec-09-all-these-models-are-the-same.html">All These Models Are the Same &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/reasoning-compute.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ReasoningComputeDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>

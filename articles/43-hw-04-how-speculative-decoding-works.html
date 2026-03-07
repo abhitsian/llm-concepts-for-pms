@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Speculative Decoding Works</title>
+  <link rel="stylesheet" href="../css/style.css?v=1772868557">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">627 words</div><h1>How Speculative Decoding Works</h1><div class="article-subtitle">Part 4 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
+<p>A user sends a message to an LLM-powered app. The model knows what it wants to say — a four-paragraph explanation with code examples. But it has to generate that response one token at a time, each token waiting for the previous one to finish. Four hundred tokens, four hundred sequential steps. The GPU sits mostly idle during each step cuz the bottleneck isn't computation — it's the serial dependency. Speculative decoding breaks this bottleneck, &amp; understanding how it works explains why LLMs keep getting faster without getting smarter.</p>
+<h2 id="the-draft-and-verify-trick">The Draft-&amp;-Verify Trick</h2>
+<p>The core idea is deceptively simple. You have two models: a small, fast <em>draft</em> model &amp; the large, accurate <em>target</em> model you actually want to use. The draft model races ahead, predicting the next several tokens — say, eight at a time. Then the target model looks at all eight tokens in a single parallel pass &amp; checks: would I have generated the same tokens? For every token where the answer is yes, you've saved a sequential generation step. For any token where the answer is no, you discard from that point forward &amp; regenerate.</p>
+<p>The math is what makes this work. Generation is sequential — the model must produce token N before it can produce token N+1. But <em>verification</em> is parallel — the model can check whether it agrees with tokens N through N+7 all at once, cuz the draft provides the complete sequence to evaluate. This asymmetry is the entire trick. Verification costs roughly the same as generating a single token, but it covers multiple tokens simultaneously.</p>
+<p>Think of it like editing versus writing. Writing a paragraph from scratch requires thinking about each sentence in order. But reading a paragraph someone else wrote &amp; checking whether you'd say the same thing — that's much faster, cuz you process the whole thing at once. The draft model writes. The target model edits. When the draft is good, the editing pass accepts multiple tokens in the time it would've taken to write one.</p>
+<h2 id="why-it-works-without-quality-loss">Why It Works Without Quality Loss</h2>
+<p>This is the part that surprises ppl: speculative decoding produces <em>mathematically identical</em> output to running the target model alone. It's not an approximation. The target model has final say on every token. If it rejects a drafted token, that token never appears in the output. The acceptance criterion is designed so the final distribution over tokens exactly matches what the target model would produce on its own.</p>
+<p>The speedup depends entirely on how often the draft model's predictions match the target's. For predictable text — boilerplate code, common phrases, structured formatting — the acceptance rate is high, sometimes 80-90%. The draft model correctly guesses most tokens &amp; the target model confirms them in bulk. For creative or unusual text, the acceptance rate drops &amp; the speedup shrinks. But it never gets <em>slower</em> than normal generation, cuz at worst, you reject all draft tokens &amp; fall back to standard one-at-a-time decoding.</p>
+<p>In practice, this translates to 2-3x speedup for typical workloads. Some implementations report even higher gains on code generation &amp; structured output, where the draft model's predictions are esp reliable.</p>
+<h2 id="the-invisible-infrastructure">The Invisible Infrastructure</h2>
+<p>What makes speculative decoding interesting from a product perspective is that it's completely invisible to the user. The output is identical. The API interface doesn't change. The model's capabilities are the same. The only difference is that responses arrive faster. It's a pure infrastructure optimization — latency drops without any tradeoff in quality, accuracy, or behavior.</p>
+<p>This matters for PMs cuz it explains a pattern you'll notice: API providers periodically announce latency improvements without changing the model. The model name stays the same, the benchmarks stay the same, but responses come back 40% faster. Speculative decoding — along with related techniques like quantization &amp; batching optimizations — is often behind these gains. The user experience improvement is, in a real sense, free. No product redesign, no prompt changes, no behavior differences. Just faster. Understanding this helps you distinguish between provider improvements that change what you can build &amp; those that simply make what you've already built feel better.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="42-hw-03-how-compaction-works.html">&larr; How Compaction Works</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="44-hw-05-how-rlhf-actually-works.html">How RLHF Actually Works &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1772868557"></script>
+<script src="../js/diagrams/speculative-decoding.js?v=1772868557"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    SpeculativeDecodingDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1772868557"></script>
+</body>
+</html>
