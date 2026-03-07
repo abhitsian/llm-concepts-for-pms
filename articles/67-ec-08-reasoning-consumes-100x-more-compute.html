@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reasoning Consumes 100x More Compute</title>
-  <link rel="stylesheet" href="../css/style.css?v=1772893674">
+  <link rel="stylesheet" href="../css/style.css?v=1772895355">
 </head>
 <body>
   <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
@@ -19,6 +19,7 @@
 <p>Huang's argument is elegant &amp; historically grounded. DeepSeek didn't reduce compute demand — it <em>increased</em> it. When training gets cheaper, more ppl train models. When inference gets cheaper, more ppl deploy them. When reasoning models think longer — chaining through multi-step logic, verifying their own work, exploring solution paths — they burn dramatically more inference compute per query.</p>
 <p>This is Jevons paradox, the 19th-century observation that making coal engines more efficient didn't reduce coal consumption — it made coal so useful that total consumption exploded. The same dynamic is playing out in AI compute. Every efficiency gain expands the addressable market. Every cost reduction unlocks use cases that were previously too expensive. The cheaper it gets, the more the world uses.</p>
 <p>The 100x number isn't hypothetical. A standard GPT-4-class completion might generate a few hundred tokens. A reasoning model working through a complex math problem or code debugging task might generate tens of thousands of "thinking tokens" — internal chain-of-thought steps that consume compute but never appear in the final output. The user sees a clean answer. The GPU cluster sees a hundred times the work.</p>
+<p>At the Morgan Stanley TMT Conference, Huang laid out the full trajectory — three successive inflection points, each multiplying compute demand by orders of magnitude. First, generative models replaced hand-coded rules. Then reasoning models demanded 1,000x more compute per query. Next, agentic systems — models that plan, execute, &amp; iterate autonomously — will consume a million times more tokens per task. Each wave doesn't replace the last; it stacks on top of it. The compute flywheel is self-reinforcing: better reasoning creates more valuable outputs, which justifies more compute, which funds better hardware, which enables even deeper reasoning.</p>
 <h2>The Supply Side Responds</h2>
 <p>AMD's Lisa Su on the Q4 2024 call, reading the same demand signals:</p>
 <blockquote><p>"We believe this places AMD on a steep long-term growth trajectory, led by the rapid scaling of our data center AI franchise from more than $5 billion of revenue in 2024 to tens of billions of dollars of annual revenue over the coming years."</p></blockquote>
@@ -35,8 +36,8 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="68-ec-09-all-these-models-are-the-same.html">All These Models Are the Same &rarr;</a>
 </nav>
-  <script src="../js/bezier-core.js?v=1772893674"></script>
-<script src="../js/diagrams/reasoning-compute.js?v=1772893674"></script>
+  <script src="../js/bezier-core.js?v=1772895355"></script>
+<script src="../js/diagrams/reasoning-compute.js?v=1772895355"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var canvas = document.getElementById('bezier-canvas');
@@ -44,6 +45,6 @@
     ReasoningComputeDiagram(canvas, container);
   });
 </script>
-  <script src="../js/nav.js?v=1772893674"></script>
+  <script src="../js/nav.js?v=1772895355"></script>
 </body>
 </html>

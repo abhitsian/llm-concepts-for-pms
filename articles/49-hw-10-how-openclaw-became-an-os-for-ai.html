@@ -4,13 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>How OpenClaw Became an OS for AI</title>
-  <link rel="stylesheet" href="../css/style.css?v=1772893674">
+  <link rel="stylesheet" href="../css/style.css?v=1772895355">
 </head>
 <body>
   <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">638 words</div><h1>How OpenClaw Became an OS for AI</h1><div class="article-subtitle">Part 10 of the How It Actually Works series</div><div class="divider">╌╌╌╌</div><hr />
 <p>A startup PM is building a customer support product. She needs to route queries to different models based on complexity, connect to her company's knowledge base, maintain conversation history across sessions, &amp; track costs per interaction. Six months ago her team built all of this from scratch — custom routing logic, bespoke API wrappers, a hand-rolled memory layer. Now she's looking at a growing category of tools that handle all of it out of the box. What she's seeing is the emergence of an AI operating system — a layer between models &amp; applications that manages the plumbing so product teams can focus on product.</p>
+<p>The adoption speed was staggering. Jensen Huang noted at the Morgan Stanley TMT Conference that OpenClaw "surpassed Linux in 3 weeks" as the most-downloaded open-source software in history. A framework that barely existed a year ago is now the default plumbing layer for AI applications — evidence that the industry was starving for this abstraction.</p>
 <h2 id="the-os-analogy">The OS Analogy</h2>
 <p>Every computing platform eventually develops an operating system. Early PC software talked directly to hardware — managing its own memory, drawing its own pixels, handling its own input. Then DOS appeared, then Windows, then mobile OSes. The pattern is always the same: a shared infrastructure layer absorbs the common problems so applications don't each reinvent them. AI is following this pattern with eerie precision.</p>
 <p>The AI OS layer — whether you call it OpenClaw, LangChain, LiteLLM, OpenRouter, or any of the emerging orchestration frameworks — handles four core jobs. <strong>Model routing:</strong> picking the right model for each task, balancing cost against quality against latency. A simple FAQ lookup doesn't need GPT-4; a complex reasoning task shouldn't go to a cheap model. <strong>Tool management:</strong> connecting models to external APIs, databases, &amp; services through standardized interfaces like MCP or function calling. <strong>Memory:</strong> maintaining persistent context across sessions so the model remembers what happened yesterday without the application developer building a custom retrieval system. <strong>Cost optimization:</strong> caching common queries, batching requests, falling back to cheaper models when the premium one is unnecessary.</p>
@@ -28,8 +29,8 @@
   <a class="nav-index" href="../index.html">Index</a>
   <a href="50-hw-11-how-gemini-hit-1m-token-context.html">How Gemini Hit 1M Token Context &rarr;</a>
 </nav>
-  <script src="../js/bezier-core.js?v=1772893674"></script>
-<script src="../js/diagrams/openclaw.js?v=1772893674"></script>
+  <script src="../js/bezier-core.js?v=1772895355"></script>
+<script src="../js/diagrams/openclaw.js?v=1772895355"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var canvas = document.getElementById('bezier-canvas');
@@ -37,6 +38,6 @@
     OpenclawDiagram(canvas, container);
   });
 </script>
-  <script src="../js/nav.js?v=1772893674"></script>
+  <script src="../js/nav.js?v=1772895355"></script>
 </body>
 </html>
