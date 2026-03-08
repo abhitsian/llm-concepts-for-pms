@@ -806,6 +806,26 @@ body.company-page {
   line-height: 1.5;
 }
 
+.company-strategy-analysis {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text-80);
+  margin-bottom: 48px;
+}
+.company-strategy-analysis p { margin-bottom: 1em; }
+.company-strategy-analysis p:last-child { margin-bottom: 0; }
+
+.company-insight {
+  background: var(--color-code-bg);
+  border-left: 3px solid var(--color-highlight);
+  padding: 1.2em 1.5em;
+  margin-bottom: 48px;
+  border-radius: 0 6px 6px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text-80);
+}
+
 .company-footer {
   max-width: 800px;
   margin: 0 auto;
