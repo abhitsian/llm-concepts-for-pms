@@ -155,6 +155,21 @@
     if (bookMatch) currentBookSlug = bookMatch[1];
   }
 
+  // --- Theme toggle ---
+  var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    currentTheme = theme;
+    updateThemeIcon();
+  }
+
+  function updateThemeIcon() {
+    var btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = currentTheme === 'dark' ? '\u2600' : '\u263E';
+  }
+
   // --- Build header ---
   var header = document.createElement('header');
   header.className = 'site-header';
@@ -163,7 +178,11 @@
       '<span></span><span></span><span></span>' +
     '</button>' +
     '<a class="site-header-title" href="' + basePath + 'index.html">LLM Concepts for PMs</a>' +
-    '<div class="site-header-right"></div>';
+    '<div class="site-header-right">' +
+      '<button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">' +
+        (currentTheme === 'dark' ? '\u2600' : '\u263E') +
+      '</button>' +
+    '</div>';
 
   document.body.insertBefore(header, document.body.firstChild);
 
@@ -240,4 +259,12 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeSidebar();
   });
+
+  // Theme toggle click
+  var themeBtn = document.getElementById('theme-toggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    });
+  }
 })();
