@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The 280x Collapse</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774955743">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">667 words</div><h1>The 280x Collapse</h1><div class="article-subtitle">Module 11 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>Inference costs have fallen roughly 280-fold since late 2022. What cost $28 to run then costs $0.10 today for equivalent computation. This is the single most important fact in AI product strategy, and most product managers don't know it.</p>
+
+<h2>Where the 280x Came From</h2>
+
+<p>No single factor explains a 280x reduction. It's the compound effect of improvements across every layer of the stack:</p>
+
+<p><strong>Better chips</strong> &mdash; Each new GPU generation (A100 &rarr; H100 &rarr; B200) delivers roughly 2&ndash;3x more performance per dollar. Three generations in three years = ~8&ndash;10x from hardware alone.</p>
+
+<p><strong>Quantization</strong> &mdash; Moving from FP32 to FP8 and beyond yields ~4x throughput improvement with minimal quality loss. Custom kernels push this further.</p>
+
+<p><strong>Software optimization</strong> &mdash; vLLM's PagedAttention reduced memory waste from 80% to under 4%. Continuous batching improved throughput 10&ndash;23x. Speculative decoding added another 2&ndash;3x.</p>
+
+<p><strong>Model architecture</strong> &mdash; Newer models are more efficient. Mixture-of-experts activates only a fraction of parameters per query, reducing compute by 4&ndash;8x while maintaining quality. Distilled models deliver 80&ndash;90% of frontier quality at 10% of the cost.</p>
+
+<p><strong>Scale</strong> &mdash; More data centers, more chips, more competition among providers. Supply expansion drives down prices even without technical improvements.</p>
+
+<p>The 280x is the product of all of these, compounding. Hardware alone would have given 10x. Software alone would have given 10x. Together, with architecture improvements and competition, you get 280x. And the curve hasn't flattened.</p>
+
+<h2>What This Means for Product Strategy</h2>
+
+<p>The cost curve is a product roadmap signal. Here's how to read it:</p>
+
+<p><strong>Features that seem unviable today will be viable in 12&ndash;18 months.</strong> An agentic workflow that costs $2 per session today will cost $0.20 in 18 months. If you wait for the economics to make sense before building, you'll be 18 months behind the competitors who built now and scaled when the cost dropped.</p>
+
+<p><strong>Long-context features are moving from luxury to standard.</strong> Passing full conversation history or analyzing large documents used to be prohibitively expensive. The cost is falling fast enough that these features are becoming economically standard. Design for them now.</p>
+
+<p><strong>Agentic AI is a bet on this curve &mdash; and it's a correct bet.</strong> AI agents that take multi-step actions generate 10&ndash;100x more tokens per session than single-turn chat. Today's unit economics on agents look terrible. But the same was true of cloud computing in 2008, streaming video in 2012, and mobile apps in 2010. The companies that bet on the cost curve were right every time.</p>
+
+<p><strong>Don't price based on today's costs.</strong> If you set AI feature pricing using current inference costs, you'll be overcharging in a year and your competitors will undercut you. Price based on where costs will be in 12&ndash;18 months. The companies that get this wrong build beautiful products with unsustainable economics, then panic-raise prices when competition drives margins down.</p>
+
+<h2>The Jevons Paradox</h2>
+
+<p>When something gets cheaper, people use more of it, not less. This is the Jevons Paradox, and it's playing out in AI with mathematical precision. Google processes 20x more AI tokens now than a year ago. Total AI compute demand is growing faster than costs are falling. The industry is running to stand still &mdash; building massive infrastructure just to keep up with demand that the falling costs themselves create.</p>
+
+<p>For product managers, the implication is that AI usage will be far higher than you project. Users who interact with AI once a day at current prices will interact 10 times a day when it's 10x cheaper. Features that seem niche at current costs become mainstream at future costs. Plan your infrastructure and roadmap for 10x the usage you currently see.</p>
+
+<h2>First Principles Takeaway</h2>
+
+<p>The 280x cost collapse is the most reliable signal in AI strategy. It tells you: build the user experience and workflow around expensive features now, because the economics will catch up. The product managers who built for the cost curve in previous technology transitions &mdash; cloud, mobile, streaming &mdash; were the ones still standing five years later. The same pattern is playing out in AI, faster.</p>
+<div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+  <nav class="article-nav">
+  <a href="79-fs-10-inference.html">&larr; Inference</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="81-fs-12-the-application-layer.html">The Application Layer &rarr;</a>
+</nav>
+  
+  <script src="../js/nav.js?v=1774955743"></script>
+</body>
+</html>

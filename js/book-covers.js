@@ -263,10 +263,76 @@ var BookCovers = (function() {
     });
   }
 
+  // Book 5: From Sand to Software — Layered silicon/circuit strata
+  // Industrial, physical — horizontal strata with particle flow in emerald
+  function InfraCover(canvas, container) {
+    var layers = [];
+    for (var i = 0; i < 7; i++) {
+      layers.push({
+        y: 0.12 + (i / 7) * 0.76,
+        thickness: 1 + Math.random() * 2,
+        speed: 0.08 + Math.random() * 0.12,
+        phase: Math.random() * Math.PI * 2,
+        opacity: 0.06 + Math.random() * 0.08
+      });
+    }
+    var particles = [];
+    for (var i = 0; i < 30; i++) {
+      particles.push({
+        x: Math.random(),
+        y: Math.random(),
+        speed: 0.02 + Math.random() * 0.06,
+        size: 0.5 + Math.random() * 1.5,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+
+    return B.animate(canvas, container, function(ctx, w, h, time) {
+      ctx.fillStyle = '#0a140e';
+      ctx.fillRect(0, 0, w, h);
+      B.drawGrid(ctx, w, h, 60);
+
+      // Silicon strata — horizontal bands with subtle wave
+      layers.forEach(function(l) {
+        var yBase = l.y * h;
+        var t = time * l.speed + l.phase;
+        var p0 = { x: -10, y: yBase + Math.sin(t) * h * 0.02 };
+        var p1 = { x: w * 0.33, y: yBase + Math.sin(t + 1.2) * h * 0.03 };
+        var p2 = { x: w * 0.66, y: yBase + Math.cos(t + 0.8) * h * 0.03 };
+        var p3 = { x: w + 10, y: yBase + Math.sin(t + 2.0) * h * 0.02 };
+        B.drawCurve(ctx, [p0, p1, p2, p3], 60, wA(P.green, l.opacity + 0.04), l.thickness, 10);
+        B.drawCurve(ctx, [p0, p1, p2, p3], 60, wA(P.green, l.opacity + 0.15), 0.5, 4);
+      });
+
+      // Electron particles flowing upward through layers
+      particles.forEach(function(p) {
+        var px = p.x * w + Math.sin(time * 0.5 + p.phase) * w * 0.03;
+        var py = ((p.y - time * p.speed * 0.1) % 1.0);
+        if (py < 0) py += 1.0;
+        py = py * h;
+        var pulse = 0.3 + 0.7 * ((Math.sin(time * 2 + p.phase) + 1) / 2);
+        B.drawDot(ctx, {x: px, y: py}, p.size * pulse, wA(P.green, 0.2 + pulse * 0.3), 5 * pulse);
+      });
+
+      // Chip outlines — rectangular traces
+      for (var i = 0; i < 3; i++) {
+        var cx = w * (0.2 + i * 0.3) + Math.sin(time * 0.15 + i) * w * 0.02;
+        var cy = h * (0.3 + i * 0.2) + Math.cos(time * 0.2 + i) * h * 0.02;
+        var sz = 20 + Math.sin(time * 0.4 + i * 1.5) * 5;
+        var al = 0.08 + 0.04 * Math.sin(time * 0.8 + i);
+        ctx.strokeStyle = wA(P.green, al);
+        ctx.lineWidth = 1;
+        ctx.strokeRect(cx - sz, cy - sz, sz * 2, sz * 2);
+        B.drawDot(ctx, {x: cx, y: cy}, 2, wA(P.green, al + 0.15), 6);
+      }
+    });
+  }
+
   return {
     ConceptsCover: ConceptsCover,
     PatternsCover: PatternsCover,
     MechanicsCover: MechanicsCover,
-    EarningsCover: EarningsCover
+    EarningsCover: EarningsCover,
+    InfraCover: InfraCover
   };
 })();

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Memory Wall</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774955743">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">698 words</div><h1>The Memory Wall</h1><div class="article-subtitle">Module 5 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>Here's something that trips up almost everyone who looks at AI hardware for the first time: the chip's compute power is often not the bottleneck. Memory bandwidth is.</p>
+
+<h2>The Chef Analogy</h2>
+
+<p>Imagine a chef who can cook 1,000 dishes per minute. Superhuman speed. But the kitchen has a small window through which ingredients are passed, one at a time. It doesn't matter how fast the chef works &mdash; they're limited by how fast ingredients arrive. Most of the time, the chef is standing idle, waiting.</p>
+
+<p>This is the memory wall. AI chips can compute faster than they can receive data. For every operation, the chip needs to load model parameters &mdash; the billions of numbers that encode everything the model knows &mdash; from memory into compute. The speed at which this data moves is called memory bandwidth, and it's the binding constraint on AI inference performance today.</p>
+
+<h2>HBM: The Solution</h2>
+
+<p>The memory that feeds AI chips is called HBM &mdash; High Bandwidth Memory. It is physically stacked on top of the processor in a single package, connected by thousands of tiny copper pillars called microbumps. The stacking is literal: layers of memory chips are placed directly on top of each other, then bonded to the logic chip below. This vertical integration minimizes the distance data has to travel, maximizing bandwidth.</p>
+
+<p>A modern AI chip like the H100 has 80GB of HBM3 memory with 3.35 terabytes per second of bandwidth. That sounds enormous. It's not enough. A large language model has hundreds of billions of parameters. During inference, generating each word requires loading a significant fraction of these parameters from memory into compute. The math: if generating one token requires moving 100GB of data, and your bandwidth is 3.35 TB/s, the absolute fastest you can generate tokens is ~33 per second. In practice, it's slower.</p>
+
+<h2>The Supply Crunch</h2>
+
+<p>Three companies make HBM: SK Hynix (South Korea), Samsung (South Korea), and Micron (United States). That's the entire global supply. SK Hynix leads in quality and volume, having invested aggressively when others hesitated. Samsung has been catching up. Micron supplies a smaller share.</p>
+
+<p>There is currently a massive HBM supply crunch. Every new AI chip needs more HBM than the last. The H100 uses 80GB. The B200 uses 192GB. The GB200 NVL72 rack uses over 13 terabytes. Demand is growing faster than HBM manufacturing capacity can expand. This is why some AI services get rate-limited or slowed &mdash; not because the models aren't smart enough, but because there isn't enough memory to run them at full speed.</p>
+
+<h2>Why This Matters for Products</h2>
+
+<p>The memory wall has direct product implications that most PMs never think about:</p>
+
+<p><strong>Longer context windows are expensive.</strong> When you extend a model's context from 4,000 tokens to 200,000 tokens, the intermediate computations (called the KV cache) that must be stored in memory grow proportionally. Longer conversations use more memory, which means fewer users can be served simultaneously on the same hardware. A 200K context query can cost 100x more than a 2K context query &mdash; not linearly more, but dramatically more, because it pushes other users out of memory.</p>
+
+<p><strong>Model size is constrained by memory.</strong> The reason you can't just make models arbitrarily large isn't compute &mdash; it's memory. A 1-trillion-parameter model at FP16 precision requires 2 terabytes of memory just to store the weights. No single chip has that much. You need to split the model across multiple chips, which introduces communication overhead and reduces efficiency. Memory capacity sets the practical ceiling on model size per chip.</p>
+
+<p><strong>Batch size determines unit economics.</strong> If you can fit more users' queries into GPU memory simultaneously (a larger batch), the cost per query drops. Memory capacity directly determines how many concurrent users you can serve efficiently. More HBM = bigger batches = lower cost per token = better margins.</p>
+
+<h2>First Principles Takeaway</h2>
+
+<p>"More AI" requires more of multiple specific physical things simultaneously &mdash; compute chips, memory chips, interconnects, power, cooling. Any one can be the bottleneck. Right now, memory bandwidth is the binding constraint on inference. Your product decisions about context length, conversation history, and system prompt size are, at root, decisions about how much HBM you're consuming per user.</p>
+<div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+  <nav class="article-nav">
+  <a href="73-fs-04-the-chip.html">&larr; The Chip</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="75-fs-06-the-cluster.html">The Cluster &rarr;</a>
+</nav>
+  
+  <script src="../js/nav.js?v=1774955743"></script>
+</body>
+</html>
