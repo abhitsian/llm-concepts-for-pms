@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Groq and the Inference Rebels</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">781 words</div><h1>Groq and the Inference Rebels</h1><div class="article-subtitle">Deep Dive 5 &mdash; From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>In January 2024, a company called Groq demonstrated something that made the AI industry sit up: Claude and GPT-class models running at <strong>500+ tokens per second</strong>. Not a benchmark trick. Real-time, in-browser, conversational speed so fast the text appeared almost instantly. For context, standard Nvidia GPU inference runs at 30&ndash;80 tokens per second. Groq was 10x faster.</p>
+
+<h2>The LPU: A Different Kind of Chip</h2>
+
+<p>Groq builds a <strong>Language Processing Unit (LPU)</strong> &mdash; an entirely new chip architecture designed from scratch specifically for inference. Not training. Not general-purpose computation. Just inference: taking a trained model and running it as fast as possible.</p>
+
+<p>The key architectural difference: Nvidia GPUs are <strong>memory-bandwidth-bound</strong> during inference. The chip spends most of its time waiting for data from HBM. Groq's LPU uses <strong>SRAM (on-chip memory)</strong> instead of HBM. SRAM is dramatically faster but dramatically smaller and more expensive per bit. Groq trades memory capacity for memory speed &mdash; fitting the model (or a partition of it) into fast on-chip memory so the compute unit never waits for data.</p>
+
+<p>The result: for models that fit within Groq's memory architecture, inference is <strong>blazingly fast and deterministic</strong> &mdash; no variable latency, no queuing delays, predictable per-token timing. This matters for real-time applications: voice AI, live translation, interactive agents where 300ms latency kills the experience.</p>
+
+<h2>The Tradeoff</h2>
+
+<p>Groq's architecture has fundamental constraints:</p>
+
+<p><strong>Model size limits.</strong> SRAM is expensive. A Groq chip has far less memory than an HBM-equipped GPU. Running a 70B parameter model requires distributing across many Groq chips, each holding a portion. Running a 400B+ frontier model requires enormous Groq clusters. The economics work for smaller models; they get challenging for frontier-scale.</p>
+
+<p><strong>Training isn't the target.</strong> Groq's LPU is designed for inference, not training. AI labs still need Nvidia GPUs or Google TPUs to train their models. Groq competes only for the inference workload &mdash; which is admittedly the larger and growing market.</p>
+
+<p><strong>Software ecosystem.</strong> Groq has a much smaller software ecosystem than CUDA. The compiler, libraries, and optimization tools are proprietary and less mature. For standard transformer inference, this is manageable. For cutting-edge architectures with custom operations, it's a real limitation.</p>
+
+<h2>Cerebras: The Wafer-Scale Rebel</h2>
+
+<p>Cerebras took an even more radical approach: make the chip <strong>the entire wafer</strong>. A normal chip is a small die cut from a larger silicon wafer. Cerebras's WSE-3 (Wafer Scale Engine) uses the <strong>entire 300mm wafer</strong> as a single chip &mdash; <strong>4 trillion transistors</strong>, 900,000 cores, 44GB of on-chip SRAM.</p>
+
+<p>The advantage: no inter-chip communication bottleneck. All 900,000 cores are connected on-chip at silicon speeds. For models that fit, communication overhead is effectively zero. Cerebras demonstrated training a 70B parameter model on a single WSE-3 &mdash; something that would require hundreds of Nvidia GPUs.</p>
+
+<p>The constraint: a single wafer-scale chip costs roughly <strong>$2&ndash;3 million</strong>. Yield management on a wafer-scale die is incredibly complex &mdash; any defect kills a much larger area than on a conventional chip. And models that exceed the chip's memory must be partitioned across multiple wafers, reintroducing the communication problem Cerebras was designed to avoid.</p>
+
+<h2>Why Nvidia Isn't Losing Sleep (Yet)</h2>
+
+<p>The inference rebels &mdash; Groq, Cerebras, and others like SambaNova, Tenstorrent, and Etched &mdash; all have the same basic thesis: <strong>Nvidia GPUs are over-engineered for inference</strong>. GPUs are general-purpose parallel processors that happen to be good at AI. Purpose-built inference chips should be better at the specific thing enterprises are paying for: serving trained models to users.</p>
+
+<p>This thesis is correct in principle. The question is whether it matters in practice. Nvidia's response has been to keep improving inference performance on its own GPUs. The H200 with speculative decoding achieves <strong>3.6x throughput improvement</strong> over the H100. The B200 adds another generational leap. Nvidia is a moving target &mdash; and it has the ecosystem advantage.</p>
+
+<p>The inference rebels also face a chicken-and-egg problem. Cloud providers won't stock chips that customers don't demand. Customers won't develop for chips that cloud providers don't stock. Breaking into the market requires either massive capital (to build and operate your own cloud, like Groq is doing) or a killer partnership with a hyperscaler.</p>
+
+<p>The most likely outcome: the inference rebels carve out niches. Groq dominates latency-sensitive workloads (voice AI, real-time agents). Cerebras dominates specific training workloads where wafer-scale shines. Nvidia keeps the vast middle of the market. The GPU generalist vs. specialized ASIC dynamic plays out over 5&ndash;10 years, with neither side achieving a knockout.</p>
+
+<p><strong>For PMs:</strong> Watch Groq's pricing. If Groq can offer 10x faster inference at comparable or lower cost, it changes the product design space. Features that require real-time AI responses &mdash; voice interfaces, live collaboration, interactive agents &mdash; become much more viable. The inference chip war is ultimately a product-possibility war.</p>
+<div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+  <nav class="article-nav">
+  <a href="85-fs-16-what-bottlenecks-claude.html">&larr; What Bottlenecks Claude</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="87-fs-18-deepseek-and-the-china-fork.html">DeepSeek and the China Fork &rarr;</a>
+</nav>
+  
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenAI&#x27;s Billion-Dollar Dependencies</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">818 words</div><h1>OpenAI's Billion-Dollar Dependencies</h1><div class="article-subtitle">Deep Dive 3 &mdash; From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>OpenAI is the most famous AI company in the world. It's also one of the most dependent. Unlike Google (which builds its own chips and data centers) or Meta (which runs its own infrastructure at massive scale), OpenAI doesn't own the physical stack underneath its products. Every token ChatGPT generates runs on someone else's hardware, in someone else's data centers, on someone else's chips.</p>
+
+<h2>The Microsoft Marriage</h2>
+
+<p>Microsoft invested <strong>$13 billion</strong> in OpenAI between 2019 and 2023. In exchange, Microsoft got: exclusive cloud provider status (OpenAI runs on Azure), a license to integrate OpenAI models into Microsoft products (M365 Copilot, GitHub Copilot, Bing), and a revenue share on OpenAI's API business.</p>
+
+<p>This was a brilliant deal for Microsoft. Azure became the default cloud for AI workloads overnight. GitHub Copilot got the best coding model in the world. Microsoft 365 Copilot &mdash; now at <strong>15 million paid seats</strong>, growing 160% year-over-year &mdash; is powered by OpenAI's models. Azure AI contributes <strong>16 percentage points</strong> to Azure's total growth.</p>
+
+<p>For OpenAI, the deal provided survival capital and world-class infrastructure. But it created a structural dependency. OpenAI cannot leave Azure without renegotiating the most important partnership in AI. Azure's capacity constraints become OpenAI's capacity constraints. Azure's pricing floor becomes OpenAI's cost floor. When Microsoft says "a large share of AI capacity is allocated to our own products first," that's OpenAI's capacity being consumed by Microsoft Copilot before it reaches OpenAI's API customers.</p>
+
+<h2>The CoreWeave and Oracle Escape Routes</h2>
+
+<p>OpenAI has been diversifying its infrastructure away from sole dependence on Azure. CoreWeave &mdash; a neocloud valued at $35 billion despite being founded in 2017 &mdash; now provides significant compute for OpenAI's training runs. Oracle Cloud provides additional GPU capacity.</p>
+
+<p>CoreWeave's value proposition: purpose-built GPU infrastructure with no legacy enterprise workloads competing for resources. They lease Nvidia GPUs in massive quantities and provide them as dedicated clusters. The risk: CoreWeave is highly leveraged, financed by debt secured against future GPU revenue. If AI demand softens, CoreWeave's financial model faces stress. And OpenAI's training runs face disruption.</p>
+
+<p>The Stargate project &mdash; a reported <strong>$100+ billion</strong> infrastructure initiative &mdash; is OpenAI's attempt to eventually own its own compute destiny. But "eventually" is key. Building data centers takes 3&ndash;4 years. OpenAI needs compute now.</p>
+
+<h2>The Custom Chip Gambit</h2>
+
+<p>OpenAI is reportedly working with <strong>Broadcom</strong> to design custom AI chips &mdash; application-specific integrated circuits (ASICs) optimized for OpenAI's specific model architectures and inference patterns. The logic: if Google gets 30&ndash;40% cost advantage from custom TPUs, OpenAI could get a similar advantage from custom silicon.</p>
+
+<p>But custom chip design takes <strong>2&ndash;3 years</strong> from design start to production volume. TSMC fab capacity must be reserved. The chip design team must be hired and retained (semiconductor talent is scarce and expensive). And the software stack &mdash; the compiler, libraries, and optimization tools &mdash; must be built from scratch or adapted. Google has been doing this since 2013. OpenAI is starting now.</p>
+
+<p>In the meantime, OpenAI runs on <strong>Nvidia GPUs</strong> &mdash; mostly H100s and B200s &mdash; rented from Azure, CoreWeave, and Oracle. Every Nvidia pricing decision, every TSMC allocation decision, and every power availability constraint directly affects OpenAI's cost structure and capacity.</p>
+
+<h2>The Business Model Tension</h2>
+
+<p>OpenAI's revenue reportedly crossed <strong>$12+ billion</strong> annualized in early 2026, growing rapidly. But so are costs. Training frontier models costs hundreds of millions to billions. Inference at ChatGPT's scale &mdash; hundreds of millions of users generating billions of tokens daily &mdash; requires enormous continuous compute.</p>
+
+<p>The fundamental tension: OpenAI charges users $20&ndash;200/month for ChatGPT subscriptions and per-token API pricing. But it pays Nvidia, Microsoft, and CoreWeave for the GPU time those tokens consume. <strong>The margin between what users pay and what infrastructure costs is OpenAI's entire business.</strong> If Nvidia raises chip prices, OpenAI's margins compress. If Azure raises cloud prices, OpenAI's margins compress. OpenAI doesn't control its own cost structure.</p>
+
+<p>Compare to Google: when Google improves TPU efficiency by 30%, 100% of that saving flows to Google's bottom line. When Nvidia improves GPU efficiency by 30%, the saving is split between Nvidia (higher chip ASP), the cloud provider (higher margin), and the end customer (lower API price). OpenAI captures only a fraction of each hardware improvement.</p>
+
+<h2>The Strategic Calculus</h2>
+
+<p>OpenAI's strategy is clear: use the best available infrastructure today (Nvidia GPUs via Azure/CoreWeave/Oracle), while investing in future independence (custom chips via Broadcom, owned data centers via Stargate). The question is whether the model layer commoditizes faster than OpenAI can build its own infrastructure layer.</p>
+
+<p>If models commoditize before OpenAI achieves infrastructure independence, OpenAI becomes a high-cost provider of a commodity product &mdash; squeezed between Google (which runs models on custom chips) and Meta (which gives models away for free). If OpenAI maintains model leadership long enough to build its own stack, it becomes a vertically integrated AI company like Google.</p>
+
+<p>The race is against time, commoditization, and the $600B/yr CapEx machine that its competitors already control.</p>
+<div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+  <nav class="article-nav">
+  <a href="83-fs-14-google-built-the-whole-stack.html">&larr; Google Built the Whole Stack</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="85-fs-16-what-bottlenecks-claude.html">What Bottlenecks Claude &rarr;</a>
+</nav>
+  
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

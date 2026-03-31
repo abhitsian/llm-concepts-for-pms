@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Read AI News</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">918 words</div><h1>How to Read AI News</h1><div class="article-subtitle">Deep Dive 7 &mdash; From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>If you've read the previous modules, you have the complete mental model. Now here's the payoff: every piece of AI news maps onto the physical stack. Once you see the connections, you can't unsee them. Headlines that seemed random become predictable. Strategic moves that seemed confusing become obvious.</p>
+
+<h2>Reading CapEx Announcements</h2>
+
+<p><strong>Headline:</strong> "Google announces $75 billion in AI CapEx for 2025."</p>
+
+<p><strong>What you now know:</strong> This money goes to data centers (Module 7), which need chips (Module 4) from TSMC fabs (Module 3) using ASML machines (Module 2), powered by electricity from newly contracted turbines. The spend is committed 3&ndash;4 years out. Google is betting that AI demand in 2028 will require this infrastructure. The $75B isn't an experiment &mdash; it's turbine deposits, fab reservations, and construction contracts.</p>
+
+<p><strong>What to watch:</strong> If multiple hyperscalers announce CapEx increases simultaneously, supply chains will tighten. TSMC allocation gets more competitive. HBM supply gets scarcer. Inference costs stop falling as fast. Your AI feature costs may plateau or increase temporarily before new capacity comes online.</p>
+
+<h2>Reading Chip Launches</h2>
+
+<p><strong>Headline:</strong> "Nvidia announces B300 with 2x performance over B200."</p>
+
+<p><strong>What you now know:</strong> "2x performance" needs context. Is it training performance or inference performance? FP4 or FP8? At what batch size? (Module 8 &mdash; Software Stack). Does the new chip require liquid cooling that existing data centers don't have? (Module 6 &mdash; Clusters). When will TSMC actually manufacture it in volume? (Module 3 &mdash; The Fab). Nvidia announces chips 12&ndash;18 months before they're widely available.</p>
+
+<p><strong>What to watch:</strong> The release date matters less than the <em>volume production date</em>. A chip announced in March might not ship in quantity until Q4. Your product roadmap should track production dates, not announcement dates.</p>
+
+<h2>Reading Model Releases</h2>
+
+<p><strong>Headline:</strong> "Anthropic releases Claude 4 with 2x reasoning improvement."</p>
+
+<p><strong>What you now know:</strong> The improvement likely comes from post-training (Module 9 &mdash; Training), specifically reinforcement learning on reasoning tasks. This means Claude 4 probably generates more internal tokens per query (extended thinking), which means higher inference cost per response (Module 10 &mdash; Inference). The 2x improvement might cost 3x more per query. Check the pricing page, not just the benchmark chart.</p>
+
+<p><strong>What to watch:</strong> Model releases always highlight capability improvements. They rarely highlight cost changes upfront. The first question for any model upgrade: what does this cost per token? The cost-capability-speed triangle (Module 10) tells you that capability improvements usually trade off against cost or speed.</p>
+
+<h2>Reading Partnership Deals</h2>
+
+<p><strong>Headline:</strong> "Apple partners with Anthropic for on-device AI."</p>
+
+<p><strong>What you now know:</strong> On-device means running smaller models on Apple Silicon, not cloud inference (Module 4 &mdash; The Chip). This limits model capability &mdash; a phone can't run a 200B parameter model. The value is latency (instant, no network round trip) and privacy (data stays on device). The partnership likely involves Anthropic providing distilled models &mdash; smaller models trained to mimic larger ones (Module 9 &mdash; Training). Apple's A-series and M-series chips have neural engines specifically for this.</p>
+
+<p><strong>What to watch:</strong> Which tasks go on-device vs. cloud. Simple tasks (autocomplete, photo tagging) run on-device. Complex tasks (multi-step reasoning, long document analysis) require cloud inference. The boundary between "on-device" and "cloud" is a product architecture decision with direct cost and privacy implications.</p>
+
+<h2>Reading Pricing Changes</h2>
+
+<p><strong>Headline:</strong> "OpenAI cuts GPT-4o API pricing by 50%."</p>
+
+<p><strong>What you now know:</strong> This reflects some combination of: better hardware (newer GPUs with more throughput), software optimization (better batching, quantization &mdash; Module 8), increased supply (more data centers online &mdash; Module 7), and competitive pressure (Claude and Gemini pricing). The 280x collapse (Module 11) continues. This specific cut probably means a competitor (likely Google) was gaining market share at the lower price point.</p>
+
+<p><strong>What to watch:</strong> Pricing cuts that come with capability improvements are genuine &mdash; the cost-capability curve shifted. Pricing cuts that come without capability changes are competitive responses. The latter signal that the model layer is commoditizing (Module 12) and providers are fighting on price. That's good for you as a buyer, bad for the providers' margins.</p>
+
+<h2>Reading Hiring Announcements</h2>
+
+<p><strong>Headline:</strong> "Anthropic hires former TSMC VP of Advanced Packaging."</p>
+
+<p><strong>What you now know:</strong> Advanced packaging is how HBM is stacked onto logic chips (Module 5 &mdash; Memory Wall). This hire signals Anthropic is seriously exploring custom chip design. You don't hire a TSMC packaging expert to use commodity GPUs. This person is working on a chip that won't exist for 2&ndash;3 years.</p>
+
+<p><strong>What to watch:</strong> AI companies' hiring patterns reveal strategy 2&ndash;3 years before product announcements. Chip designers = custom silicon coming. Networking engineers = scaling to larger clusters. Energy procurement hires = data center expansion. Compiler engineers = new hardware support.</p>
+
+<h2>The Meta-Pattern</h2>
+
+<p>Every piece of AI news maps to one or more layers of the physical stack. The infrastructure knowledge from the first 12 modules gives you the decoder ring. You stop reading AI news as isolated events and start reading it as <strong>moves on a physical chessboard</strong> &mdash; where the pieces are chips, data centers, power contracts, and software ecosystems, and the game is played over 3&ndash;5 year time horizons.</p>
+
+<p>The PM who understands the physical stack doesn't just react to AI news. They <em>anticipate</em> it. When you know TSMC is at capacity, you know chip prices won't fall next quarter. When you know Google is vertically integrated, you know Gemini's inference will get cheaper faster than competitors. When you know the 280x curve hasn't flattened, you know to build for tomorrow's economics, not today's.</p>
+
+<p>That's the difference between reading the news and <em>understanding</em> it.</p>
+<div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+  <nav class="article-nav">
+  <a href="87-fs-18-deepseek-and-the-china-fork.html">&larr; DeepSeek and the China Fork</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="89-fs-20-the-pms-infrastructure-playbook.html">The PM's Infrastructure Playbook &rarr;</a>
+</nav>
+  
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

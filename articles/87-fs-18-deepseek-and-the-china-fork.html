@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DeepSeek and the China Fork</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">745 words</div><h1>DeepSeek and the China Fork</h1><div class="article-subtitle">Deep Dive 6 &mdash; From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>In January 2025, a Chinese AI lab called DeepSeek released R1 &mdash; a reasoning model that matched OpenAI's o1 on major benchmarks. The reported training cost: <strong>$5.5 million</strong>. For context, frontier models from OpenAI and Google cost hundreds of millions to billions. DeepSeek did it for the price of a nice house in San Francisco.</p>
+
+<p>This wasn't just a technical achievement. It was a geopolitical shock. The entire U.S. export control strategy &mdash; denying China access to advanced chips to slow its AI development &mdash; was premised on the assumption that frontier AI requires frontier hardware. DeepSeek proved you can get frontier-class results with clever engineering on older, restricted hardware.</p>
+
+<h2>How DeepSeek Did It</h2>
+
+<p>DeepSeek used <strong>Nvidia H800 GPUs</strong> &mdash; a China-export-compliant variant of the H100 with reduced interconnect bandwidth. The H800 is deliberately hobbled: the chip-to-chip communication speed is limited, making it harder to train large models across many GPUs efficiently. The U.S. government designed these restrictions specifically to slow Chinese AI labs.</p>
+
+<p>DeepSeek's innovations worked around the restriction:</p>
+
+<p><strong>Mixture-of-Experts (MoE) architecture.</strong> DeepSeek-V3 (the base model for R1) uses a MoE design with <strong>671 billion total parameters but only 37 billion active per token</strong>. This means the model only loads and computes with a small fraction of its total weights for each query, dramatically reducing memory bandwidth requirements. The active parameter count is small enough to run efficiently even on bandwidth-limited hardware.</p>
+
+<p><strong>Multi-Token Prediction (MTP).</strong> Instead of predicting one next token, the model predicts multiple tokens ahead. This improves training efficiency &mdash; you get more learning signal per training step &mdash; and reduces the total compute needed.</p>
+
+<p><strong>FP8 mixed-precision training.</strong> DeepSeek was one of the first to successfully train at FP8 precision from the start, rather than training at FP16/FP32 and quantizing afterwards. This nearly doubles effective throughput compared to FP16 training.</p>
+
+<p><strong>Reinforcement learning without expensive human feedback.</strong> R1's reasoning capability was trained via <strong>RL with verifiable rewards</strong> (RLVR) &mdash; using math and coding problems where answers can be automatically checked, instead of expensive human raters. This cut the post-training cost dramatically.</p>
+
+<h2>Huawei Ascend: China's CUDA</h2>
+
+<p>DeepSeek used Nvidia chips (H800). But the long-term Chinese strategy doesn't depend on Nvidia. <strong>Huawei's Ascend 910B</strong> is China's domestically produced AI chip, manufactured on SMIC's 7nm process (no EUV required). It reportedly delivers 70&ndash;80% of the H100's training performance.</p>
+
+<p>Huawei is also building <strong>CANN</strong> &mdash; its own CUDA equivalent. The software ecosystem is years behind CUDA, but China's government is funding adoption aggressively. Chinese AI labs are being encouraged (and sometimes mandated) to develop on Ascend hardware to reduce dependence on U.S. technology.</p>
+
+<p>The constraint: without EUV machines (blocked by U.S./Netherlands export controls), China's most advanced domestic process is ~7nm via SMIC. This is 2&ndash;3 generations behind TSMC's leading edge (2nm). Chinese chips use more power, generate more heat, and deliver fewer transistors per mm&sup2;. The gap is real but not disabling &mdash; especially as Chinese labs like DeepSeek develop software techniques that compensate for hardware limitations.</p>
+
+<h2>The Fork</h2>
+
+<p>The AI world is splitting into two ecosystems:</p>
+
+<p><strong>The U.S./Western stack:</strong> TSMC fabrication &rarr; ASML EUV &rarr; Nvidia/Google/Amazon chips &rarr; CUDA/XLA/Neuron &rarr; U.S.-based frontier models &rarr; Western cloud providers.</p>
+
+<p><strong>The Chinese stack:</strong> SMIC fabrication (no EUV) &rarr; Huawei Ascend chips &rarr; CANN software &rarr; Chinese frontier models (DeepSeek, Qwen, Yi) &rarr; Chinese cloud providers (Alibaba, Baidu, Tencent).</p>
+
+<p>These ecosystems are diverging. Software written for CUDA doesn't run on Ascend. Models optimized for TPUs don't easily port to Huawei hardware. Research papers from Chinese labs increasingly reference Ascend-specific optimizations that Western labs can't reproduce. The AI community, which was largely unified and open until 2023, is fracturing along geopolitical lines.</p>
+
+<h2>Why DeepSeek Matters for Your Roadmap</h2>
+
+<p>DeepSeek's $5.5M training cost proved three things that matter for product leaders:</p>
+
+<p><strong>1. Frontier capability is cheaper than you think.</strong> The headline costs from OpenAI and Google include infrastructure overhead, research dead ends, and organizational cost. A focused team with the right techniques can achieve comparable results at 1/100th the cost.</p>
+
+<p><strong>2. Hardware restrictions don't prevent capability, they delay it.</strong> China is 12&ndash;18 months behind on raw hardware, but software innovation is closing the gap. Don't assume geopolitical restrictions guarantee sustained Western AI dominance.</p>
+
+<p><strong>3. Open-source from China is real competition.</strong> DeepSeek R1 is open-source. Any company in the world can download and deploy it. This accelerates model commoditization globally. Your AI moat cannot be the model &mdash; because a model equivalent to what cost $500M to build is now available for free.</p>
+<div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+  <nav class="article-nav">
+  <a href="86-fs-17-groq-and-the-inference-rebels.html">&larr; Groq and the Inference Rebels</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="88-fs-19-how-to-read-ai-news.html">How to Read AI News &rarr;</a>
+</nav>
+  
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

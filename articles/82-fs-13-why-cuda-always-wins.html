@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why CUDA Always Wins</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">903 words</div><h1>Why CUDA Always Wins</h1><div class="article-subtitle">Deep Dive 1 &mdash; From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>In 2006, Nvidia released CUDA &mdash; a programming framework that let developers write general-purpose code for GPUs. At the time, GPUs were for gaming. Nobody outside a few research labs cared about using them for anything else. Jensen Huang's bet was that general-purpose GPU computing would eventually matter. It took a decade to prove him right. And that decade is the moat.</p>
+
+<h2>The 20-Year Compound</h2>
+
+<p>CUDA isn't a product. It's an <strong>ecosystem</strong>. Twenty years of accumulation:</p>
+
+<p><strong>Libraries.</strong> cuBLAS for linear algebra. cuDNN for deep learning primitives. cuFFT for signal processing. TensorRT for inference optimization. NCCL for multi-GPU communication. Each library represents years of kernel-level optimization &mdash; hand-tuned assembly code that squeezes maximum performance from specific Nvidia architectures. These aren't wrappers. They're thousands of person-years of low-level engineering.</p>
+
+<p><strong>Frameworks.</strong> PyTorch &mdash; the dominant AI research framework, used in virtually every published paper since 2019 &mdash; is built on CUDA. TensorFlow. JAX (Google's framework) supports CUDA alongside its own TPU backend. Every major AI framework treats CUDA as the primary target. AMD's ROCm is a secondary backend with less testing, fewer optimizations, and more bugs.</p>
+
+<p><strong>Talent.</strong> Every ML engineer graduating from Stanford, MIT, Berkeley, or CMU learned on CUDA. Every startup's first GPU cluster runs CUDA. Every tutorial, every Stack Overflow answer, every blog post about GPU optimization assumes CUDA. The knowledge base is so deep and so CUDA-specific that switching costs aren't just technical &mdash; they're cognitive. Engineers think in CUDA patterns.</p>
+
+<p><strong>Research.</strong> When a PhD student at DeepMind invents a new attention mechanism, they implement it in CUDA first. When it gets published, other researchers reproduce it in CUDA. By the time it reaches production, it's been optimized for three generations of Nvidia hardware. The AMD or Intel version arrives 12&ndash;18 months later, if it arrives at all.</p>
+
+<h2>AMD's ROCm: The Challenger That Can't Close the Gap</h2>
+
+<p>AMD's answer to CUDA is ROCm (Radeon Open Compute). On paper, AMD's MI300X GPU matches or beats Nvidia's H100 on raw specs. More memory (192GB vs 80GB), competitive compute. AMD priced it aggressively. Major customers &mdash; Microsoft, Meta &mdash; bought MI300X clusters.</p>
+
+<p>But ROCm is 8&ndash;10 years behind CUDA in software maturity. Specific problems:</p>
+
+<p><strong>Kernel coverage.</strong> CUDA has optimized kernels for virtually every operation AI models need. ROCm covers the common ones but hits gaps on newer or niche operations. When a gap appears, the researcher either writes a custom kernel (hard, slow) or switches to Nvidia (easy, fast).</p>
+
+<p><strong>Compiler quality.</strong> CUDA's compiler (nvcc) produces tighter, faster code than ROCm's compiler (hipcc) for most workloads. The difference is 10&ndash;30% on typical training jobs. That's not nothing &mdash; it's millions of dollars at scale.</p>
+
+<p><strong>Multi-GPU scaling.</strong> Nvidia's NCCL library for multi-GPU communication is battle-tested at 10,000+ GPU scale. AMD's RCCL works but has less production mileage. At frontier training scale, communication bugs that appear at 10,000 GPUs can set back a training run by weeks.</p>
+
+<p><strong>The ecosystem tax.</strong> Even if ROCm were 100% compatible today, the switching cost for a large AI lab is enormous. Revalidating every training pipeline, re-benchmarking every model, retraining staff &mdash; the total cost of switching is measured in engineering-years, not dollars.</p>
+
+<h2>Google's Approach: Don't Compete, Co-Design</h2>
+
+<p>Google looked at CUDA's moat and made a different choice: don't try to replicate the ecosystem. Instead, co-design custom hardware (TPUs) with a custom compiler (XLA) and custom framework support (JAX). The TPU doesn't run CUDA at all &mdash; it runs Google's own software stack, optimized end-to-end for Google's specific workloads.</p>
+
+<p>This works for Google because they control the entire vertical: the chip, the compiler, the model architecture, the data center, the products. They don't need ecosystem breadth &mdash; they need ecosystem depth for their specific use cases. Anthropic runs much of Claude's inference on TPUs. The cost advantage is real. But this approach is only viable if you have Google's resources to build and maintain the entire stack.</p>
+
+<h2>Amazon's Trainium: The Cost Play</h2>
+
+<p>Amazon's Trainium chips take yet another angle: don't beat CUDA on performance, beat it on <strong>price</strong>. Trainium 2 offers 30&ndash;40% better price-performance than Nvidia GPUs for supported workloads. Amazon's Neuron SDK (their CUDA equivalent) is narrower but sufficient for training and inference of standard architectures.</p>
+
+<p>The bet: if you can save 30&ndash;40% on your largest cost line (compute), you'll tolerate a narrower software stack. Anthropic committed to running on Trainium as part of its $4 billion Amazon partnership. The economic logic is compelling &mdash; but it means tying your compute destiny to a single cloud provider.</p>
+
+<h2>Why This Matters for the Next 5 Years</h2>
+
+<p>CUDA's moat is not permanent. It's eroding at the edges. PyTorch 2.0's compiler infrastructure (torch.compile) abstracts away some hardware specifics, making it slightly easier to target non-Nvidia hardware. Triton &mdash; an open-source GPU programming language from OpenAI &mdash; generates code for both Nvidia and AMD GPUs, reducing the kernel-writing advantage.</p>
+
+<p>But "eroding at the edges" is not "collapsing." The core CUDA advantage &mdash; the libraries, the talent, the research pipeline &mdash; compounds faster than it decays. Nvidia's strategy is clear: keep CUDA just far enough ahead that switching never quite makes economic sense. Ship new hardware features that require new CUDA capabilities. Make each generation's software tightly coupled to its hardware. The treadmill never stops.</p>
+
+<p>For product leaders: CUDA's dominance means <strong>Nvidia's pricing power persists</strong>. Don't plan your AI economics assuming GPU costs will fall to commodity levels quickly. The software lock-in props up hardware margins. Budget accordingly.</p>
+<div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+  <nav class="article-nav">
+  <a href="81-fs-12-the-application-layer.html">&larr; The Application Layer</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="83-fs-14-google-built-the-whole-stack.html">Google Built the Whole Stack &rarr;</a>
+</nav>
+  
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

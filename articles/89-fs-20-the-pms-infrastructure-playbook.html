@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The PM&#x27;s Infrastructure Playbook</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  
+  <div class="article-card">
+    <div class="article-meta">935 words</div><h1>The PM's Infrastructure Playbook</h1><div class="article-subtitle">Deep Dive 8 &mdash; From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>You now understand the complete stack &mdash; from sand to software, from atoms to applications. This final module translates that understanding into <strong>decisions you make every week</strong> as a product manager building with AI.</p>
+
+<h2>The Five Questions for Every AI Feature</h2>
+
+<p>Before building any AI feature, run it through these five questions. Each connects directly to a layer of the physical stack:</p>
+
+<p><strong>1. "What happens when the model gets 10x better and 10x cheaper in 18 months?"</strong></p>
+
+<p>The 280x cost collapse (Module 11) tells you costs fall roughly 10x every 18 months. If your feature's value proposition survives a 10x better, 10x cheaper model &mdash; because you built the workflow, the data loop, and the integration &mdash; build it. If a 10x better model makes your feature unnecessary because you were just wrapping the model &mdash; rethink it. The durable products use AI to build something AI alone can't replace: trust, workflow depth, organizational context.</p>
+
+<p><strong>2. "Which model tier does this feature actually need?"</strong></p>
+
+<p>The cost-capability-speed triangle (Module 10) means you should never use one model for everything. FAQ lookups don't need a frontier model. Complex multi-step reasoning does. Model routing &mdash; sending easy queries to cheap models and hard queries to expensive models &mdash; is a product architecture decision that directly determines your margin. <strong>80% of queries may not need your most expensive model.</strong> Design the routing logic as carefully as you design the user experience.</p>
+
+<p><strong>3. "How long is my system prompt, and does it need to be?"</strong></p>
+
+<p>System prompt length has a direct cost impact (Module 10). A 5,000-token system prompt costs ~10x more per query on prefill than a 500-token one. Every instruction, every few-shot example, every context document in your prompt is money per query. Audit your system prompts ruthlessly. Move static instructions to fine-tuning. Use prompt caching for content that doesn't change between users. This isn't engineering optimization &mdash; it's product economics.</p>
+
+<p><strong>4. "What's my context window budget per session?"</strong></p>
+
+<p>Context length is the most expensive product decision most PMs don't realize they're making (Module 5). Passing full conversation history vs. a compressed summary can be a 50x cost difference. Analyze how much context your feature actually needs. For most enterprise features, a well-designed summary of the last 5 turns is as effective as passing 50 turns verbatim &mdash; at 1/10th the cost.</p>
+
+<p><strong>5. "Am I building a feature or a workflow?"</strong></p>
+
+<p>Single-turn AI features (summarize this, answer that) are commoditizing fast (Module 12). Any foundation model can do them. The defensible product is the <strong>workflow</strong>: multi-step processes that integrate with systems, maintain state, handle approvals, and manage exceptions. Features are table stakes. Workflows are moats.</p>
+
+<h2>The Infrastructure Calendar</h2>
+
+<p>AI capability doesn't improve smoothly. It arrives in discrete jumps tied to the physical stack:</p>
+
+<p><strong>Quarterly:</strong> New model versions from labs (Anthropic, OpenAI, Google). These bring capability improvements and usually cost reductions. Review your model selection and routing quarterly.</p>
+
+<p><strong>Semi-annually:</strong> New GPU generations ship in volume. H100 &rarr; H200 &rarr; B200 &rarr; B300. Each generation brings 2&ndash;3x inference improvement. Plan feature launches to coincide with new hardware availability &mdash; the cost of your feature drops when new GPUs reach production scale.</p>
+
+<p><strong>Annually:</strong> New serving software releases (vLLM, TensorRT major versions). These bring 2&ndash;5x efficiency improvements through better batching, caching, and optimization. Re-benchmark your inference costs annually against the latest serving stack.</p>
+
+<p><strong>Every 2&ndash;3 years:</strong> New data center capacity comes online. This expands total AI supply, reduces queuing and rate limits, and enables new scale-dependent features. If your feature was rate-limited at launch, revisit it when capacity expands.</p>
+
+<h2>What Not to Build</h2>
+
+<p><strong>Don't build a model wrapper.</strong> If your product is "ChatGPT/Claude but for [vertical]" with no proprietary data, no workflow integration, and no distribution advantage &mdash; you will be commoditized. The foundation model providers are moving up the stack. They will build your product and give it away to drive API usage.</p>
+
+<p><strong>Don't assume current cost structures are permanent.</strong> If your business model depends on AI being expensive (you're the premium provider in a world of expensive AI), the 280x cost curve will destroy that positioning. Build for the world where AI is cheap and abundant, not the world where it's expensive and scarce.</p>
+
+<p><strong>Don't ignore the physical constraints.</strong> If your roadmap assumes unlimited AI scaling with no capacity constraints, you haven't understood the stack. There are moments &mdash; new chip launches, data center openings, power contract activations &mdash; when capacity expands. Between those moments, capacity is fixed. Your product should handle graceful degradation when AI resources are constrained.</p>
+
+<h2>The One-Page Mental Model</h2>
+
+<p><strong>The physical world creates the ceiling.</strong> ASML makes the machines. TSMC makes the chips. The power grid limits how many run. None of this is software.</p>
+
+<p><strong>The software determines how close you get to the ceiling.</strong> CUDA, vLLM, custom kernels. Invisible to users, determinative of cost and performance.</p>
+
+<p><strong>The model is the intelligence.</strong> Trained once, expensive, getting better fast, getting cheaper fast. Not your moat.</p>
+
+<p><strong>Inference is the meter running.</strong> Every query costs money. Every agent step costs more. The cost falls 280x over 3 years. Build for where the economics will be.</p>
+
+<p><strong>The application layer is where you live &mdash; and where commoditization risk is highest.</strong> Your moat exists in what models can't easily replicate: workflow, data, trust, integration.</p>
+
+<p><strong>The agent shift is the strategy.</strong> Not query-answer. Goal-action. The companies that build the agent orchestration layer own the next decade.</p>
+
+<p><strong>The window is narrow.</strong> The stack below is consolidating fast. Your advantage is position, not technology. Use it while it's yours.</p>
+
+<p>It all starts with sand. It ends with what you build on top of it.</p>
+<div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+  <nav class="article-nav">
+  <a href="88-fs-19-how-to-read-ai-news.html">&larr; How to Read AI News</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <span></span>
+</nav>
+  
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>
