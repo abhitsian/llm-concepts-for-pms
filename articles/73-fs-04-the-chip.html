@@ -5,45 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Chip</title>
   <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
-  <link rel="stylesheet" href="../css/style.css?v=1774955743">
+  <link rel="stylesheet" href="../css/style.css?v=1774957032">
 </head>
 <body>
   
   <div class="article-card">
-    <div class="article-meta">655 words</div><h1>The Chip</h1><div class="article-subtitle">Module 4 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
-<p>Graphics Processing Unit. The name is an accident of history. GPUs were originally designed to render video games, which requires doing millions of similar calculations simultaneously &mdash; one per pixel on screen. It turned out that training neural networks also requires doing millions of similar calculations simultaneously. The GPU was the wrong tool that became the right tool.</p>
+    <div class="article-meta">633 words</div><h1>The Chip</h1><div class="article-subtitle">Module 4 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>Graphics Processing Unit. The name is an accident of history. GPUs were designed to render video games &mdash; millions of similar calculations per frame, one per pixel. It turned out that training neural networks also requires millions of similar calculations. The GPU was the wrong tool that became the right tool, and Nvidia rode that accident to a $3+ trillion market cap.</p>
 
-<h2>Parallelism: The Core Idea</h2>
+<h2>Parallelism: Why GPUs Win</h2>
 
-<p>A CPU &mdash; the regular processor in your laptop &mdash; is designed to do one complex task very fast. It has a few powerful cores that can handle intricate logic, branching decisions, and irregular data flows. Think of it as a brilliant professor who can solve any problem, but only one problem at a time.</p>
+<p>A CPU &mdash; the processor in your laptop &mdash; is designed to do one complex task very fast. A few powerful cores that handle intricate logic, branching decisions, irregular data flows. Think of a brilliant professor who can solve any problem, but only one at a time.</p>
 
-<p>A GPU is designed to do millions of simple tasks at the same time. It has thousands of smaller, simpler cores that all execute the same operation in parallel on different data. Think of it as an army of calculators, each doing basic arithmetic, but all working simultaneously.</p>
+<p>A GPU has <strong>thousands of smaller, simpler cores</strong> that all execute the same operation in parallel on different data. Think of an army of calculators, each doing basic arithmetic, but all working simultaneously. Neural network math is almost entirely matrix multiplication: multiply this row by that column, billions of times. This is <em>embarrassingly parallel</em> &mdash; every multiplication is independent. GPUs are built for exactly this.</p>
 
-<p>Neural network math is almost entirely matrix multiplication: multiply this row of numbers by that column of numbers, over and over, billions of times. This is embarrassingly parallel &mdash; every multiplication is independent of every other. GPUs are built for exactly this. A modern AI GPU can perform trillions of these operations per second.</p>
+<p>Nvidia's B200 Blackwell chip delivers <strong>4.5 petaflops</strong> of FP8 compute. That's 4,500 trillion floating-point operations per second. On a single chip.</p>
 
 <h2>The CUDA Moat</h2>
 
-<p>Nvidia didn't invent the GPU. But they built the software layer on top of it &mdash; CUDA &mdash; that made GPUs programmable for general computation, not just graphics. CUDA launched in 2006. Twenty years later, every AI framework, every optimization library, every production deployment system is written against CUDA. This is the moat.</p>
+<p>Nvidia didn't invent the GPU. But they built <strong>CUDA</strong> &mdash; the software layer that made GPUs programmable for general computation. CUDA launched in 2006. For 20 years, every AI framework (PyTorch, TensorFlow, JAX), every optimization library, every production deployment, every PhD thesis has been written against CUDA.</p>
 
-<p>AMD makes GPUs with comparable raw hardware specs. They don't have 20 years of software ecosystem. Every researcher who wrote a paper used CUDA. Every graduate student who built a model used CUDA. Every startup that deployed an AI product used CUDA. The chip is not the moat. The ecosystem around the chip is the moat.</p>
+<p>AMD makes GPUs with comparable raw hardware specs. They don't have 20 years of software ecosystem. Every researcher who wrote a breakthrough paper used CUDA. Every startup that shipped an AI product used CUDA. The graduate student who'll invent next year's architecture will use CUDA.</p>
 
-<p>This is why Nvidia is worth more than the GDP of most countries. Not because their transistors are fundamentally better, but because switching to anything else means rewriting or re-optimizing millions of lines of code. Hardware can be matched in 3&ndash;4 years. Software ecosystems cannot.</p>
+<p><strong>The chip is not the moat. The ecosystem around the chip is the moat.</strong> Hardware can be matched in 3&ndash;4 years. Software ecosystems take decades. This is Dylan Patel's mental model #2: "Software is the real moat. AMD has great hardware. Nvidia wins because CUDA took 15 years to build. You can't clone a software ecosystem."</p>
 
 <h2>The Alternatives</h2>
 
-<p><strong>Google's TPU</strong> (Tensor Processing Unit) is purpose-built for the specific matrix math that neural networks need. Less flexible than a GPU, but faster and cheaper per operation for AI specifically. Google doesn't sell TPUs &mdash; they use them internally and rent access through Google Cloud. TPUs power Gemini and much of Claude's inference. The advantage: Google co-designs the chip, the software stack, the networking, and the model architecture as one integrated system.</p>
+<p><strong>Google's TPU</strong> (Tensor Processing Unit) is purpose-built for the specific matrix math neural networks need. Less flexible than a GPU, but faster and cheaper per operation for AI. Google doesn't sell TPUs &mdash; they use them internally and rent access through Cloud. TPUs power Gemini and much of Claude's inference. The advantage: Google co-designs the chip, the compiler, the networking, and the model architecture as one integrated system. Patel's mental model #1: "Systems &gt; microarchitecture. Google's TPU wins not because the chip spec is better, but because the whole system is co-designed."</p>
 
-<p><strong>Amazon's Trainium</strong> follows the same logic &mdash; custom silicon optimized for AI training and inference, available exclusively through AWS. The pitch: 30&ndash;40% better price-performance than Nvidia GPUs for specific workloads. The tradeoff: narrower software support, less flexibility.</p>
+<p><strong>Amazon's Trainium</strong> follows the same logic: custom silicon optimized for AI, available only through AWS. The pitch: 30&ndash;40% better price-performance for supported workloads. The tradeoff: narrower software support, less flexibility.</p>
 
-<p><strong>The pattern:</strong> every hyperscaler is building custom chips to reduce dependence on Nvidia and to optimize for their specific workloads. The GPU remains the default &mdash; the thing that works for everything &mdash; but custom silicon wins on efficiency for known, stable workloads.</p>
+<p>The pattern: every hyperscaler is building custom chips to reduce Nvidia dependence. The GPU remains the default &mdash; the thing that works for everything. Custom silicon wins on efficiency for known, stable workloads. The GPU wins on flexibility for everything else.</p>
 
 <h2>The Rack Is the New Chip</h2>
 
-<p>Nvidia's latest products aren't really GPUs. They're racks. The GB200 NVL72 is 72 GPUs connected so tightly via NVLink that they behave as a single massive processor. It consumes 120 kilowatts of power &mdash; 80 houses' worth. The chip design and the rack design are now inseparable. Jensen Huang doesn't sell you a chip anymore. He sells you a data center building block.</p>
+<p>Nvidia's latest product isn't a GPU. It's a rack. The <strong>GB200 NVL72</strong> is 72 GPUs connected via NVLink so tightly they behave as a single massive processor. It consumes <strong>120 kilowatts</strong> of power &mdash; 80 houses' worth. Jensen Huang doesn't sell you a chip anymore. He sells you a data center building block.</p>
 
-<h2>First Principles Takeaway</h2>
-
-<p>The chip determines what AI can do and what it costs. But the chip alone is insufficient &mdash; the software ecosystem (CUDA), the system design (racks), and the manufacturing access (TSMC allocation) all matter as much as transistor count. When evaluating AI infrastructure, ask about the whole system, not just the spec sheet.</p>
+<p>This is Patel's observation playing out: Nvidia is becoming a systems company, not a chip company. The chip, the interconnect, the networking, the software &mdash; sold as one integrated rack. The margin on the system is higher than the margin on the chip alone. And the switching cost for the system is much higher than for a single component.</p>
 <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
   </div>
   <nav class="article-nav">
@@ -52,6 +50,6 @@
   <a href="74-fs-05-the-memory-wall.html">The Memory Wall &rarr;</a>
 </nav>
   
-  <script src="../js/nav.js?v=1774955743"></script>
+  <script src="../js/nav.js?v=1774957032"></script>
 </body>
 </html>

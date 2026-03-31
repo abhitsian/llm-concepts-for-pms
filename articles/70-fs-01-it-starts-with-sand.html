@@ -5,39 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>It Starts with Sand</title>
   <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
-  <link rel="stylesheet" href="../css/style.css?v=1774955743">
+  <link rel="stylesheet" href="../css/style.css?v=1774957032">
 </head>
 <body>
   
   <div class="article-card">
-    <div class="article-meta">597 words</div><h1>It Starts with Sand</h1><div class="article-subtitle">Module 1 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
-<p>Silicon is the second most abundant element on earth. It's in sand, in rock, in the ground under your feet. Taken raw, it does nothing useful. But when you purify it &mdash; and we mean purify it to a degree that is almost absurd, 99.9999999% pure, nine nines &mdash; it becomes a semiconductor. Something that conducts electricity sometimes, and doesn't other times.</p>
+    <div class="article-meta">658 words</div><h1>It Starts with Sand</h1><div class="article-subtitle">Module 1 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>Most technology transitions were about software getting better. The internet: software. Mobile: software. Cloud: software. You could understand the implications without understanding the hardware because the hardware was essentially a solved, commodity problem. Dell or HP made a box, you bought it, software ran on it, someone else worried about the details.</p>
 
-<p>That "sometimes" is the entire foundation of the digital world.</p>
+<p>AI is different. For the first time since the invention of the transistor, <strong>the hardware is the story</strong>. What chips exist, how many there are, where they are, who controls them &mdash; these determine which AI capabilities are possible, how much they cost, and who wins. A PM who doesn't understand this is flying blind in a way that a PM in 2005 could safely ignore. You can't anymore.</p>
 
 <h2>The Switch</h2>
 
-<p>The ability to switch electrical current on and off is a binary decision. On = 1. Off = 0. One switch is called a transistor. A modern AI chip has 92 billion of them, each smaller than a virus, switching on and off billions of times per second. All of computation &mdash; every calculation, every word an AI generates, every photo that loads on your phone &mdash; is just billions of these tiny switches flipping in coordinated patterns.</p>
+<p>Silicon is the second most abundant element on earth. It's in sand, in rock, in the ground under your feet. Taken raw, it does nothing useful. But when you purify it &mdash; and we mean purify it to a degree that is almost absurd, 99.9999999% pure, nine nines &mdash; it becomes a semiconductor. Something that conducts electricity sometimes, and doesn't other times. That "sometimes" is the entire foundation of the digital world.</p>
 
-<p>There is no magic in a computer. There is no intelligence in a chip. There is only a vast number of switches that flip very fast, in patterns designed by humans. When someone tells you that AI "thinks" &mdash; what they mean is that 92 billion transistors are switching on and off in a sequence that produces output indistinguishable from thought. The distinction matters, because it grounds everything that follows in physics rather than metaphor.</p>
+<p>The ability to switch electrical current on and off is a binary decision. On = 1. Off = 0. One switch is called a transistor. A modern AI chip &mdash; Nvidia's Blackwell B200 &mdash; has <strong>208 billion</strong> of them, each smaller than a virus, switching on and off billions of times per second. All of computation &mdash; every calculation, every word Claude generates, every recommendation Netflix serves &mdash; is just billions of these tiny switches flipping in coordinated patterns.</p>
+
+<p>There is no magic in a computer. There is no intelligence in a chip. There is only a vast number of switches that flip very fast, in patterns designed by humans. When someone tells you that AI "thinks" &mdash; what they mean is that 208 billion transistors are switching on and off in a sequence that produces output indistinguishable from thought. The distinction matters. It grounds everything that follows in physics rather than metaphor.</p>
 
 <h2>Why This Is Hard</h2>
 
-<p>Making transistors that small requires manufacturing at a scale of precision that has no analogy in everyday life. The current leading-edge process &mdash; 2 nanometers &mdash; means etching features that are roughly 10 atoms wide. Imagine shrinking New York City until the Empire State Building is the width of a human hair, and then building perfectly functional plumbing inside every building in that miniaturized city. That's the challenge.</p>
+<p>Making transistors that small requires manufacturing at a scale of precision that has no analogy in everyday life. The current leading-edge process &mdash; 2 nanometers &mdash; means etching features that are roughly 10 atoms wide. Imagine shrinking New York City until the Empire State Building is the width of a human hair, and then building perfectly functional plumbing inside every building in that miniaturized city. That's roughly the challenge.</p>
 
-<p>The machines that do this use extreme ultraviolet light &mdash; a wavelength shorter than anything in sunlight &mdash; to etch circuit patterns onto silicon wafers. The light is generated by shooting a tiny droplet of molten tin with a laser, 50,000 times per second, creating a plasma that emits the exact wavelength needed. This sounds like science fiction. It is the most precise manufacturing process humans have ever devised, running at industrial scale, 24 hours a day.</p>
+<p>The machines that do this use extreme ultraviolet light &mdash; a wavelength shorter than anything in sunlight &mdash; to etch circuit patterns onto silicon wafers. The light is generated by shooting a tiny droplet of molten tin with a laser, <strong>50,000 times per second</strong>, creating a plasma that emits the exact wavelength needed. This sounds like science fiction. It is the most precise manufacturing process humans have ever devised, running at industrial scale, 24 hours a day, in a handful of buildings in the Netherlands, Taiwan, and South Korea.</p>
 
-<h2>Why This Matters for AI</h2>
+<p>One company makes these machines. One. We'll get to that.</p>
 
-<p>Every previous technology shift &mdash; internet, mobile, cloud &mdash; was fundamentally a software story. You could understand the implications without understanding the hardware. Dell made a box, you bought it, software ran on it.</p>
+<h2>Why You Should Care</h2>
 
-<p>AI is different. For the first time since the invention of the transistor, <strong>the hardware is the story</strong>. What chips exist, how many there are, where they are, who controls them &mdash; these determine which AI capabilities are possible, how much they cost, and who wins. A product manager who doesn't understand this is flying blind in a way that a PM in 2005 could safely ignore.</p>
+<p>When Dylan Patel at SemiAnalysis maps the AI industry, he doesn't start with models or products. He starts with three hard physical constraints: <strong>logic</strong> (how many chips can be manufactured), <strong>memory</strong> (how much data can be fed to those chips), and <strong>power</strong> (how much electricity can run them). Every limitation you'll encounter in AI &mdash; rate limits, latency, cost per query, context window ceilings &mdash; traces back to one of these three physical bottlenecks.</p>
 
-<p>The rest of this course starts here, with sand, because the constraints that matter most in AI are physical. You cannot write more code and get more AI. The bottleneck is atoms &mdash; silicon, copper, water for cooling, electricity, land. Understanding this prevents the magical thinking that makes most AI strategies useless.</p>
-
-<h2>First Principles Takeaway</h2>
-
-<p>AI capability is physically constrained. The ceiling on what AI can do at any given moment is set not by software cleverness but by how many transistors exist, how fast they switch, and how much power they consume. Everything that follows in this course &mdash; chips, clusters, training, inference, cost curves, product decisions &mdash; traces back to this physical reality.</p>
+<p>You cannot write more code and get more AI. The bottleneck is atoms &mdash; silicon, copper, water for cooling, electricity, land. Understanding this prevents the magical thinking that makes most AI roadmaps useless. The rest of this course starts here, with sand, because the constraints that matter most in AI are physical. Everything else is software running inside those constraints.</p>
 <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
   </div>
   <nav class="article-nav">
@@ -46,6 +44,6 @@
   <a href="71-fs-02-the-chokepoint.html">The Chokepoint &rarr;</a>
 </nav>
   
-  <script src="../js/nav.js?v=1774955743"></script>
+  <script src="../js/nav.js?v=1774957032"></script>
 </body>
 </html>

@@ -5,43 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Training</title>
   <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
-  <link rel="stylesheet" href="../css/style.css?v=1774955743">
+  <link rel="stylesheet" href="../css/style.css?v=1774957032">
 </head>
 <body>
   
   <div class="article-card">
-    <div class="article-meta">642 words</div><h1>Training</h1><div class="article-subtitle">Module 9 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
-<p>A neural network before training is a vast web of random numbers. Billions of them. These numbers &mdash; called weights or parameters &mdash; encode nothing. After training, they encode language, logic, facts, reasoning patterns, and something that looks remarkably like understanding. Training is the process that transforms random noise into useful intelligence.</p>
+    <div class="article-meta">517 words</div><h1>Training</h1><div class="article-subtitle">Module 9 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>A neural network before training is a vast web of random numbers. Billions of them. These numbers &mdash; called weights or parameters &mdash; encode nothing. After training, they encode language, logic, facts, reasoning patterns, and something that looks remarkably like understanding. Training is the process that transforms random noise into intelligence. Nobody fully understands why it works.</p>
 
 <h2>The Deceptively Simple Idea</h2>
 
-<p>Take a large fraction of human writing &mdash; books, websites, code, conversations, scientific papers. Show the model a sequence of text. Ask it: what word comes next? It guesses. It's wrong. Adjust the numbers slightly to make it less wrong. Repeat. Two trillion times.</p>
+<p>Take a large fraction of human writing &mdash; books, websites, code, conversations, scientific papers, legislation, poetry, Reddit threads. Show the model a sequence of text. Ask: what word comes next? It guesses. It's wrong. Adjust the billions of numbers slightly to make it less wrong next time. Repeat. <strong>Two trillion times.</strong></p>
 
-<p>This sounds almost insultingly simple. It is not. The emergent result of doing this simple operation at sufficient scale is a system that can write code, reason through multi-step problems, summarize thousand-page documents, translate between languages, and answer questions across virtually every domain of human knowledge. Nobody fully understands why this works.</p>
-
-<p>The scaling laws &mdash; more data, bigger model, more compute = predictably better performance &mdash; were discovered empirically. Researchers at OpenAI in 2020 showed that loss (how wrong the model's predictions are) decreases as a smooth power law with model size, dataset size, and compute. We ran the experiment and it worked. The theory explaining <em>why</em> it works is still incomplete.</p>
+<p>This sounds almost insultingly simple. The emergent result of doing this at sufficient scale is a system that can write working code, reason through multi-step math, summarize thousand-page legal documents, translate between 100+ languages, and generate plausible business strategy memos. The scaling laws &mdash; discovered empirically at OpenAI in 2020 &mdash; showed that loss (how wrong the model's predictions are) decreases as a <strong>smooth power law</strong> with model size, dataset size, and compute. More of each = predictably better. We ran the experiment and it worked. The theory explaining <em>why</em> is still incomplete.</p>
 
 <h2>The Numbers</h2>
 
-<p>Training a frontier model costs $50 million to $1 billion. It requires 10,000&ndash;100,000 GPUs running in tight synchronization for weeks to months. The electricity bill alone can run into tens of millions of dollars. The training data comprises trillions of tokens &mdash; a significant fraction of all publicly available text on the internet, plus licensed datasets, synthetic data, and curated collections.</p>
+<p>Training a frontier model costs <strong>$50 million to $1+ billion</strong>. It requires 10,000&ndash;100,000 GPUs synchronized for weeks to months. The electricity bill alone runs into tens of millions. Training data: trillions of tokens &mdash; a significant fraction of all publicly available human text, plus licensed datasets, synthetic data, and curated collections.</p>
 
-<p>Training happens once. The result is a fixed set of billions of numbers &mdash; the model weights &mdash; that encode everything the model will ever know from pre-training. This is CapEx: a one-time investment that produces an asset.</p>
+<p>Training happens <strong>once</strong>. The result is a fixed set of billions of numbers &mdash; the model weights &mdash; that encode everything the model knows. This is CapEx: a one-time investment that produces an asset. The model you call through an API today was trained months ago.</p>
 
 <h2>Post-Training: Where Behavior Comes From</h2>
 
-<p>The base model that emerges from pre-training is capable but raw. It knows a lot, but it doesn't follow instructions well, it can be harmful, it hallucinates confidently, and it doesn't have the conversational behavior users expect. Post-training shapes raw capability into useful behavior.</p>
+<p>The base model from pre-training is capable but raw. It knows enormous amounts but doesn't follow instructions well, hallucinates confidently, can be harmful, and lacks the conversational polish users expect. Post-training shapes raw capability into useful behavior.</p>
 
-<p><strong>RLHF</strong> (Reinforcement Learning from Human Feedback) is the core technique. Human raters evaluate pairs of model outputs &mdash; which response is better? More helpful? More accurate? More harmless? The model learns to generate outputs that humans prefer. Over many iterations, it develops the helpful, conversational, safety-aware behavior that characterizes products like Claude and ChatGPT.</p>
+<p><strong>RLHF</strong> (Reinforcement Learning from Human Feedback): Human raters evaluate pairs of model outputs &mdash; which is better? More helpful? More accurate? More harmless? The model learns to generate outputs humans prefer. Over many iterations, it develops the helpful, safety-aware behavior that characterizes Claude and ChatGPT.</p>
 
-<p><strong>Reasoning</strong> is the current frontier. Models like o3, DeepSeek-R1, and Claude's extended thinking mode are trained (via reinforcement learning) to generate long chains of internal reasoning before answering. They explore approaches, backtrack, verify their work. The result: dramatically better performance on complex problems. The cost: dramatically more tokens generated per query, which multiplies inference expense. A reasoning model might generate 5&ndash;50x more tokens internally before producing a visible answer.</p>
+<p><strong>Reasoning</strong> is the current frontier. Models like o3, DeepSeek-R1, and Claude's extended thinking mode are trained via reinforcement learning to generate long chains of internal reasoning before answering. They explore approaches, backtrack, verify their work. The result: dramatically better performance on complex problems &mdash; math, code, multi-step logic. The cost: <strong>5&ndash;50x more tokens generated per query</strong>, because the model "thinks" internally before producing a visible answer.</p>
 
-<h2>The Shifting Investment</h2>
-
-<p>The industry is shifting investment from pre-training scale to post-training sophistication. Pre-training follows diminishing returns &mdash; doubling the model size or data yields smaller and smaller improvements. Post-training techniques (RLHF, constitutional AI, reasoning RL) offer steeper capability gains per dollar invested. This is why Dylan Patel says "we're in early innings of post-training." The techniques for shaping model behavior are less mature and improving faster than the techniques for raw pre-training.</p>
-
-<h2>First Principles Takeaway</h2>
-
-<p>Training is expensive, happens once, and produces a static artifact (the model weights). Pre-training determines the capability ceiling &mdash; what the model <em>could</em> do. Post-training determines behavior quality &mdash; what the model <em>actually</em> does when you interact with it. The model you call through an API today was trained months ago. The cost of building it is amortized across all users. The cost of <em>using</em> it &mdash; inference &mdash; is what runs continuously and what you're actually paying for.</p>
+<p>This is Patel's mental model #3: <strong>"Training = CapEx. Inference = OpEx."</strong> Train once, serve forever &mdash; but serving is where the money burns. The shift from pre-training scale to post-training sophistication is the current strategic inflection. Patel says "we're in early innings of post-training." The techniques for shaping model behavior are less mature and improving faster than raw pre-training.</p>
 <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
   </div>
   <nav class="article-nav">
@@ -50,6 +42,6 @@
   <a href="79-fs-10-inference.html">Inference &rarr;</a>
 </nav>
   
-  <script src="../js/nav.js?v=1774955743"></script>
+  <script src="../js/nav.js?v=1774957032"></script>
 </body>
 </html>

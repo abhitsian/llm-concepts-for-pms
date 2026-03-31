@@ -5,49 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Software Stack</title>
   <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
-  <link rel="stylesheet" href="../css/style.css?v=1774955743">
+  <link rel="stylesheet" href="../css/style.css?v=1774957032">
 </head>
 <body>
   
   <div class="article-card">
-    <div class="article-meta">728 words</div><h1>The Software Stack</h1><div class="article-subtitle">Module 8 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
-<p>Between the raw hardware and the AI models you call from your product, there are layers of software that most people never think about. These layers &mdash; compilers, libraries, serving frameworks &mdash; are where enormous competitive advantage lives. They're invisible to end users but determinative of cost, speed, and what's possible.</p>
+    <div class="article-meta">606 words</div><h1>The Software Stack</h1><div class="article-subtitle">Module 8 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>Between the raw hardware and the AI models you call from your product, there are layers of software that most people never think about. These layers &mdash; compilers, serving frameworks, optimization libraries &mdash; are where enormous competitive advantage lives. They're invisible to end users but determine your product's cost structure entirely.</p>
 
-<h2>CUDA: The 20-Year Moat</h2>
+<h2>CUDA: The Real Moat</h2>
 
-<p>The reason Nvidia dominates AI isn't the GPU. It's CUDA. CUDA (Compute Unified Device Architecture) is the programming interface that sits between software code and Nvidia hardware. It launched in 2006. Every AI framework &mdash; PyTorch, TensorFlow, JAX &mdash; is built on top of CUDA. Every optimization technique, every custom kernel, every production deployment system assumes CUDA underneath.</p>
+<p>Nvidia doesn't just sell a chip. They sell a full-stack solution where the compiler, the libraries, and the hardware are perfectly co-designed. CUDA is the programming interface, 20 years deep, that every meaningful piece of AI software is built against. Every PyTorch op, every transformer layer, every quantization technique &mdash; tuned for CUDA.</p>
 
-<p>AMD has built hardware with comparable specs. Intel has Gaudi. Google has its own compiler stack for TPUs. But none of them have 20 years of ecosystem. The graduate student who wrote a breakthrough paper used CUDA. The startup that deployed a novel architecture used CUDA. The enterprise ML team that optimized inference used CUDA. Switching means rewriting or losing performance on millions of lines of code.</p>
+<p>AMD has great hardware. Intel has Gaudi. But Patel puts it bluntly: <strong>"AMD has great hardware. Nvidia wins because CUDA took 15 years to build. You can't clone a software ecosystem."</strong> Switching to AMD means rewriting or losing performance on millions of lines of code. The software stack is stickier than the hardware.</p>
 
-<p>Hardware can be matched in 3&ndash;4 years. Software ecosystems cannot. This is the deepest moat in the AI industry.</p>
+<h2>vLLM: The Most Important Software You've Never Heard Of</h2>
 
-<h2>The Serving Layer: Where Cost Becomes Margin</h2>
+<p>Developed at UC Berkeley, <strong>vLLM</strong> figured out how to manage GPU memory the way operating systems manage computer memory &mdash; dynamically, efficiently, with almost no waste. The key innovation: <strong>PagedAttention</strong>, which stores the KV cache (the model's working memory) in non-contiguous memory pages instead of requiring one large contiguous block.</p>
 
-<p>Once a model is trained, serving it to millions of users requires a separate software stack optimized for inference. This is where the difference between 30% and 80% GPU utilization lives &mdash; and that difference is pure margin.</p>
+<p>Before vLLM, up to <strong>80% of GPU memory was wasted</strong> during inference. Fragmented allocations, pre-reserved blocks sitting empty. After vLLM, waste dropped to <strong>under 4%</strong>. The practical result: <strong>Stripe cut inference costs 73%</strong> by migrating to vLLM. Not by buying better hardware. Not by switching models. By using better serving software.</p>
 
-<p><strong>vLLM</strong> is the most important piece of AI infrastructure software most people have never heard of. Developed at UC Berkeley, vLLM figured out how to manage GPU memory the way operating systems manage computer memory &mdash; dynamically, efficiently, with almost no waste. The key innovation: PagedAttention, which stores the KV cache (the model's working memory during a conversation) in non-contiguous memory pages instead of requiring one large contiguous block.</p>
-
-<p>Before vLLM, up to 80% of GPU memory was wasted during inference due to fragmentation and pre-allocation. After vLLM, waste dropped to under 4%. The practical result: Stripe cut inference costs 73% by migrating to vLLM. Not by buying better hardware. Not by using a different model. By using better serving software.</p>
+<p>Continuous batching &mdash; vLLM's other innovation &mdash; keeps injecting new requests as old ones complete, achieving <strong>up to 23x throughput improvement</strong> over static batching. A single GPU goes from serving 5% of its capacity to serving 80%+. The difference is pure margin.</p>
 
 <h2>Quantization: Trading Precision for Speed</h2>
 
-<p>Neural network parameters are stored as numbers with a certain level of precision. Training typically uses FP32 (32-bit floating point) or FP16 (16-bit). But inference can often use much lower precision &mdash; FP8, INT8, even INT4 &mdash; with minimal quality loss. This is called quantization.</p>
+<p>Neural network parameters are stored as numbers with a certain precision. Training uses FP32 (32-bit) or FP16 (16-bit). But inference can often use much lower precision &mdash; FP8, INT8, even INT4 &mdash; with minimal quality loss.</p>
 
-<p>Running a model in FP8 instead of FP32 can roughly 4x throughput: you fit 4 times as many numbers in the same memory, and the compute is proportionally faster. Advanced labs use custom CUDA kernels to squeeze FP4 precision from their hardware. The inference cost reduction over the past 3 years &mdash; roughly 280x &mdash; is substantially driven by quantization improvements.</p>
+<p>Running in FP8 instead of FP32 can roughly <strong>4x throughput</strong>: 4 times as many numbers fit in the same memory, and compute is proportionally faster. Advanced labs use custom CUDA kernels to push INT4 precision. The 280x inference cost reduction over the past 3 years is substantially driven by quantization improvements. Hardware improved ~10x. The rest was software.</p>
 
 <h2>Speculative Decoding</h2>
 
-<p>Language models generate text one token at a time, sequentially. Each token requires a full forward pass through the model. Speculative decoding breaks this bottleneck: a small, fast "draft" model predicts the next 5&ndash;8 tokens, and the main model verifies them all in a single parallel pass. When predictions match (which they often do for predictable sequences), you get multiple tokens for the cost of one forward pass.</p>
+<p>Language models generate text one token at a time, sequentially. Each token requires a full forward pass through the model. Speculative decoding breaks this: a small, fast "draft" model predicts the next 5&ndash;8 tokens. The main model verifies them all in one parallel pass. When predictions match &mdash; and for predictable sequences like common phrases, they usually do &mdash; you get multiple tokens for the cost of one forward pass.</p>
 
-<p>This technique delivers 2&ndash;3x latency reduction with zero change in output quality. It's now standard in production serving frameworks &mdash; vLLM, TensorRT-LLM, and SGLang all support it. When a new model version feels "faster," speculative decoding is often part of the story.</p>
+<p><strong>2&ndash;3x latency reduction. Zero change in output quality.</strong> Now standard in vLLM, TensorRT-LLM, and SGLang. Nvidia's H200 showed <strong>3.6x throughput improvement</strong> with this technique. When a new model version feels "faster" &mdash; speculative decoding is often the story.</p>
 
-<h2>The Pattern</h2>
+<h2>The Pattern That Matters</h2>
 
-<p>Across the entire software stack, the pattern repeats: the physical layer sets the ceiling, but software determines how close you get to it. A well-optimized software stack on last-generation hardware routinely outperforms a poorly-optimized stack on current-generation hardware. This is why Nvidia's real advantage is CUDA, not the GPU. Why Google's TPU advantage is the co-designed software, not the chip. Why inference cost fell 280x while hardware improved maybe 10x &mdash; the rest was software.</p>
+<p>Across the entire stack: <strong>the physical layer sets the ceiling, but software determines how close you get to it.</strong> A well-optimized software stack on last-generation hardware routinely outperforms a poorly-optimized stack on current-generation hardware. This is why inference cost fell 280x while hardware improved only ~10x. The gap was closed by software.</p>
 
-<h2>First Principles Takeaway</h2>
-
-<p>The software between hardware and models is the highest-leverage layer in the AI stack. It's invisible to users but determines your product's cost structure. When you evaluate AI infrastructure, don't just ask "which chip?" &mdash; ask "which serving framework, which quantization, which batching strategy?" The answers to those questions determine whether your AI feature has positive unit economics or not.</p>
+<p>For your product: don't just ask "which model?" Ask "which serving framework, which quantization, which batching strategy?" Those answers determine whether your AI features have positive unit economics.</p>
 <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
   </div>
   <nav class="article-nav">
@@ -56,6 +52,6 @@
   <a href="78-fs-09-training.html">Training &rarr;</a>
 </nav>
   
-  <script src="../js/nav.js?v=1774955743"></script>
+  <script src="../js/nav.js?v=1774957032"></script>
 </body>
 </html>

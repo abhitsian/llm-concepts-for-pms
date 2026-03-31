@@ -5,55 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Inference</title>
   <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
-  <link rel="stylesheet" href="../css/style.css?v=1774955743">
+  <link rel="stylesheet" href="../css/style.css?v=1774957032">
 </head>
 <body>
   
   <div class="article-card">
-    <div class="article-meta">692 words</div><h1>Inference</h1><div class="article-subtitle">Module 10 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
-<p>Training creates the model. Inference is using it. Every time you send a message to Claude or ChatGPT, you are running inference &mdash; the model takes your input, processes it through billions of parameters, and generates a response one token at a time. Training happens once. Inference happens billions of times per day, across every AI product in the world, and it never stops.</p>
+    <div class="article-meta">592 words</div><h1>Inference</h1><div class="article-subtitle">Module 10 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>Training creates the model. Inference is using it. Every time you send a message to Claude, GPT-4, or any AI system, you run inference: the model processes your input through billions of parameters and generates a response, one token at a time. Training happens once and costs millions. Inference happens billions of times per day and <strong>never stops</strong>.</p>
 
-<h2>What Actually Happens in 500 Milliseconds</h2>
+<h2>What Happens in 500 Milliseconds</h2>
 
-<p>When a user types a message and hits send, two things happen in sequence:</p>
+<p><strong>Phase 1 &mdash; Prefill:</strong> The model reads the entire input (system prompt + conversation history + your message) and builds a compressed representation. This is compute-heavy and parallelizable. For 10,000 tokens of input, prefill takes 200&ndash;400ms. The model stores intermediate computations in the <strong>KV cache</strong> &mdash; its working memory for this conversation.</p>
 
-<p><strong>Phase 1: Prefill.</strong> The model reads the entire input &mdash; system prompt, conversation history, user message &mdash; and builds a compressed representation. This is compute-heavy. For a 10,000-token context, prefill alone takes 200&ndash;400ms. The model processes all input tokens in parallel, building the KV cache (a stored representation of everything it's read so far).</p>
+<p><strong>Phase 2 &mdash; Decode:</strong> The model generates the response, one token at a time. Each token requires a full forward pass through billions of parameters. This is sequential and <strong>memory-bandwidth-bound</strong> &mdash; the chip mostly waits for data from HBM. A 300-token response takes 1&ndash;2 seconds. This is why AI responses appear to "type" themselves out &mdash; the model is generating tokens as fast as memory bandwidth allows.</p>
 
-<p><strong>Phase 2: Decode.</strong> The model generates the response, one token at a time. Each token requires a full forward pass through billions of parameters. This is sequential and memory-bandwidth-bound &mdash; the chip is mostly waiting for data to arrive from HBM. A 300-token response takes 1&ndash;2 seconds.</p>
-
-<p>The KV cache &mdash; the model's working memory for the current conversation &mdash; grows with context length. Longer conversations consume more GPU memory, which means fewer concurrent users fit on the same hardware. This is why longer context windows cost dramatically more: not linearly, but exponentially in terms of resource consumption.</p>
+<p>The KV cache grows with context length. Longer conversations = more memory consumed = fewer concurrent users per GPU. This is the physics behind rate limits and context window pricing tiers.</p>
 
 <h2>The Five Levers</h2>
 
-<p>Anthropic, OpenAI, and every serious lab has teams of 100+ engineers optimizing these five dimensions of inference:</p>
+<p>Every serious AI lab has teams of 100+ engineers optimizing these five dimensions:</p>
 
-<p><strong>1. Batching</strong> &mdash; Process many users' queries simultaneously instead of one at a time. A single query uses ~5% of a GPU's capacity. Continuous batching (vLLM's innovation) keeps injecting new requests as old ones complete, achieving up to 23x throughput improvement. Low-traffic features are disproportionately expensive because batches don't fill.</p>
+<p><strong>1. Batching</strong> &mdash; Process many queries simultaneously. A single query uses ~5% of GPU capacity. vLLM's continuous batching achieves <strong>23x throughput improvement</strong>. Critical insight: <em>low-traffic features are disproportionately expensive</em> because batches don't fill. Launching AI to 100% of users can make unit economics <em>better</em>, not worse.</p>
 
-<p><strong>2. Quantization</strong> &mdash; Run the model at lower numerical precision. FP8 instead of FP32 can ~4x throughput with minimal quality loss. Advanced labs use INT4 with custom kernels.</p>
+<p><strong>2. Quantization</strong> &mdash; Lower precision (FP8 instead of FP32) yields ~4x throughput with minimal quality loss. INT4 with custom kernels pushes further.</p>
 
-<p><strong>3. KV Cache Management</strong> &mdash; Cache repeated content (system prompts, common prefixes) instead of recomputing for every query. Prompt caching can eliminate the most expensive part of prefill for repeated patterns.</p>
+<p><strong>3. KV Cache Management</strong> &mdash; Cache repeated content (system prompts, common prefixes) instead of recomputing. If every user gets the same 2,000-token system prompt and you cache it, you eliminate the most expensive part of prefill. <strong>A 500-token system prompt vs. 5,000 tokens is ~10x cost difference on prefill.</strong> That's a design decision, not just an engineering one.</p>
 
-<p><strong>4. Speculative Decoding</strong> &mdash; Use a small fast model to draft tokens, then verify in bulk with the main model. 2&ndash;3x latency reduction, zero quality loss.</p>
+<p><strong>4. Speculative Decoding</strong> &mdash; Draft model predicts, main model verifies in parallel. 2&ndash;3x faster, zero quality loss.</p>
 
-<p><strong>5. Model Routing</strong> &mdash; Route easy queries to small cheap models, hard queries to frontier models. 80% of queries may not need the most powerful model. Intelligent routing captures cost savings without sacrificing quality where it matters.</p>
+<p><strong>5. Model Routing</strong> &mdash; Route easy queries to small cheap models, hard queries to frontier models. 80% of queries may not need the most powerful model. FAQ lookups don't need Claude Opus. Routing them to a cheaper model while reserving Opus for complex reasoning is a product architecture decision with direct margin impact.</p>
 
 <h2>The Cost-Capability-Speed Triangle</h2>
 
-<p>For every AI feature, you can optimize for two of three dimensions, never all three:</p>
+<p>For every AI feature, you can optimize for <strong>two of three</strong>. Never all three simultaneously:</p>
 
-<p><strong>Capability</strong> (frontier model, full context) vs. <strong>Cost</strong> (token price, GPU hours) vs. <strong>Speed</strong> (time to first token, tokens per second).</p>
+<p><strong>Capability</strong> (frontier model, full context) &times; <strong>Cost</strong> (token price, GPU hours) &times; <strong>Speed</strong> (time to first token, TPS).</p>
 
-<p>A complex workflow agent needs capability + reliability, and can sacrifice speed (users expect to wait). Live search suggestions need speed + low cost, and can sacrifice capability (a smaller model is fine). FAQ retrieval needs cost + speed, and can use a 7B model instead of a frontier one. This is a product decision, not just an engineering one.</p>
+<p>A complex workflow agent: optimize capability + reliability, sacrifice speed (users expect to wait). Live search suggestions: optimize speed + cost, sacrifice capability (smaller model is fine). FAQ retrieval: optimize cost + speed, use a 7B model. Document analysis: optimize capability + speed, sacrifice cost (premium use case). <strong>This is a product decision per feature, not one model for everything.</strong></p>
 
 <h2>Inference Is OpEx</h2>
 
-<p>Training is CapEx &mdash; pay once, get a model. Inference is OpEx &mdash; pay continuously, for every query, every user, every session. The more successful your AI product, the higher the OpEx. This is the fundamental economic difference between AI and traditional software: in old SaaS, scale improved margins (more users on the same server). In AI SaaS, scale can <em>compress</em> margins (more users = more GPU cost).</p>
+<p>Old SaaS: developer cost dominates COGS &rarr; 80%+ gross margins. Scale improves margins. AI SaaS: GPU cost dominates COGS &rarr; margins compress to 40&ndash;60%. <strong>The more successful the product, the higher the OpEx.</strong> Patel's mental model #4: "AI breaks SaaS economics."</p>
 
-<p>Anthropic needs approximately 4&ndash;5 gigawatts of compute capacity just to serve its projected revenue. At roughly $10&ndash;13 billion per gigawatt per year in rental costs, inference economics determine whether AI labs survive or die.</p>
-
-<h2>First Principles Takeaway</h2>
-
-<p>Inference is the meter that never stops running. Every product decision you make &mdash; context length, system prompt size, conversation history policy, model selection per feature &mdash; has a direct inference cost. The product manager who understands inference economics builds features with positive unit economics. The one who doesn't builds features that become more expensive as they succeed.</p>
+<p>Anthropic needs approximately <strong>4&ndash;5 gigawatts</strong> just to serve projected revenue. At $10&ndash;13 billion per gigawatt per year in rental costs, inference economics determine whether AI labs survive.</p>
 <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
   </div>
   <nav class="article-nav">
@@ -62,6 +56,6 @@
   <a href="80-fs-11-the-280x-collapse.html">The 280x Collapse &rarr;</a>
 </nav>
   
-  <script src="../js/nav.js?v=1774955743"></script>
+  <script src="../js/nav.js?v=1774957032"></script>
 </body>
 </html>

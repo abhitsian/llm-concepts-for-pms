@@ -5,47 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Data Center</title>
   <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
-  <link rel="stylesheet" href="../css/style.css?v=1774955743">
+  <link rel="stylesheet" href="../css/style.css?v=1774957032">
 </head>
 <body>
   
   <div class="article-card">
-    <div class="article-meta">708 words</div><h1>The Data Center</h1><div class="article-subtitle">Module 7 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
-<p>The data center is no longer a room full of servers. For AI, the data center <em>is</em> the computer. The building, the power supply, the cooling systems, and the networking are all integral parts of one computing system. You don't deploy a model to a server. You deploy it to a building.</p>
+    <div class="article-meta">575 words</div><h1>The Data Center</h1><div class="article-subtitle">Module 7 of From Sand to Software</div><div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div><hr />
+<p>The data center is no longer a room full of servers. For AI, <strong>the data center is the computer</strong>. The building, the power supply, the cooling systems, the networking &mdash; all integral parts of one computing system. You don't deploy a model to a server. You deploy it to a building.</p>
 
-<h2>Power: The New Constraint</h2>
+<h2>Power Is the New Constraint</h2>
 
-<p>A single AI rack consumes 120 kilowatts. A typical American house uses about 1.5 kilowatts. One rack uses as much power as 80 homes. A medium-sized AI data center runs 10,000&ndash;50,000 of these racks. Do the math: that's 1&ndash;6 gigawatts of continuous power demand from a single building. For reference, a large nuclear power plant generates about 1 gigawatt.</p>
+<p>One AI rack: <strong>120 kilowatts</strong>. One American house: ~1.5 kilowatts. One rack = 80 houses. A medium-sized AI data center runs 10,000&ndash;50,000 racks. That's <strong>1&ndash;6 gigawatts</strong> of continuous demand from a single facility. A large nuclear plant generates about 1 gigawatt.</p>
 
-<p>Power has become the primary constraint on AI scaling in most regions. Companies aren't limited by how many chips they can buy &mdash; they're limited by how much electricity they can secure. Google is buying wind farms and gas turbines. Microsoft signed a deal to restart a nuclear reactor at Three Mile Island. Amazon is purchasing data centers near nuclear plants. The AI industry's appetite for electricity is reshaping the energy landscape of entire regions.</p>
+<p>About <strong>20 gigawatts</strong> of new data center capacity is coming online in the US this year alone &mdash; equivalent to the entire electricity consumption of the Netherlands. Power companies built to serve residential loads are being asked to deliver gigawatts of continuous industrial power to single buildings. The grid wasn't designed for this.</p>
 
-<p>About 20 gigawatts of new data center capacity is being deployed in the United States this year alone. For context, that's roughly equivalent to the total electricity consumption of a country like the Netherlands. Power companies that were built to serve residential and light commercial loads are being asked to deliver gigawatts of continuous power to single buildings. The grid wasn't designed for this.</p>
+<p>Google is buying wind farms and gas turbines. Microsoft signed a deal to restart a nuclear reactor at Three Mile Island. Amazon is purchasing data centers adjacent to nuclear plants. Companies are using diesel truck engines for emergency power. Power is now the primary constraint on AI scaling in most regions &mdash; not chips, not software, not models. <strong>Electricity.</strong></p>
 
-<h2>The CapEx Signal</h2>
+<h2>The $600 Billion Signal</h2>
 
-<p>The combined capital expenditure of Google, Microsoft, Amazon, and Meta on AI infrastructure exceeds $600 billion per year. This money pays for land, buildings, turbines, generators, cooling systems, networking equipment, and chips. Most of it is committed 3&ndash;4 years in advance.</p>
+<p>Combined CapEx from Google, Microsoft, Amazon, and Meta on AI infrastructure now exceeds <strong>$600 billion per year</strong>. Google alone: roughly $75 billion. Microsoft: $80 billion+. This money goes to land, buildings, turbines, generators, cooling, networking, and chips.</p>
 
-<p>This is not speculative. You don't sign a $2 billion turbine deposit on a whim. You don't negotiate a 20-year power purchase agreement because you're following a trend. The physical commitments &mdash; turbine orders, fab allocations, grid permits &mdash; are structural. They take years to build and years to unwind. When critics say "the AI bubble will pop," they need to explain who's going to cancel the turbine orders that have already been placed for 2028 delivery. The infrastructure buildout has its own momentum.</p>
+<p>Most of it is committed <strong>3&ndash;4 years in advance</strong>. Turbine deposits for 2028 delivery. Fab capacity booked for 2027 production. Grid permits with 5+ year connection queues. These are physical commitments that take years to build and years to unwind.</p>
 
-<h2>The Hyperscalers vs. The Neoclouds</h2>
+<p>This is Patel's mental model #6: <strong>"CapEx signals conviction."</strong> $600B/yr from the big four isn't hype. You can see it from satellite imagery. The AI buildout is structural, industrial-scale, and irreversible on any short timeline. When critics say "the AI bubble will pop" &mdash; they need to explain who cancels the turbine orders already in production.</p>
 
-<p><strong>Hyperscalers</strong> (Google, AWS, Azure, Meta) own the data centers, run the GPUs, and rent compute. They have the balance sheets to commit $50&ndash;100 billion per year each. They build for their own AI products first, then sell excess capacity. When demand outstrips supply, internal products get priority. This is why Azure sometimes rate-limits external AI customers &mdash; Microsoft's own Copilot products consume capacity first.</p>
+<h2>Hyperscalers vs. Neoclouds</h2>
 
-<p><strong>Neoclouds</strong> (CoreWeave, Oracle Cloud, Lambda Labs) rent GPU capacity specifically for AI workloads. They're growing fast: CoreWeave was valued at $35 billion despite being founded in 2017. OpenAI uses CoreWeave and Oracle heavily. The advantage: purpose-built for AI, no legacy enterprise workloads competing for resources. The risk: these are heavily leveraged companies that depend on continued AI demand to service their debt. If demand stalls, the neoclouds face real credit risk.</p>
+<p><strong>Hyperscalers</strong> (Google, AWS, Azure, Meta) own the data centers and GPUs. They build for their own AI products first, then sell excess capacity. When demand outstrips supply, internal products get priority. This is why Azure sometimes rate-limits external AI customers &mdash; Microsoft's own Copilot products consume capacity first.</p>
 
-<h2>Dylan Patel's Three Hard Constraints</h2>
+<p><strong>Neoclouds</strong> (CoreWeave, Oracle Cloud, Lambda Labs) rent GPU capacity purpose-built for AI. CoreWeave was valued at $35 billion in 2025 despite being founded in 2017. OpenAI uses CoreWeave and Oracle heavily. The advantage: no legacy enterprise workloads competing for resources. The risk: heavily leveraged companies dependent on continued AI demand to service debt. If demand stalls, neoclouds face real credit risk.</p>
 
-<p>SemiAnalysis founder Dylan Patel frames AI scaling around three physical constraints, and data centers sit at the intersection of all three:</p>
+<h2>Patel's Three Hard Constraints</h2>
 
-<p><strong>Logic</strong> &mdash; TSMC fab capacity and ASML machines determine how many chips can be manufactured. Patel projects this will be the #1 constraint by 2030.</p>
+<p>The data center sits at the intersection of all three physical constraints on AI scaling:</p>
 
-<p><strong>Memory</strong> &mdash; HBM supply from SK Hynix, Samsung, and Micron determines how much data can be fed to those chips. Currently a major bottleneck.</p>
+<p><strong>1. Logic</strong> &mdash; TSMC fab capacity and ASML machines. Patel projects this becomes the #1 constraint by 2030.</p>
 
-<p><strong>Power</strong> &mdash; Grid connections, turbines, and land determine how many chips can actually run. This is the most binding constraint right now for new builds.</p>
+<p><strong>2. Memory</strong> &mdash; HBM supply from three Korean and American companies. Currently a major bottleneck.</p>
 
-<h2>First Principles Takeaway</h2>
+<p><strong>3. Power</strong> &mdash; Grid connections, turbines, land. The most binding constraint right now for new builds.</p>
 
-<p>When you use an AI product, you are touching a building that consumes more electricity than a small city. The cost of that electricity and the capital cost of that hardware is what you're paying for in your AI subscription or API bill. The $600B annual CapEx from the hyperscalers isn't hype &mdash; it's industrial infrastructure with 3&ndash;4 year lead times. Your product roadmap should account for the fact that AI capacity is expanding rapidly but is physically constrained in the near term.</p>
+<p><strong>For product leaders:</strong> When you use an AI product, you are touching a building that consumes more electricity than a small city. The cost of that electricity, and the capital cost of that hardware, is what you're paying for in your API bill. Nothing about this is "just software."</p>
 <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
   </div>
   <nav class="article-nav">
@@ -54,6 +54,6 @@
   <a href="77-fs-08-the-software-stack.html">The Software Stack &rarr;</a>
 </nav>
   
-  <script src="../js/nav.js?v=1774955743"></script>
+  <script src="../js/nav.js?v=1774957032"></script>
 </body>
 </html>
