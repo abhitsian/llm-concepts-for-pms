@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Eight-Year Question</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">680 words</div><h1>The Eight-Year Question</h1><div class="article-subtitle">Part 3 of Field Notes: AI Economics series</div><div class="divider">╌╌╌╌</div><hr />
+<p>The single most useful piece of historical context Apoorv Agrawal offered in the first session of his Stanford course is one number from a previous super-cycle: eight.</p>
+<p>That is how many years passed between AWS breaking ground in 2004 and Amazon migrating its own retail business onto AWS in 2012. Netflix, the platform's first big customer, did not arrive until 2010 &mdash; six years in.</p>
+<p>For most of that interval, the question Wall Street was asking was not "is this profitable?" It was "is Amazon going to go bankrupt?"</p>
+<h2>The Pattern Recurring</h2>
+<p>The shape we are looking at right now is not new. Every major tech super-cycle has had the same opening act: a multi-year period where capex outpaces revenue, public-market analysts panic, and the people building the infrastructure look reckless. Then revenue catches up, the build-out compounds, and the cycle stabilizes with a profit pool many multiples larger than the cumulative capex.</p>
+<p>What is new is the magnitude. The internet super-cycle peaked at perhaps tens of billions of telecom and fiber capex per year. The cloud super-cycle peaked at low hundreds of billions. The AI super-cycle is on track to clear $660B in 2026 alone &mdash; with depreciation horizons of five to six years against a profitability question still open.</p>
+<h2>Reading the Same Earnings Call Differently</h2>
+<p>Agrawal's strongest piece of student advice was a behavioral change: listen to the hyperscaler earnings calls every quarter.</p>
+<blockquote><p>"You'll have public-company CEOs tell you their biggest questions. Their biggest things they're thinking about. I recommend listening to those. If they stop guiding to big numbers on capex, that would imply that the current equilibrium does not work."</p></blockquote>
+<p>This is the cleanest signal anyone has named for when the cycle's character changes. As long as Microsoft, Google, Amazon, and Meta keep increasing their capex guidance, they are betting that the inverted triangle of today resolves into a normal triangle later. The day any of them flatten or cut, that bet has shifted.</p>
+<h2>Why the Timeline Might Be Longer This Time</h2>
+<p>Cloud took about a decade to flip from infrastructure-heavy to application-heavy. Agrawal's view is that AI's flip will take longer:</p>
+<blockquote><p>"My guess is that it might stay this way for longer than I anticipated. Because of just how hard it is to get the substrate &mdash; the chips, the data centers, the power."</p></blockquote>
+<p>The substrate this time is physical in a way the cloud's wasn't. AWS could buy commodity Intel chips off a price list. Hyperscalers building gigawatt AI campuses are competing for finite supplies of GE Vernova gas turbines, Eaton transformers, ASML lithography slots, NVIDIA Blackwells, and electricians who can pull 480V three-phase. Each is a multi-year supply problem with no easy substitute.</p>
+<h2>The CapEx-Revenue Mismatch Is the Whole Game</h2>
+<p>One Stanford student asked the question that frames the entire investment thesis cleanly:</p>
+<blockquote><p>"Is a large part of the bottom part of the triangle basically buying capacity for future revenue?"</p></blockquote>
+<p>Agrawal's answer was yes:</p>
+<blockquote><p>"There's a chart in the readings. For what happened in the mobile super-cycle, something very similar happened. The first inning had inflated market caps for a lot of the capex-heavy businesses. So if you think about a basket of capex names versus steady-state names, you should expect that. We are so early that that's happening as well."</p></blockquote>
+<p>The semis, infrastructure, and energy layers are inflating in valuation today against revenue that has not yet appeared on the application side. That is normal for an early cycle. It is also why the triangle is inverted: the bet is that today's investment in the substrate produces tomorrow's cash flow at the application layer, and the market is pricing in the full discounted value of that future cash flow now.</p>
+<p>The eight-year clock matters. So does the question of whether this time is six years, ten years, or twenty.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="97-ae-02-software-ate-the-world-ai-burns-it.html">&larr; Software Ate The World, AI Burns It</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="99-ae-04-bigger-than-the-manhattan-project.html">Bigger Than the Manhattan Project &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/training-inference.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    TrainingInferenceDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

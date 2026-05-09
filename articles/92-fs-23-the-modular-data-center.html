@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Modular Data Center</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">640 words</div><h1>The Modular Data Center</h1><div class="article-subtitle">Part 23 of From Sand to Software series</div><div class="divider">╌╌╌╌</div><hr />
+<p>The traditional way to build a gigawatt of AI compute is to find a piece of land, pour 24/7 concrete on it for two years, ship in 9,000 construction workers, fight regional supply chains for switchgear and chillers, and then plug in chips. This is what an Abilene looks like. It works. It does not scale to every site that has cheap stranded power.</p>
+<p>The unsexy answer to that scaling problem &mdash; and possibly the most quietly disruptive piece of infrastructure innovation in AI right now &mdash; is the prefab data center. Crusoe calls theirs <em>Spark</em>. The pitch:</p>
+<blockquote><p>"To bring down those labor costs, we designed something we call Crusoe Spark &mdash; a modular, self-contained AI data center that we manufacture in centralized locations. We can bring down the labor and infrastructure costs about 30 to 50 percent."</p></blockquote>
+<h2>Two Configurations</h2>
+<p>Two unit sizes:</p>
+<ul>
+<li>Air-cooled: 500 kW per unit.</li>
+<li>Liquid-cooled: 2 MW per unit.</li>
+</ul>
+<p>You truck them in. You connect power and water. You have compute. The math is straightforward: where Lochmiller's earlier slide put the building-and-power-plant capex at roughly $20M / MW, Spark targets $10&ndash;14M / MW for that same scope.</p>
+<p>The savings come from two places. First, factory labor is cheaper and more available than skilled trades on a remote desert site. Second, the unit is repeatable. The thousandth one off the line is faster to assemble than the first.</p>
+<h2>Why This Matters for Power Strategy</h2>
+<p>The bigger reason Spark is interesting is not the cost line. It is the deployment topology. Lochmiller again:</p>
+<blockquote><p>"You can deploy them in fleets, which actually opens up a lot of net new power opportunities."</p></blockquote>
+<p>Translate that. Today, energy-first data center strategy hunts for sites with hundreds of MW to a GW of stranded power &mdash; the West Texas oversupply, the Quad wind farm, the Manitoba hydro corridor. Those sites are rare. There are far more sites with 5&ndash;50 MW of trapped power: a single producing well, an over-built solar field, a stranded substation, a small hydroelectric dam. None of them justify a billion-dollar greenfield campus. All of them justify a fleet of Sparks.</p>
+<p>This is the same arc that turned crypto mining from giant warehouses into containerized trailers parked next to gas wells in North Dakota. The difference: AI workloads are not gimmicks burning electricity for hashes. They are training and inference jobs that produce real economic output.</p>
+<h2>The Prefab Pattern in Industry History</h2>
+<p>Modular construction is not novel &mdash; it has appeared every time an industry hit a labor or supply-chain wall. Liberty ships in WWII. Sears Catalog houses. Containerized shipping. The pattern is the same: when bespoke on-site assembly becomes the bottleneck, somebody figures out how to do as much as possible in a factory and as little as possible in the field.</p>
+<p>For AI infrastructure, that wall is the trades shortage. Crusoe disclosed 9,000 construction workers on a single Abilene site. Multiply that across the dozen new gigawatt-scale campuses being built simultaneously and you run out of qualified electricians and welders before you run out of money. Modularity is the only obvious lever to break that constraint.</p>
+<h2>The PM Read</h2>
+<p>For PMs, Spark and its competitors matter for one reason: latency-tolerant inference is about to get geographically diverse in a way it isn't today. If you are running async agents, batch fine-tunes, evaluation harnesses, or any workload where 200 ms of round-trip latency is fine, you are going to have a much wider set of providers to choose from over the next 18 months &mdash; many of them in unfashionable zip codes.</p>
+<p>The token may be the atomic unit of intelligence. The prefab unit may turn out to be the atomic unit of compute capacity.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="91-fs-22-the-60m-megawatt.html">&larr; The $60M Megawatt</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="93-fs-24-the-electrical-stack-rewrite.html">The Electrical Stack Rewrite &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/distillation.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    DistillationDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

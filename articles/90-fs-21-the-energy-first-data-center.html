@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Energy-First Data Center</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">720 words</div><h1>The Energy-First Data Center</h1><div class="article-subtitle">Part 21 of From Sand to Software series</div><div class="divider">╌╌╌╌</div><hr />
+<p>For two decades the data center industry was a real-estate business with computers in it. You picked a metro &mdash; Northern Virginia, Santa Clara, Dublin &mdash; near where the customers and the fiber were, and you built. Power came to you. Water came to you. The grid was a utility you negotiated with, not a constraint you designed around.</p>
+<p>AI broke that model. The new constraint is not land or fiber. It is megawatts.</p>
+<h2>Move Data to Energy</h2>
+<p>Chase Lochmiller, founder &amp; CEO of Crusoe, told a Stanford class this week that the entire premise of his company comes from inverting the old playbook:</p>
+<blockquote><p>"Markets are reasonably efficient. We didn't want to be the next data center developer in Northern Virginia. So we said, can we find areas that aren't historical data center markets and go there &mdash; instead of moving the energy, we're actually moving data."</p></blockquote>
+<p>Crypto miners stumbled onto this insight first. Proof-of-work was so power-hungry that the cheapest place to do it was wherever electrons were stranded &mdash; flared natural gas in North Dakota, surplus hydro in Quebec, curtailed wind in Texas. AI training workloads have the same property. They are batch jobs. They tolerate latency. They don't need to be near a customer. They need to be near a generator.</p>
+<h2>Abilene, Texas: The First Manifestation</h2>
+<p>The example Lochmiller walked through is now one of the largest AI computing campuses in the world. Most people in tech had never heard of Abilene before Crusoe put a shovel in the ground there in June 2024.</p>
+<p>Why Abilene? West Texas is windy and sunny. Renewable developers had built more wind and solar capacity than the grid could carry, chasing federal production tax credits that paid them to produce clean electrons regardless of price. The result was structural oversupply with nowhere to go.</p>
+<blockquote><p>"Power prices were actually negative because there was no marginal buyer for this power. And it wasn't enough transmission to get the power to somewhere where it actually was useful. So we said, great &mdash; have we got a power-hungry application for you."</p></blockquote>
+<p>The Abilene campus now houses two substations: a 200&nbsp;MW and a 1&nbsp;GW. The 1&nbsp;GW substation is the largest privately owned in the United States. A gigawatt is the entire city of Denver. The full campus, eight buildings, totals 2.1&nbsp;GW. Two Denvers running on a single coherent backend network so that one training job can use every chip across every building.</p>
+<p>The first eight buildings are Project Stargate &mdash; Oracle and OpenAI. The expansion underway is for Microsoft.</p>
+<h2>Across the Meter</h2>
+<p>Crusoe's second flagship site is Quad, Texas &mdash; population 1,500, with 3,500 construction workers currently on site. The on-site workforce is twice the size of the town. There is a wind farm directly feeding the data center, with planned solar, batteries, and gas to firm up power.</p>
+<p>Lochmiller calls the architecture "across the meter":</p>
+<blockquote><p>"What we don't need, we sell into the grid &mdash; create an energy abundance that drops the cost for all local rate payers. And when we actually need power, when the wind's not blowing, the sun's not shining, we firm up from the grid. It's a mutually beneficial relationship of investing in power infrastructure and leveraging the large distribution transmission across the grid."</p></blockquote>
+<p>This is a meaningful philosophical change. Behind-the-meter sites generate their own power and ignore the grid. In front of the meter you are a customer. Across the meter you are both producer and consumer, with the grid as a battery and a balancer.</p>
+<h2>The PM Implication</h2>
+<p>If you are a product manager building anything that depends on inference, this matters in three ways. First, latency-tolerant workloads &mdash; training, batch fine-tuning, async agent runs &mdash; will increasingly happen in places like Abilene and Quad, not in coastal hyperscale regions. The geography of your compute is changing. Second, sustainability narratives that lean on "AI uses too much water" need updating. The Abilene buildings each hold a million gallons that recirculate. Annual fresh-water consumption is comparable to a single household. Third, when you read about a hyperscaler announcing a new gigawatt campus in a town no one has heard of, you are watching the new geography of intelligence get drawn. The map of AI runs along transmission lines, not interstates.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="89-fs-20-the-pms-infrastructure-playbook.html">&larr; The PM's Infrastructure Playbook</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="91-fs-22-the-60m-megawatt.html">The $60M Megawatt &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/physical-world.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    PhysicalWorldDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

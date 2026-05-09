@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parameter × Context Squared</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">740 words</div><h1>Parameter × Context Squared</h1><div class="article-subtitle">Part 6 of Field Notes: AI Economics series</div><div class="divider">╌╌╌╌</div><hr />
+<p>If you are trying to understand why NVIDIA paid $20 billion for Grok &mdash; the largest acquisition in NVIDIA's history &mdash; the answer fits in one short formula. Sunny Madhura, the former Grok president now at NVIDIA, gave it on stage:</p>
+<blockquote><p>"The compute per token is usually the parameter size of the model times the context length squared."</p></blockquote>
+<p>Read it slowly. Doubling the parameter count doubles the compute. Doubling the context length quadruples it. Tripling the context length multiplies it by nine.</p>
+<p>This is the equation behind every "AI is a CapEx monster" story. It is also the equation that explains why reasoning models broke the inference economy, why agents are about to break it again, and why a company that was a niche chip startup nine years in is now strategically critical to the world's largest AI hardware company.</p>
+<h2>The Boring Background</h2>
+<p>Sunny's framing of why this is unique compared to the previous era of computing:</p>
+<blockquote><p>"Snowflake is a database retrieval company. You go get a record and bring it back. The number of cycles it takes to do that is not a really large amount. But you look at the number of compute cycles, the FLOPs, it takes to generate a single token &mdash; it's mind-boggling. We're in this era where we have incredible technology, but it's incredibly compute intensive. Several orders of magnitude larger than any other computing paradigm."</p></blockquote>
+<p>The previous decade of cloud compute was about retrieving data: pull a record, format it, return it. Cycles per request were small. Margins on that were huge precisely because the compute was negligible. Token generation reverses both numbers. Each individual token requires running the entire model's worth of math. Each token in the context window is consulted by every other token. The squared term is the attention mechanism.</p>
+<h2>Why Reasoning Models Broke Everything</h2>
+<p>One-shot pre-trained models &mdash; the GPT-3.5 / GPT-4 era &mdash; produced an answer of a few hundred tokens per request. The math was tractable. Then reasoning models arrived. Sunny's account from the front line:</p>
+<blockquote><p>"Reasoning models are much more voracious in their token consumption. Deeper thinking than what one-shot pre-trained models were doing. When you looked at token consumption curves, they were just going parabolic. Our hardware, our clouds were starting to break. OpenAI only had a gigawatt of compute. Anthropic only had a gigawatt of compute. We had to figure out how to make both more token-efficient models, but also more token-efficient architectures."</p></blockquote>
+<p>A reasoning trace might be 10,000 tokens long where a chat answer was 200. The context window grew alongside it &mdash; from 4K to 32K to 1M tokens for some Gemini variants. Apply parameter &times; context&sup2; to those numbers. The compute per request went up by orders of magnitude in months.</p>
+<h2>Jensen's "1 Billion X"</h2>
+<p>Brad Gerstner, fundraising for the deal that became the NVIDIA-Grok acquisition, recounted the conversation that triggered everything:</p>
+<blockquote><p>"Jensen came on my podcast and said, 'Everything just changed. Inference time reasoning. Inference is about to 1 billion X. Not 10x, not 100x, not a million x. A billion x. Our systems of compute are not designed for what's coming.'"</p></blockquote>
+<p>This is one of the more astonishing claims any tech CEO has ever made on the record. It is also internally consistent with the formula: if reasoning grows context, agents grow it more, multimodal grows it again, and you compose them, the multiplication is exponential. A billion-x increase in inference compute is not a marketing number. It is the conclusion of the math.</p>
+<h2>The Strategic Implication</h2>
+<p>Two consequences for product:</p>
+<p><strong>Token efficiency is the next frontier.</strong> Models that produce the same quality of output with fewer reasoning tokens win on cost. Architectures that reduce the attention cost (KV-cache reuse, sliding-window attention, mixture-of-experts) win on cost. Anyone building an AI product with a non-trivial inference bill is now in the same business as the labs &mdash; squeezing tokens out of the request.</p>
+<p><strong>Inference economics will dominate the next few earnings cycles.</strong> The hyperscalers' guidance increases on capex are precisely a function of this formula. They are sizing for a future where reasoning and agents are dominant workloads, not exceptional ones. The training share of NVIDIA's GPU fleet today is roughly 60%. That number is widely expected to invert as agents scale.</p>
+<p>Parameter &times; context&sup2; is the most consequential equation in commercial computing right now. Every other line item in the AI economic stack is downstream of it.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="100-ae-05-feature-or-platform.html">&larr; Feature or Platform?</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="102-ae-07-agi-is-here-context-isnt.html">AGI Is Here, Context Isn't &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/reasoning-compute.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ReasoningComputeDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bigger Than the Manhattan Project</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">700 words</div><h1>Bigger Than the Manhattan Project</h1><div class="article-subtitle">Part 4 of Field Notes: AI Economics series</div><div class="divider">╌╌╌╌</div><hr />
+<p>The slide Apoorv Agrawal opened the AI infrastructure session with shows hyperscaler AI capex over time. The line goes up and to the right, but the more useful framing is what Agrawal compared the total to:</p>
+<blockquote><p>"This is one of the biggest investments we are making. This is bigger than space, bigger than our highway system, the Manhattan Project. Second only to the US defense budget."</p></blockquote>
+<p>The Apollo program, in 2024 dollars, cost roughly $260B over a decade. The Interstate Highway System cost about $100B over thirty years, also adjusted. The Manhattan Project ran around $30B. The 2025 hyperscaler capex on AI alone exceeded all three combined. The 2026 number is on track to roughly double 2025.</p>
+<h2>The Bigger Picture: Tech as a Share of GDP</h2>
+<p>Brad Gerstner, joining the same session as the first guest speaker, set the broader context. Two long-running curves:</p>
+<p><strong>Global GDP doubling time.</strong> For most of history, the rate at which the world doubles its productivity per capita was glacial. It took roughly 6,000 years for the first doubling. The modern era has compressed that dramatically.</p>
+<blockquote><p>"And then all of this stuff starts happening in the 1800s and 1900s. The number of years it takes to double GDP has plummeted. Now we're doubling global GDP &mdash; or you might think of it as quality of life &mdash; every 25 years."</p></blockquote>
+<p><strong>Tech as a share of global GDP.</strong> Technology has gone from roughly 5% of global GDP a decade ago to 13% today, and Gerstner's bet is that it goes considerably higher.</p>
+<blockquote><p>"If I asked you ten years from now, are we going to be at below 13 percent or above 13 percent of global GDP, I think you'd all say technology as a percentage of global GDP is going to be a lot bigger."</p></blockquote>
+<p>Then the operative quote, from Demis Hassabis via Gerstner:</p>
+<blockquote><p>"AI will be 10x the impact of the Industrial Revolution, but happening at 10x the speed &mdash; probably unfolding in a decade rather than a century."</p></blockquote>
+<h2>Why the Capex Number Is Both Right and Risky</h2>
+<p>Two readings of the same fact:</p>
+<p><strong>Optimistic.</strong> If AI does compound earnings the way technology has compounded earnings &mdash; the NASDAQ has compounded EPS at 15% per year over the last decade, versus 6% for non-tech &mdash; then the present value of the future cash flow stream justifies the capex even at $660B per year. The math works because tech keeps eating GDP, and AI accelerates that.</p>
+<p><strong>Pessimistic.</strong> The capex is going to consume close to 100% of operating cash flow at the hyperscalers in 2026, against a ten-year average closer to 40%. Companies are starting to issue debt to bridge. Useful-life assumptions on the chips are five to six years. If the application-layer revenue does not materialize on roughly that timeline, the depreciation will hit the income statement before the cash flow does.</p>
+<p>Both readings can be right at different time horizons. The 2-3 year picture is dominated by execution risk: can the hyperscalers actually deploy the gigawatts they have ordered, find the trades workers, get the gas turbines? The 7-10 year picture is dominated by demand risk: does the application layer monetize at the scale required to justify the capex of today?</p>
+<h2>The Bionic Mandate</h2>
+<p>Gerstner's framing for students sitting in the room was less about the numbers and more about the implication for individual careers:</p>
+<blockquote><p>"You can't consume enough AI today. It used to be: you go to school, you get a job at a place like Grok or Altimeter. Today, I don't really care where you went to school. I want somebody who shows up and delivers abnormal value. Bionic value."</p></blockquote>
+<p>The aggregate capex number is the macro version of the same point. Whoever can build, train, and apply more intelligence per dollar than their competitors wins. At the company level, that funds Manhattan-Project-sized data centers. At the individual level, it makes "bionic" the new minimum competence bar.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="98-ae-03-the-eight-year-question.html">&larr; The Eight-Year Question</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="100-ae-05-feature-or-platform.html">Feature or Platform? &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/capex-surge.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    CapexSurgeDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

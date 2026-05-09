@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Electrical Stack Rewrite</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">700 words</div><h1>The Electrical Stack Rewrite</h1><div class="article-subtitle">Part 24 of From Sand to Software series</div><div class="divider">╌╌╌╌</div><hr />
+<p>If you trace a single electron from a transmission line to a GPU, it goes through one of the most underexamined supply chains in technology. From a 765 kV high-voltage line, down to a 345 kV substation, down to 34.5 kV inside the data center, then stepped down again to 480 V or 415 V at the row level, and finally down to the rack. Five voltage transformations. Tons of copper. Megawatts of switchgear. And almost none of it has been redesigned in the last hundred years.</p>
+<p>Asked at Stanford which company in the AI infrastructure stack he was bearish on long-term, Chase Lochmiller did not pick a model lab or a cloud provider. He picked the electrical-equipment incumbents.</p>
+<blockquote><p>"My bear case is the huge investment we're making across the electrical stack. The data center is fundamentally going to drive a lot of innovations in the whole stack &mdash; solid-state electronics, solid-state transformers, power electronics. It puts in jeopardy a lot of these companies that have not innovated much in the last hundred years. This is Eaton, Schneider, a number of others. They'll do super well in the near term &mdash; they're on the critical path right now. Long term, if they don't innovate, that whole piece of the stack is going to dramatically come down in cost."</p></blockquote>
+<p>It is rare to hear a hyperscale infrastructure CEO publicly call out his own critical-path suppliers. But the math is conspicuous.</p>
+<h2>Why the Stack Is Wrong for AI</h2>
+<p>The legacy electrical stack was designed for a load profile that does not exist anymore. Transformers and switchgear assume steady, modestly varying current draw across a large pool of loads &mdash; offices, server racks running varied web traffic, industrial machinery. AI training is closer to a binary: either every GPU in a 1 GW cluster is at full draw simultaneously, or the workload pauses and the draw drops to baseline. The voltage gradient between the substation and the chip is also extreme. Five sequential transformations means five sequential conversion losses. Each percent of efficiency lost compounds across a campus running for years.</p>
+<p>Solid-state transformers and modern power electronics &mdash; built from silicon carbide and gallium nitride &mdash; are smaller, more efficient, and far more programmable. They can match a workload's load profile in real time. They are also, for now, much more expensive than the legacy iron-core equipment. That is the textbook setup for a cost-curve disruption: the new technology is better on the hard-to-replicate axis (efficiency, density, programmability) while still losing on price &mdash; until volume catches up.</p>
+<h2>900 V DC and the Long Bet</h2>
+<p>The end state Lochmiller hinted at is a shift from AC distribution inside the data center to high-voltage DC &mdash; ultimately 900 V DC at the rack. DC distribution removes whole stages of conversion. It also matches the way GPUs actually consume power. AC at the rack is a legacy of a world where the dominant load was lighting and motors.</p>
+<blockquote><p>"There's going to be huge shifts to 900 V DC and all these different aspects. Power electronics &mdash; how do you get power from 765 kV to 900 V DC in the rack? That's a super, super huge opportunity."</p></blockquote>
+<h2>The Eaton/Schneider Risk</h2>
+<p>The near-term picture for Eaton, Schneider, and the gas-turbine majors is excellent. They are sold out. Lead times are blowing out. Stocks are up. Lochmiller's bear case is the second-derivative one: incumbents that earn supernormal margins during a critical-path shortage are usually the slowest to disrupt themselves. They have neither the muscle memory nor the cost structure to build solid-state successors.</p>
+<p>For PMs and investors, the playbook here echoes other physical-supply-chain disruptions in tech. The component you can't get is not the component you should bet on long-term. The boring middle layer between the substation and the chip is the next frontier. The companies who build the GaN-based, software-controlled, DC-native version of that layer are doing the same thing that Crusoe did to data centers, and that NVIDIA did to GPUs &mdash; treating physical infrastructure as a software problem.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="92-fs-23-the-modular-data-center.html">&larr; The Modular Data Center</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="94-fs-25-the-h100-that-didnt-depreciate.html">The H100 That Didn't Depreciate &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/architecture-tax.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ArchitectureTaxDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

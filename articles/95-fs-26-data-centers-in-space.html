@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Centers in Space</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">580 words</div><h1>Data Centers in Space</h1><div class="article-subtitle">Part 26 of From Sand to Software series</div><div class="divider">╌╌╌╌</div><hr />
+<p>It is the kind of idea that sounds like a Twitter joke until somebody puts a chip in orbit. Crusoe, the same company building the gigawatt Stargate campus in West Texas, has partnered with StarCloud, which has already launched the first H100s into low Earth orbit. Asked whether space-based data centers are real or fantasy, Lochmiller's answer was unusually candid &mdash; bullish on the premise, skeptical on the timeline.</p>
+<h2>Why Space Looks Tempting</h2>
+<p>Walk through Lochmiller's $60M / MW capex breakdown and notice how many line items vanish if you remove gravity and earth:</p>
+<ul>
+<li>No concrete foundation. No batch plant pouring 24/7.</li>
+<li>No site permits, no water rights, no zoning fights.</li>
+<li>No power approvals. No grid interconnect queues.</li>
+<li>No millions of fiber strands. Optical interconnects work in vacuum, point to point, with no atmospheric loss.</li>
+<li>No HVAC. Space is cold &mdash; in principle.</li>
+</ul>
+<blockquote><p>"I just walked you through the whole stack of areas where I'm spending billions. All the concrete foundation, guess what &mdash; you don't need that in space. All the permitting, all the approvals on the power side. You don't need that either. The core networking pieces, the millions of strands of fiber, the technicians plugging it all in &mdash; in space, you use optics for everything. Optically interconnected. That's all very interesting."</p></blockquote>
+<p>The largest single physical-world capex line item &mdash; the building &mdash; goes to zero. So does the second largest, the gas-fired power plant.</p>
+<h2>Why Space Is Hard</h2>
+<p>The same talk had the candid pushback:</p>
+<blockquote><p>"Thermal management is very challenging. And the ongoing operations piece is very challenging. In these data centers, things fail. GPUs fail, they have to be reseated in the compute tray. Sometimes they have to be RMAed and sent back to the vendor. Guess what &mdash; you're not sending an astronaut into space to take a chip and send it back to Jensen."</p></blockquote>
+<p>Three problems compound:</p>
+<p><strong>Thermal.</strong> Space is cold but it is also a vacuum, which is the worst possible heat-transfer medium. There is no convection. You cool by radiation only. The required radiator surface area for a megawatt of GPU compute in vacuum is enormous &mdash; bigger than the spacecraft holding the GPUs.</p>
+<p><strong>Repair.</strong> Earthside, a typical hyperscale data center cycles through several percent of its GPUs each year for hardware faults. In orbit, every fault is permanent. The only repair model is "replace the satellite."</p>
+<p><strong>Depreciation.</strong> Every component &mdash; chip, board, optic, structural element &mdash; degrades faster in radiation. A five-year terrestrial GPU might be a two-year orbital one. The math hinges on Starship-class payload costs falling far enough to absorb that depreciation.</p>
+<h2>The Real Question</h2>
+<p>The question is not whether intelligence in orbit is possible. The first H100s are already up. The question is whether the cost curve crosses for non-toy workloads. That depends almost entirely on launch economics &mdash; specifically on Starship reaching the cost-per-kilogram targets SpaceX has publicly committed to.</p>
+<p>If Starship hits its target costs, space data centers become viable for narrow workloads first &mdash; satellite imagery processing, geospatial inference, defense applications where physical inaccessibility is a feature rather than a bug. The general-purpose hyperscale orbital data center is a much harder thesis.</p>
+<p>For PMs, the right way to read this: a fun thought experiment that throws every assumption about terrestrial data center cost structure into relief. The reason Crusoe is investing on the ground in Abilene rather than in orbit is the same reason most useful infrastructure plays will be terrestrial for the next decade. The map of intelligence still runs along transmission lines.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="94-fs-25-the-h100-that-didnt-depreciate.html">&larr; The H100 That Didn't Depreciate</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="96-ae-01-the-triangle.html">The Triangle &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/openclaw.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    OpenclawDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

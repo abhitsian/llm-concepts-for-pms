@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The H100 That Didn't Depreciate</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">680 words</div><h1>The H100 That Didn't Depreciate</h1><div class="article-subtitle">Part 25 of From Sand to Software series</div><div class="divider">╌╌╌╌</div><hr />
+<p>Every public-company finance team running an AI cluster has a depreciation schedule that goes something like this: useful life of compute is five to six years, with straight-line depreciation. The assumption baked into that number is that next-gen silicon makes previous-gen silicon worth less every year. That has been true for almost the entire history of the IT industry.</p>
+<p>It is not currently true.</p>
+<h2>The Chart That Broke The Model</h2>
+<p>Lochmiller put a Bloomberg chart on screen of H100 spot pricing over the chip's three-year life so far. The shape was not the standard depreciation curve. It was a U:</p>
+<blockquote><p>"H100s debuted about three years ago. The pricing had come down. But with the boom in demand coming from agents, the price of H100s has actually come up &mdash; and exceeded the price folks were paying when these chips first came out. We're experiencing this firsthand on the ground in our Cruso Cloud business."</p></blockquote>
+<p>And the same trend is now showing up in Blackwell pricing &mdash; new generations are not collapsing the pricing of older generations the way every prior chip cycle did. Semi Analysis published a follow-on chart with the same U-shape for Blackwell.</p>
+<p>This is not a small accounting footnote. If H100 useful life is closer to ten years than five, every published model of hyperscaler ROI on AI capex is wrong by a meaningful multiple in the right direction. If it is closer to five &mdash; or shorter, because frontier training does abandon old silicon &mdash; the math gets brutal.</p>
+<h2>Why H100s Are Holding Value</h2>
+<p>Three forces are at work, and the agentic-AI boom triggered all three at once:</p>
+<p><strong>Inference is eating the world.</strong> Reasoning models burn dramatically more compute per request than one-shot pre-trained models. Sunny from Grok / NVIDIA observed in the same lecture series that compute per token scales roughly as <em>parameter size &times; context length squared</em>. A 200-token reasoning trace consumes orders of magnitude more compute than a 200-token chat reply.</p>
+<p><strong>Agents make every workload bursty in a different way.</strong> Pre-agent inference followed human waking hours &mdash; predictable diurnal load with a Christmas dip. Agent inference runs 24/7, and it runs <em>around</em> humans, not in lockstep with them.</p>
+<p><strong>Older silicon is fine for both.</strong> Inference does not need the absolute latest training-grade GPU. An H100, an A100, or even older silicon at the right price is a perfectly good way to serve tokens.</p>
+<p>The result: cutting-edge GPUs go to the model labs that need them for training. Mid-cycle GPUs get re-deployed to inference fleets. Demand for both is far higher than the standard depreciation curve assumed.</p>
+<h2>The Commoditization Question</h2>
+<p>Lochmiller's view, when asked whether compute is becoming a commodity:</p>
+<blockquote><p>"It depends on the use case and the timeframe. Older compute will commoditize as you look further back. One thing that is absolutely not a commodity is scale &mdash; if you do anything at really, really big scale, it's super hard to replicate. There's always going to be a cutting edge, and any of the newest stuff will always command a premium."</p></blockquote>
+<p>Both Jensen Huang and Lochmiller are right at different time horizons. Yesterday's Hopper looks like a commodity in five years. Today's Blackwell at gigawatt scale, with InfiniBand backend network, is not.</p>
+<h2>What This Means for Your Model</h2>
+<p>If you are an investor, the depreciation assumption embedded in every hyperscaler's reported AI CapEx number is the single most consequential modeling input. If H100s and Blackwells last seven to ten years instead of four to five, the cash-on-cash returns on $660B of 2026 capex change shape entirely.</p>
+<p>If you are a PM, the implication is stranger and more useful. The previous-generation silicon you assumed would be worthless next year is now a strategic asset. Anyone holding spare H100 capacity in 2025 is looking at a real options portfolio, not a depreciation schedule. The phrase "next-gen makes previous-gen worthless" does not survive contact with the agent boom.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="93-fs-24-the-electrical-stack-rewrite.html">&larr; The Electrical Stack Rewrite</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="95-fs-26-data-centers-in-space.html">Data Centers in Space &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/inference-costs.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    InferenceCostsDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

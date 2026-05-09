@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The $60M Megawatt</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">760 words</div><h1>The $60M Megawatt</h1><div class="article-subtitle">Part 22 of From Sand to Software series</div><div class="divider">╌╌╌╌</div><hr />
+<p>The new unit of measure in AI is not the GPU. It is the megawatt. Every hyperscaler conversation is now denominated in MW. Every campus is sized in GW. The reason is simple: chips you can buy. Power you have to build. And building one megawatt of AI-grade compute capacity, fully outfitted, costs roughly sixty million dollars before you charge a single customer.</p>
+<p>Until this week, that number lived inside a few finance models at Crusoe, CoreWeave, and the hyperscalers. At Stanford on Thursday, Chase Lochmiller put the full breakout on a slide.</p>
+<h2>The Two Halves</h2>
+<p>The $60M splits roughly $20M for the building and power plant, and $40M for the IT &amp; compute capex that goes inside it.</p>
+<p><strong>Power plant + building (~$20M / MW):</strong></p>
+<ul>
+<li>Labor: $4.7M / MW. Construction crews, electricians, welders, plumbers, pipe fitters. The 5,000-car parking lot Lochmiller showed at Abilene exists because there are 9,000 people on site every day.</li>
+<li>Gas plant: $2&ndash;3M / MW. Has roughly tripled.</li>
+<li>Electrical equipment: high-voltage to low-voltage transformers, switchgear, distribution centers.</li>
+<li>Mechanical: chillers, plumbing, air-handling units, fan walls.</li>
+<li>Tenant fit-out: hot-aisle containment, cooling distribution units, data hall infrastructure.</li>
+<li>Soft costs: insurance, financing, siting, commissioning.</li>
+<li>Materials: steel, concrete (poured 24/7 from an on-site batch plant).</li>
+</ul>
+<p><strong>IT capex (~$40M / MW):</strong></p>
+<ul>
+<li>GPUs: $30M / MW &mdash; the single largest line item by far.</li>
+<li>Networking: $4M / MW. InfiniBand or RoCE for the high-performance backend.</li>
+<li>CPUs and storage: $3M / MW &mdash; and there is a real CPU shortage right now driven by agentic workflows.</li>
+<li>In-room capex, deployment, shipping, install labor: ~$3M / MW.</li>
+</ul>
+<p><strong>Total: ~$60M per megawatt of capex. Annual OpEx: ~$1&ndash;2M per MW</strong> &mdash; power, insurance, on-site labor, GPU and cable replacements.</p>
+<h2>Why It Is Going Up, Not Down</h2>
+<p>Conventional wisdom says infrastructure prices fall as the industry scales. The opposite is happening here:</p>
+<blockquote><p>"Things like gas generation infrastructure &mdash; prices have gone up. Labor &mdash; if you're an electrician, your price has gone up because there's so much demand for your time. A gas turbine that used to cost a million dollars per megawatt now costs three million."</p></blockquote>
+<p>The constraint is the supplier base, not the technology. There are essentially four gas-turbine manufacturers worldwide &mdash; GE Vernova, Siemens, Mitsubishi, Pratt &amp; Whitney, and a few smaller players. Electrical-equipment manufacturers Eaton and Schneider sit on the critical path of every project. When everyone wants more capacity at once, oligopoly economics kick in.</p>
+<h2>The Payback Math</h2>
+<p>The interesting question is not what it costs to build, but what it returns. Lochmiller's numbers:</p>
+<ul>
+<li>Bare infrastructure rental of GPUs: ~$15M / MW / year.</li>
+<li>Layer on managed services &mdash; hosted models, API endpoints, the path "from electrons to tokens" &mdash; and you add another $5&ndash;15M / MW / year.</li>
+<li>Optimistic total: $30M / MW / year.</li>
+</ul>
+<p>That puts the payback period somewhere between two years (managed services) and four years (bare metal) on a $60M build &mdash; before depreciation, before the cost of debt, before the engineering overhead Lochmiller specifically called out as missing from the slide.</p>
+<p>This is why the entire industry is racing to move up the stack from "rent us a GPU" to "give us your model and we'll serve the tokens." The bare-metal margin is mediocre. The managed-services margin is what makes the math work.</p>
+<h2>Why This Number Should Live in Your Head</h2>
+<p>If you are a PM, $60M / MW is the right reference point for three calculations.</p>
+<p>First, when a hyperscaler announces a $50B annual capex commitment, that is roughly 800 MW of new capacity. Meta's $65B for 2025 is closer to 1.1 GW &mdash; one Denver. Google's $75B is 1.25 GW. The 2026 collective number from Microsoft, Google, Amazon, Meta, and Oracle &mdash; reportedly $660&ndash;690B &mdash; converts to roughly 11 GW of incremental capacity in a single calendar year. Eleven Denvers.</p>
+<p>Second, every conversation about token pricing economics is downstream of this $60M number. When an inference provider undercuts on price, ask yourself whether their MW math actually pencils. A two-year payback is good. A four-year payback at a depreciation horizon of five to six years is fragile. Anything longer is somebody losing money to win share.</p>
+<p>Third, the labor line item is the most underdiscussed. Half the AI capex story right now is a constraint on tradespeople: electricians, welders, pipe fitters. The bottleneck on intelligence is not silicon. It is plumbers.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="90-fs-21-the-energy-first-data-center.html">&larr; The Energy-First Data Center</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="92-fs-23-the-modular-data-center.html">The Modular Data Center &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/capex-surge.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    CapexSurgeDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

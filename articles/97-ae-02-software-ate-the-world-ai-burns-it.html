@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Software Ate The World, AI Burns It</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">700 words</div><h1>Software Ate The World, AI Burns It</h1><div class="article-subtitle">Part 2 of Field Notes: AI Economics series</div><div class="divider">╌╌╌╌</div><hr />
+<p>Marc Andreessen's 2011 essay was the closest thing the SaaS era had to a religious text. Software was eating the world because, once written, software cost essentially nothing to distribute. One engineer in San Francisco could ship a binary that ran for a billion users at a marginal cost rounding to zero. The unit economics were so good that you could charge $9 a month, lose money on the first year of a customer, and still be a great business by year three.</p>
+<p>This is the assumption AI breaks. Every other piece of the AI investment thesis is downstream of that one fact.</p>
+<h2>The Marginal Cost Is Real</h2>
+<p>Apoorv Agrawal said it as bluntly as anyone has said it on a Stanford slide:</p>
+<blockquote><p>"Software ate the world because the marginal cost of distribution was close to zero. These businesses ran at 80, even 90 percent gross margins. That is not the case with this new economic model of AI. The incremental user of Cursor or any large-scale AI business is not marginally free. It's actually quite a bit more expensive. You've got to burn those GPUs."</p></blockquote>
+<p>Every chat, every reasoning step, every agent tool call burns watts. The watts cost real money. The chips that consume them cost real money. The data center that holds the chips costs real money. There is no version of this where each new user is free.</p>
+<h2>Why Cursor Is Not Profitable</h2>
+<p>Cursor is the cleanest example. By every traditional SaaS metric &mdash; growth rate, retention, NPS &mdash; it would be one of the great venture outcomes of the last decade. It is at billions of dollars of revenue and still losing money on a per-user basis. The reason is not that the product is wrong. The reason is that every accepted completion calls a frontier model, and frontier inference is not cheap, and the average power user generates orders of magnitude more inference than a casual one.</p>
+<p>SaaS pricing was load-insensitive. AI pricing cannot be. Either you charge the heavy user differently from the light user, or the heavy user destroys the unit economics of the entire base.</p>
+<h2>The Gross Margin Inversion</h2>
+<p>Stack the gross margin profile of a typical SaaS company against a typical AI-native company:</p>
+<ul>
+<li>Pure SaaS: 75&ndash;90% gross margin, scaling improves it.</li>
+<li>AI-native, frontier-model dependent: 30&ndash;50% gross margin, scaling does not necessarily improve it &mdash; sometimes the opposite, because heavy users disproportionately use the most expensive features.</li>
+<li>Frontier model labs themselves: gross margin debated, possibly negative on the consumer tier.</li>
+</ul>
+<p>The implication for product strategy: the SaaS playbook of "ship to millions free, monetize 5%" does not transfer cleanly to AI. The freemium tier in a software business cost almost nothing per free user. The freemium tier in an AI business is the largest line item on the income statement.</p>
+<h2>What Replaces the Old Playbook</h2>
+<p>Three patterns are emerging across the survivors:</p>
+<p><strong>Usage-based pricing as default.</strong> Every meaningful AI product priced for self-serve buyers now meters by tokens, requests, or compute. The fixed-monthly-fee model is being abandoned exactly because it is incompatible with non-zero marginal cost.</p>
+<p><strong>Verticalization to capture more of the value chain.</strong> If the per-user cost of inference is high, the per-user willingness to pay needs to be high. That pushes products toward verticals where buyers will pay enterprise-software prices for AI &mdash; legal, healthcare, finance, code &mdash; and away from horizontal consumer.</p>
+<p><strong>Owning your own inference.</strong> Anthropic, OpenAI, and a handful of vertically-integrated apps run their own models on their own (or rented) infrastructure. The further down the stack you can pull the cost, the more of it you can capture.</p>
+<p>The Andreessen formulation is still right at one level. AI <em>is</em> still software. It still scales the surface area of what a single engineer can ship. But the marginal-cost claim &mdash; the part that actually made software a special kind of business &mdash; is gone. Anyone running an AI product who has not internalized that yet is going to learn it the hard way.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="96-ae-01-the-triangle.html">&larr; The Triangle</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="98-ae-03-the-eight-year-question.html">The Eight-Year Question &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/tokens-cost.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    TokensCostDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

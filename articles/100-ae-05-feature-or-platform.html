@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feature or Platform?</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">680 words</div><h1>Feature or Platform?</h1><div class="article-subtitle">Part 5 of Field Notes: AI Economics series</div><div class="divider">╌╌╌╌</div><hr />
+<p>The single sharpest question Agrawal said he asks every infrastructure-layer founder is also the most uncomfortable one:</p>
+<blockquote><p>"Are you a feature, or are you a platform?"</p></blockquote>
+<p>Translated for the AI infrastructure layer: are you something AWS will eventually absorb into its console, or are you a real standalone business?</p>
+<blockquote><p>"A lot of new businesses on the infrastructure side feel like very good ideas. But if you ask the question &mdash; hey, why is this not part of AWS? &mdash; you are thinking, maybe it should be part of AWS."</p></blockquote>
+<p>This is a brutal heuristic, and it cuts cleanly through most of the inference-layer pitch deck flood of the last 18 months. If your answer to "why does this not exist as a managed service inside Bedrock or Vertex" is "no one has gotten around to it yet," you are a feature.</p>
+<h2>The Vertical-Integration Pattern</h2>
+<p>Look at the winners of every prior super-cycle and you see the same pattern, asked about by a student in the same lecture:</p>
+<ul>
+<li>Internet super-cycle: Google. ~$3T market cap. Vertically integrated from data center to search to UX.</li>
+<li>Mobile super-cycle: Apple. ~$2.5T market cap. Vertically integrated from chip to OS to retail.</li>
+<li>Social super-cycle: Meta. ~$2T market cap. Vertically integrated across surfaces, but not down to the silicon.</li>
+<li>Cloud super-cycle: heterogeneous &mdash; AWS / GCP / Azure as an oligopoly, none fully integrated.</li>
+</ul>
+<p>The pattern: full vertical integration tends to produce the largest single winner per cycle. Partial integration produces an oligopoly. The cloud cycle is the partial-integration counter-example.</p>
+<p>The AI cycle's most-vertically-integrated player today is Google: TPUs at the chip layer, GCP at the infrastructure layer, Gemini at the model layer, Workspace and Search at the application layer. Agrawal:</p>
+<blockquote><p>"I would put the TPU business unit in semis. The GCP unit is in infrastructure. Gemini is at the apps layer. Gemini is actually one of the most-used consumer applications, the second most-used right now. The biggest question is how much of that comes from Google's distribution advantage versus it meritocratically being a good application. Jury's still out."</p></blockquote>
+<p>The Google bet is that vertical integration converts the AI super-cycle's profit pool into a single quarter-of-a-trillion-dollar business unit. The next few years are the test.</p>
+<h2>Where the Inference Layer Sits</h2>
+<p>The middle layer of the AI stack &mdash; inference providers, model serving, agent platforms, MCP middleware, evaluation harnesses, fine-tuning shops &mdash; is where the feature-or-platform question is most acute. Agrawal called it the most competitive part of the whole ecosystem.</p>
+<blockquote><p>"There's a lot of startups doing really well. They're winning so far. But you've also got the hyperscalers who want to have a dominant say in that layer. Honestly, the jury's still out."</p></blockquote>
+<p>For founders sitting in the inference layer, two strategic options:</p>
+<p><strong>Become a platform fast enough to outrun absorption.</strong> Anthropic, OpenAI, Cursor, and a few others have done this on the model and tooling side &mdash; built brand, switching costs, and product surface so dense that absorption stops being economically attractive.</p>
+<p><strong>Sell into a vertical the hyperscalers cannot move into.</strong> Defense, healthcare under HIPAA, regulated finance, sovereign clouds. Anywhere AWS itself is structurally limited, the inference layer has more durable margin.</p>
+<p>If you are not doing one of those two things, your trajectory looks like Crashplan, Heroku, MongoDB Atlas before Atlas, or any other middle-layer business that the cloud absorbed once the use case was understood.</p>
+<h2>The PM Read</h2>
+<p>The feature-or-platform question is also the right way to evaluate the AI infrastructure tools you are deciding whether to build on. If you suspect a tool will be absorbed, the cost of integrating it deeply into your product is the cost of rebuilding when it disappears. The boring answer of "use the hyperscaler's native version" is often the right one. The more interesting answer is to bet on the vertical-integration outliers &mdash; the companies that have a credible path to becoming the next Google of this cycle.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="99-ae-04-bigger-than-the-manhattan-project.html">&larr; Bigger Than the Manhattan Project</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="101-ae-06-parameter-times-context-squared.html">Parameter &times; Context Squared &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/build-vs-buy.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    BuildVsBuyDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

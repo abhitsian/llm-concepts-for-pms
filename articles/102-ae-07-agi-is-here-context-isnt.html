@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AGI Is Here, Context Isn't</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
+  <div class="article-card">
+    <div class="article-meta">820 words</div><h1>AGI Is Here, Context Isn't</h1><div class="article-subtitle">Part 7 of Field Notes: AI Economics series</div><div class="divider">╌╌╌╌</div><hr />
+<p>The most provocative argument made in the first session of Apoorv Agrawal's Stanford course did not come from the host. It came from Ali Ghodsi, founder of Databricks, in the closing fireside. Sitting next to a Crusoe CEO who had just walked through the gigawatt-scale capex required to build the substrate for "super intelligence," Ghodsi opened his remarks by telling the audience to take a deep breath:</p>
+<blockquote><p>"There's this quest for super intelligence, which I think is unwarranted. Because, first of all, they're not even defining what super intelligence is. It's this kind of godlike thing. I think we already have AGI. We already have artificial general intelligence."</p></blockquote>
+<p>The room was, predictably, skeptical. Ghodsi's polling exercise:</p>
+<blockquote><p>"How many of you think we have AGI already? Okay, it's always 10 percent. How many of you think a lot of people you interact with are not as smart as the smartest models you use? Now &mdash; how many of you think we don't have AGI yet? It's like the hypnosis is working."</p></blockquote>
+<h2>The 2009 Definition</h2>
+<p>Ghodsi's source is not new. He was at UC Berkeley's AmpLab in 2009, the lab that produced Apache Spark and a generation of distributed-systems researchers. Michael Jordan &mdash; the Michael Jordan of AI &mdash; ran adjacent groups. The working definition of AGI those researchers used, before Kurzweil and the singularity narrative consumed the term, has been comprehensively achieved.</p>
+<blockquote><p>"Back then, our definition of AGI &mdash; artificial general intelligence &mdash; we've hit that. Like, anything we imagined would be AGI, we already hit. I went and asked some of those people that were there at the time. They all said, yeah, according to that definition in 2009, for sure, we've hit that."</p></blockquote>
+<p>His take on why the term has been redefined: a moving goalpost, partly culturally driven (we keep wanting AGI to be just out of reach), partly economically driven (continuing to claim it does not yet exist justifies the next round of capex).</p>
+<h2>The Adoption Paradox</h2>
+<p>The interesting point follows from accepting Ghodsi's premise. If AGI in the original sense already exists, why is the productivity revolution missing from the data?</p>
+<blockquote><p>"You have the MIT Tech Report that says 95 percent of POCs are failing. Maybe it's 75 percent, who knows? But if you go inside an enterprise, you look at how they're using stuff &mdash; the reality is there's no agentic co-workers running around doing all the work blending with humans. That's not happening. It's just humans shuffling TPS reports. It's like Office Space. The movie is still how the world runs."</p></blockquote>
+<p>Even AI companies, Ghodsi observed, run their internal operations the old way. They hire enterprise salespeople. They write decks. They build pipelines in Salesforce. None of the futuristic agentic workforce shows up in the org chart.</p>
+<h2>The Real Bottleneck Is Context</h2>
+<p>Ghodsi's diagnosis of why is the most actionable framing of the AI adoption story I've heard:</p>
+<blockquote><p>"Inside every company, there's always this one guy or one gal who's like, oh, go ask John or Jane. She knows everything. That's the one person you can't lose. If you lose that person, the whole company collapses. That one person exists in every department, in every company, in every organization. And that one person has all the context in their head. What they have in their head is not inside the model. So therefore the model can't operate. It just doesn't know."</p></blockquote>
+<p>The model is smart enough. Smarter than most humans on most general tasks, by Ghodsi's measure. What it lacks is the ten, twenty, sometimes forty years of accumulated, undocumented, vibes-coded organizational context that the John or Jane in every team carries around. Nothing in the model's pre-training corpus contains that. Nothing in standard RAG over a Confluence wiki captures it.</p>
+<blockquote><p>"You need to get that transferred to the AI. If you don't, the AI &mdash; doesn't matter if you get super intelligence and you can solve really difficult math questions &mdash; if you can get that context into the AI, we already have AGI and they can already crack the problem."</p></blockquote>
+<h2>Carbon to Silicon</h2>
+<p>Ghodsi's call to action for the room:</p>
+<blockquote><p>"If you want to have impact in the world, figure out how to get that context into the AIs. Take an organization, transform how old-school business is happening, get those processes downloaded. Then you'll have massive impact. AGI is already here. You gotta download the brain into the silicon. Get the carbon to talk to the silicon."</p></blockquote>
+<p>If he is right, the most consequential AI products of the next five years are not new model architectures. They are the systems that capture, structure, and pipe organizational context into models that can already reason. The race is no longer compute. It is context. And the place where that context lives is in human heads, in human relationships, in the unwritten rules of how every real organization actually runs.</p>
+<p>Solve that, and AGI applies. Until you do, AGI sits idle.</p>
+<div class="end-mark">╌╌ end ╌╌</div>
+  </div>
+  <nav class="article-nav">
+  <a href="101-ae-06-parameter-times-context-squared.html">&larr; Parameter &times; Context Squared</a>
+  <a class="nav-index" href="../index.html">Index</a>
+  <a href="103-ae-08-the-bionic-bar.html">The Bionic Bar &rarr;</a>
+</nav>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+<script src="../js/diagrams/context-engineering.js?v=1774957616"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('bezier-canvas');
+    var container = canvas.parentElement;
+    ContextEngineeringDiagram(canvas, container);
+  });
+</script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

@@ -328,11 +328,109 @@ var BookCovers = (function() {
     });
   }
 
+  // Book 6: Field Notes — AI Economics — Inverted triangle thesis
+  // Three stacked layers (semis / infra / apps) with the bottom (semis) widest.
+  // Capex flows up; revenue dots concentrate at the bottom.
+  function EconomicsCover(canvas, container) {
+    var dots = [];
+    for (var i = 0; i < 80; i++) {
+      dots.push({
+        side: Math.random(),
+        layer: Math.floor(Math.random() * 3),
+        speed: 0.05 + Math.random() * 0.15,
+        phase: Math.random() * Math.PI * 2,
+        size: 0.6 + Math.random() * 1.4
+      });
+    }
+
+    return B.animate(canvas, container, function(ctx, w, h, time) {
+      ctx.fillStyle = '#160d05';
+      ctx.fillRect(0, 0, w, h);
+      B.drawGrid(ctx, w, h, 60);
+
+      // The triangle apex is at the top (apps = small).
+      // Wide base at the bottom (semis = big).
+      var apex = { x: w * 0.5, y: h * 0.18 };
+      var baseL = { x: w * 0.12, y: h * 0.86 };
+      var baseR = { x: w * 0.88, y: h * 0.86 };
+
+      // Three horizontal slabs of the triangle: semis (bottom), infra (mid), apps (top)
+      var layers = [
+        { yTop: 0.62, yBot: 0.86, color: '#f97316', label: 'semis' },     // wide
+        { yTop: 0.40, yBot: 0.62, color: '#fb923c', label: 'infra' },     // mid
+        { yTop: 0.18, yBot: 0.40, color: '#fcd34d', label: 'apps' }       // tip
+      ];
+
+      function lerp(a, b, t) { return a + (b - a) * t; }
+      function triXAt(yFrac) {
+        // yFrac in [0,1] where 0 is base, 1 is apex
+        var halfW = (1 - yFrac) * (w * 0.38);
+        return { left: w * 0.5 - halfW, right: w * 0.5 + halfW };
+      }
+
+      // Draw triangle outline pulsing
+      var pulse = 0.5 + 0.5 * Math.sin(time * 0.4);
+      ctx.strokeStyle = wA('#f97316', 0.15 + pulse * 0.1);
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(apex.x, apex.y);
+      ctx.lineTo(baseL.x, baseL.y);
+      ctx.lineTo(baseR.x, baseR.y);
+      ctx.closePath();
+      ctx.stroke();
+
+      // Slab dividers (horizontal lines through triangle)
+      layers.forEach(function(l, idx) {
+        if (idx === 0) return;
+        var yLine = l.yBot * h;
+        var yFracFromBase = 1 - (l.yBot - 0.18) / (0.86 - 0.18);
+        var x = triXAt(yFracFromBase);
+        ctx.strokeStyle = wA(l.color, 0.18);
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(x.left, yLine);
+        ctx.lineTo(x.right, yLine);
+        ctx.stroke();
+      });
+
+      // Particles (revenue/profit dots) — denser in lower layers, animated upward to apex (capex flow up)
+      dots.forEach(function(d) {
+        var l = layers[d.layer];
+        var yFracFromBase = 1 - ((l.yBot - 0.18) / (0.86 - 0.18));
+        var yProgress = ((time * d.speed + d.phase) % 1.0);
+        var yPos = l.yBot - (l.yBot - l.yTop) * yProgress;
+        var rowFrac = 1 - (yPos - 0.18) / (0.86 - 0.18);
+        var bounds = triXAt(rowFrac);
+        var xCenter = (bounds.left + bounds.right) / 2;
+        var halfW = (bounds.right - bounds.left) / 2;
+        var x = xCenter + (d.side - 0.5) * 2 * halfW * 0.92;
+        var y = yPos * h;
+        var op = 0.18 + 0.5 * (1 - yProgress);
+        if (d.layer === 0) op *= 1.4; // semis row brighter (more revenue)
+        B.drawDot(ctx, { x: x, y: y }, d.size * (0.6 + pulse * 0.4), wA(l.color, op), 5 * pulse);
+      });
+
+      // Layer labels
+      layers.forEach(function(l) {
+        var yLabel = (l.yTop + (l.yBot - l.yTop) * 0.5) * h;
+        var yFracFromBase = 1 - (yLabel / h - 0.18) / (0.86 - 0.18);
+        var bounds = triXAt(yFracFromBase);
+        B.drawLabel(ctx, l.label, { x: bounds.right + 14, y: yLabel },
+          wA(l.color, 0.45), '9px "JetBrains Mono", monospace', 'left');
+      });
+
+      // Caption: "the triangle"
+      B.drawLabel(ctx, 'the triangle', { x: w * 0.06, y: h * 0.06 },
+        wA('#fcd34d', 0.4), '10px "JetBrains Mono", monospace', 'left');
+    });
+  }
+
   return {
     ConceptsCover: ConceptsCover,
     PatternsCover: PatternsCover,
     MechanicsCover: MechanicsCover,
     EarningsCover: EarningsCover,
-    InfraCover: InfraCover
+    InfraCover: InfraCover,
+    EconomicsCover: EconomicsCover
   };
 })();
