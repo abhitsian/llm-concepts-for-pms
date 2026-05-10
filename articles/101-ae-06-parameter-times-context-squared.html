@@ -11,7 +11,7 @@
   <div class="bezier-hero"><canvas id="bezier-canvas"></canvas></div>
   <div class="article-card">
     <div class="article-meta">740 words</div><h1>Parameter × Context Squared</h1><div class="article-subtitle">Part 6 of Field Notes: AI Economics series</div><div class="divider">╌╌╌╌</div><hr />
-<p>If you are trying to understand why NVIDIA paid $20 billion for Grok &mdash; the largest acquisition in NVIDIA's history &mdash; the answer fits in one short formula. Sunny Madhura, the former Grok president now at NVIDIA, gave it on stage:</p>
+<p>If you are trying to understand why NVIDIA paid $20 billion for Grok &mdash; the largest acquisition in NVIDIA's history &mdash; the answer fits in one short formula. Sunny Madhura, the former Grok president now at NVIDIA, gave it during the Groq class of Apoorv Agrawal's Stanford AI Economics course:</p>
 <blockquote><p>"The compute per token is usually the parameter size of the model times the context length squared."</p></blockquote>
 <p>Read it slowly. Doubling the parameter count doubles the compute. Doubling the context length quadruples it. Tripling the context length multiplies it by nine.</p>
 <p>This is the equation behind every "AI is a CapEx monster" story. It is also the equation that explains why reasoning models broke the inference economy, why agents are about to break it again, and why a company that was a niche chip startup nine years in is now strategically critical to the world's largest AI hardware company.</p>
@@ -24,7 +24,7 @@
 <blockquote><p>"Reasoning models are much more voracious in their token consumption. Deeper thinking than what one-shot pre-trained models were doing. When you looked at token consumption curves, they were just going parabolic. Our hardware, our clouds were starting to break. OpenAI only had a gigawatt of compute. Anthropic only had a gigawatt of compute. We had to figure out how to make both more token-efficient models, but also more token-efficient architectures."</p></blockquote>
 <p>A reasoning trace might be 10,000 tokens long where a chat answer was 200. The context window grew alongside it &mdash; from 4K to 32K to 1M tokens for some Gemini variants. Apply parameter &times; context&sup2; to those numbers. The compute per request went up by orders of magnitude in months.</p>
 <h2>Jensen's "1 Billion X"</h2>
-<p>Brad Gerstner, fundraising for the deal that became the NVIDIA-Grok acquisition, recounted the conversation that triggered everything:</p>
+<p>Brad Gerstner, who in an earlier class in the same course had introduced Sunny to the room, recounted on a separate occasion the conversation that triggered everything:</p>
 <blockquote><p>"Jensen came on my podcast and said, 'Everything just changed. Inference time reasoning. Inference is about to 1 billion X. Not 10x, not 100x, not a million x. A billion x. Our systems of compute are not designed for what's coming.'"</p></blockquote>
 <p>This is one of the more astonishing claims any tech CEO has ever made on the record. It is also internally consistent with the formula: if reasoning grows context, agents grow it more, multimodal grows it again, and you compose them, the multiplication is exponential. A billion-x increase in inference compute is not a marketing number. It is the conclusion of the math.</p>
 <h2>The Strategic Implication</h2>
