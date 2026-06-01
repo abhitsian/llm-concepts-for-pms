@@ -10,7 +10,12 @@
 <body class="bookshelf-page">
   <div class="bookshelf-hero">
     <h1 class="bookshelf-title">LLM Concepts for PMs</h1>
-    <p class="bookshelf-subtitle">What product managers actually need to know about AI. Six books, 103 articles. Start anywhere.</p>
+    <p class="bookshelf-subtitle">What product managers actually need to know about AI. Seven books, 118 articles. Start anywhere.</p>
+    <p style="text-align:center;font-family:var(--font-mono);font-size:11px;letter-spacing:0.3px;margin-top:14px;">
+      <a href="articles/topic-index.html" style="color:var(--color-accent);text-decoration:none;">Browse by topic &rarr;</a>
+      <span style="opacity:0.4;margin:0 10px;">&middot;</span>
+      <a href="articles/fd-glossary.html" style="color:var(--color-accent);text-decoration:none;">Glossary</a>
+    </p>
   </div>
   <div class="book-grid">
     <div class="book-card-wrapper">
@@ -67,15 +72,25 @@
       <a class="book-card" href="books/ai-economics.html" style="border: 1px solid #f9731622">
         <canvas id="cover-5"></canvas>
         <div class="book-card-overlay">
-          <div class="book-card-series" style="color: #f97316">Book 6 &middot; new</div>
+          <div class="book-card-series" style="color: #f97316">Book 6</div>
           <div class="book-card-title">Field Notes: AI Economics</div>
           <div class="book-card-count">8 articles &middot; 4 classes</div>
         </div>
       </a>
     </div>
+<div class="book-card-wrapper">
+      <a class="book-card" href="books/semianalysis-decoded.html" style="border: 1px solid #9ca3af22">
+        <canvas id="cover-6"></canvas>
+        <div class="book-card-overlay">
+          <div class="book-card-series" style="color: #9ca3af">Book 7 &middot; new</div>
+          <div class="book-card-title">Inside the AI Machine</div>
+          <div class="book-card-count">Foundations + 10 issues &middot; how AI infrastructure works</div>
+        </div>
+      </a>
+    </div>
 
   </div>
-  <div class="bookshelf-footer">103 articles across six series &middot; field notes added as new classes happen</div>
+  <div class="bookshelf-footer">118 articles across seven series &middot; new deep dives added as the AI industry moves</div>
   <script src="js/bezier-core.js?v=1774957616"></script>
   <script src="js/book-covers.js?v=1774957616"></script>
   <script>
@@ -86,6 +101,7 @@
       BookCovers.EarningsCover(document.getElementById('cover-3'), document.getElementById('cover-3').parentElement);
       BookCovers.InfraCover(document.getElementById('cover-4'), document.getElementById('cover-4').parentElement);
       BookCovers.EconomicsCover(document.getElementById('cover-5'), document.getElementById('cover-5').parentElement);
+      BookCovers.WaferCover(document.getElementById('cover-6'), document.getElementById('cover-6').parentElement);
     });
   </script>
   <script src="js/nav.js?v=1774957616"></script>

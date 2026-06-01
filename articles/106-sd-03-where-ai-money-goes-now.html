@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Where AI Money Goes Now: The 2026 Value Map</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~4,000 words &middot; ~19 min read &middot; for SaaS PMs trying to read the AI P&amp;L</div>
+    <h1>Where AI Money Goes Now: The 2026 Value Map</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 3 &mdash; where the AI money goes now</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> A year ago, all the AI money was going to chip and power companies. Today, almost all of it is going to the AI labs (Anthropic, OpenAI). Anthropic&rsquo;s ARR went from $9B to $44B in twelve months. Their inference gross margin went from 38% to 70%. Nvidia and TSMC &mdash; the two companies with the most pricing power in the entire chain &mdash; have not raised prices. Analysts call this a strategic error. This is the map of who is making money in AI, who isn&rsquo;t, why, and what it means for your roadmap.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="111-fd-01-the-physical-stack.html">The Physical Stack</a> &mdash; TSMC&rsquo;s role as the manufacturing chokepoint, for the chip-maker pricing-power section.</li>
+        <li><a href="112-fd-02-memory.html">Memory</a> &mdash; HBM scarcity is one of the profit pools the article maps.</li>
+        <li><a href="113-fd-03-compute-and-precision.html">Compute &amp; Precision</a> &mdash; the move down the precision ladder (FP8&rarr;FP4) is a key cost-decline driver.</li>
+        <li><a href="114-fd-04-how-an-llm-runs-on-silicon.html">How an LLM Runs</a> &mdash; <strong>the keystone.</strong> Tokens are the unit of this entire economics story &mdash; the thing being sold.</li>
+        <li><a href="115-fd-05-connecting-chips.html">Connecting Chips</a> &mdash; the economics layer: neoclouds, hyperscalers, TCO &mdash; the players in the value chain.</li>
+      </ol>
+      <div class="buildup-foot">New here? Climb the ladder first. Fluent already? Skim, and hover any underlined term as you read.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>In December 2025, agentic AI started actually working. One widely-cited analyst firm is now spending up to <strong>$10.95M annualized on Anthropic Claude tokens</strong>. Its analysts consume roughly 5 billion tokens per employee per month &mdash; with some running over 100B/month. Token spend is now ~30% of employee compensation at the heaviest-using firms. They report it as a steal: the productivity gains let them outcompete and gain market share.</p>
+
+    <p>Two things happened in parallel that produced this:</p>
+
+    <ol>
+      <li><strong>Tokens became dramatically more valuable.</strong> Tasks that used to take ten person-hours of a junior analyst now finish in a few dollars of tokens. By one firm&rsquo;s internal numbers, agentic workflows generate ~$1,000 of human-labor-equivalent work per $1 of Anthropic spend. (Treat as a high-end case.) For frontier-quality tokens, willingness to pay is genuinely uncapped.</li>
+      <li><strong>Tokens got cheaper to produce.</strong> Blackwell GPUs deliver ~17x more throughput than H100s in FP8; switch to FP4 (which Hopper doesn&rsquo;t support natively) and the gap is 32x. Total cost of ownership per GPU is only 70% higher. Add software optimizations (wideEP, disaggregated prefill-decode, multi-token prediction) and you can 14x throughput on the same hardware before touching the chip.</li>
+    </ol>
+
+    <p>The gap between what tokens are worth (rising fast) and what they cost to produce (falling fast) is the largest in the industry&rsquo;s short history. That gap is the new profit pool. Anthropic ARR went from $9B to over $44B, GM 38% &rarr; 70%. OpenAI roughly tracking. <strong>Almost all of the new AI value created in 2026 is being captured by the AI labs.</strong></p>
+
+    <h2>Quick translation: SaaS terms for the AI value chain</h2>
+
+    <p>If you build SaaS, the AI value chain is just a stack with sharper edges. Here&rsquo;s the mapping:</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 28%;">Your SaaS layer</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 28%;">AI equivalent</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">2026 margin / pricing power</th>
+      </tr>
+      <tr><td style="padding:8px;">End-user / customer</td><td style="padding:8px;">Token consumer (you, your customers)</td><td style="padding:8px;">High ROI on tokens, paying premium prices willingly</td></tr>
+      <tr><td style="padding:8px;">Vertical SaaS app</td><td style="padding:8px;">AI feature in your product</td><td style="padding:8px;">Capturing real productivity value, paying a markup to model providers</td></tr>
+      <tr><td style="padding:8px;">Horizontal SaaS platform</td><td style="padding:8px;">AI lab (Anthropic, OpenAI, Google AI)</td><td style="padding:8px;"><strong>Capturing most of the new value.</strong> GM rising from 38% &rarr; 70%</td></tr>
+      <tr><td style="padding:8px;">Inference API providers</td><td style="padding:8px;">Fireworks, Baseten, Fal, Together</td><td style="padding:8px;">Margins widening, in hypergrowth, but smaller share than labs</td></tr>
+      <tr><td style="padding:8px;">Cloud (AWS, Azure, GCP)</td><td style="padding:8px;">Hyperscalers + Neoclouds (CoreWeave, Lambda)</td><td style="padding:8px;">Neocloud H100 rentals up 40% from Oct 2025 bottom</td></tr>
+      <tr><td style="padding:8px;">Hardware OEMs</td><td style="padding:8px;">Nvidia, AMD, Google TPU, AWS Trainium</td><td style="padding:8px;"><strong>Nvidia has not raised prices.</strong> Strategic restraint &mdash; could capture much more</td></tr>
+      <tr><td style="padding:8px;">Server components (CPU, RAM, SSD)</td><td style="padding:8px;">Memory (DRAM, HBM), networking, power</td><td style="padding:8px;">Memory prices up 6x in 12 months. The big winners</td></tr>
+      <tr><td style="padding:8px;">Foundry (where chips are made)</td><td style="padding:8px;">TSMC (N3, N2, A16 nodes)</td><td style="padding:8px;"><strong>TSMC has not raised prices.</strong> N3 above 100% utilization, still holding pricing line</td></tr>
+    </table>
+
+    <p>Three implications worth holding in your head:</p>
+    <ul>
+      <li><strong>"AI cost is going down" is half-true.</strong> Cost-per-token is dropping fast (good for buyers). Cost-per-feature-as-deployed is rising fast (because feature ambition is also rising fast, and so is premium-tier pricing). Net out, an enterprise&rsquo;s AI bill is going up, not down. Plan for that.</li>
+      <li><strong>The margin pool is migrating up the stack.</strong> In 2024 the money was in GPUs. In 2025 it was in memory and power. In 2026 it&rsquo;s in the AI labs. The 2027 question is who&rsquo;s next &mdash; could be application-layer companies, could be the labs holding the line, could be Nvidia finally pricing to value.</li>
+      <li><strong>Nvidia and TSMC are deliberately leaving money on the table.</strong> This is the most underappreciated structural fact in AI today. It is not because they can&rsquo;t raise prices &mdash; it&rsquo;s because they&rsquo;ve chosen not to. We&rsquo;ll come back to why.</li>
+    </ul>
+
+    <h2>Why tokens got more valuable and cheaper at the same time</h2>
+
+    <p>This is the core mechanic, and it&rsquo;s worth understanding because it explains everything else.</p>
+
+    <p><strong>The value side.</strong> Until late 2025, AI was a "slightly better Google search behind a chat interface." Skeptics had reasonable cause. The utility was real but bounded. Then agentic loops crossed a threshold &mdash; not because models got dramatically smarter, but because the surrounding tooling (Claude Code, Cursor, agentic harnesses, MCP, the whole loop) made the models useful for sustained multi-hour tasks. Once a token is part of a 100-step agent run that finishes a real work product, its value isn&rsquo;t "one chat reply" anymore. It&rsquo;s a fraction of a completed task that would have taken a junior engineer half a day.</p>
+
+    <p>This is why a research firm can spend $11M/year on Claude and call it cheap. They aren&rsquo;t buying chat replies. They&rsquo;re buying analyst hours.</p>
+
+    <p><strong>The cost side.</strong> Every generation of chips delivers more tokens per dollar. Hopper (H100) &rarr; Blackwell (B300) &rarr; Rubin (VR NVL72). Each transition is roughly 15-30x more throughput on the same workloads, while TCO grows much more slowly. Then software piles on: disaggregated prefill-decode (run those two phases on different chips, each optimized), wideEP (better expert routing in MoE models), multi-token prediction (generate several tokens per forward pass). Each of these is a 2-3x improvement on its own. Stack them and you get 14x from software alone, on the same B300.</p>
+
+    <p>So tokens got both more valuable AND cheaper to make. The result is the largest margin pool the industry has ever seen, sitting at the AI lab layer.</p>
+
+    <p><strong>Why this isn&rsquo;t getting competed away.</strong> The obvious objection is: "won&rsquo;t competition compress these margins?" There are two strong reasons it won&rsquo;t:</p>
+    <ol>
+      <li><strong>Frontier still has pricing power.</strong> Open-source models (Kimi K2, GLM, DeepSeek V4) are getting better, but for real knowledge work they remain meaningfully behind closed-source frontier. Kimi K2.6 at $0.95/$4 puts very little downward pressure on Opus pricing.</li>
+      <li><strong>Compute supply is constrained.</strong> No single lab can serve the entire market. Anthropic is already gating Claude Code behind a $100+/month subscription and blocking third-party harnesses like OpenClaw &mdash; not because they want to, but because they can&rsquo;t meet demand. When supply is structurally below demand, premium pricing holds.</li>
+    </ol>
+
+    <p>The SaaS PM analog: this is what it looks like when a category has product-market fit so strong that the marginal cost of supply (compute) is the binding constraint, not the marginal cost of sales. Snowflake briefly had this in 2020. Stripe in 2014. Most categories never get there. AI is there now.</p>
+
+    <h2>How Anthropic&rsquo;s margin actually expanded</h2>
+
+    <p>This is the most concrete part of the analysis, and worth slowing down on because it explains how a SaaS PM should think about AI vendor pricing going forward.</p>
+
+    <p>In November 2025, Anthropic released Opus 4.5 at $5/$25 per million tokens (input/output). The two prior Opus generations (4 and 4.1) had been $15/$75. So they cut headline price by 3x. And yet margins went up. How?</p>
+
+    <ul>
+      <li><strong>Cost per token fell faster than price.</strong> Software gains across Trainium and Nvidia plus the Hopper&rarr;Blackwell transition cut their cost-to-serve by more than the price cut.</li>
+      <li><strong>Volume migrated up the SKU ladder.</strong> Users who would have used Sonnet shifted to the now-affordable Opus, raising the blended ASP-per-token even though headline Opus pricing dropped.</li>
+      <li><strong>Premium SKUs launched.</strong> Opus Fast at 6x the price for 2.5x the speed (covered in <a href="104-sd-01-cerebras-the-wafer-bet.html">Issue 1</a>). Mythos at $25/$125 per million tokens, 5x regular Opus pricing. The heaviest users pay the premium willingly because the productivity gain dwarfs the price.</li>
+    </ul>
+
+    <p><strong>The SaaS-PM takeaway.</strong> This is a textbook "freemium plus premium tier" expansion, applied to a token-metered product. The cheap tier brings volume up the funnel. The premium tier captures the high-WTP segment. The blended margin rises even when the base SKU&rsquo;s price falls. Salesforce did this for two decades with platform + add-ons. Anthropic just did it in eighteen months.</p>
+
+    <p><strong>What this means for your AI bill in 2027.</strong> You will pay <em>less</em> per base token. You will pay <em>more</em> for premium tokens (Mythos, Opus Fast, future "real-time" or "private" SKUs). Your total spend will be higher, not lower, because feature ambition will scale faster than per-token cost decline. The "AI is deflationary" narrative is partly true and partly a trap if you budget assuming flat or shrinking AI cost.</p>
+
+    <h2>Why Nvidia and TSMC haven&rsquo;t raised prices</h2>
+
+    <p>This is the most counterintuitive part of the analysis. Nvidia is the bottleneck in the entire AI economy. TSMC is the bottleneck in chip manufacturing. Both companies have full demand visibility for 2026-27, both could raise prices with near-zero customer resistance, and both have chosen not to.</p>
+
+    <p>Three reasons:</p>
+
+    <ol>
+      <li>
+        <strong>Antitrust avoidance.</strong> Nvidia is already under DOJ, EU, and Chinese regulatory scrutiny. A visible 30% price hike on H200s or B300s would attract congressional hearings before the next earnings call. TSMC faces similar concerns as the de facto sole producer of leading-edge chips.
+        <br><em>SaaS PM analog: this is the same reason mature SaaS companies (Salesforce, Workday, ServiceNow) don&rsquo;t raise list prices aggressively at peak demand. They&rsquo;d invite competitive entry and regulatory attention.</em>
+      </li>
+      <li>
+        <strong>Ecosystem health over short-term margin.</strong> If Nvidia raises prices 30%, every AI lab accelerates their custom-silicon program. Anthropic already diversified heavily to AWS Trainium and Google TPU; OpenAI is rumored to be designing its own chip. Nvidia&rsquo;s long-term moat depends on those programs <em>not</em> becoming the default. Pricing restraint keeps the comparison "Nvidia is best in class" instead of "Nvidia is best but unreasonably expensive."
+        <br><em>SaaS PM analog: AWS in 2014-2018 deliberately under-priced compute to keep the "build your own datacenter" alternative unattractive. Same playbook.</em>
+      </li>
+      <li>
+        <strong>The "Central Bank of AI" thesis.</strong> One way to read Nvidia&rsquo;s posture is as deliberately ecosystem-supportive: let the AI labs and Neoclouds capture upside, ensure the whole stack stays profitable enough to keep expanding, and keep Nvidia at the center of the entire system. The downside of this strategy is enormous left-on-the-table margin in the short term. The upside is that nobody seriously threatens Nvidia&rsquo;s position five years out.
+        <br><em>SaaS PM analog: this is what Microsoft did with Windows in the 1990s &mdash; deliberately moderate pricing on the platform layer to maximize ecosystem investment in apps on top. Apple&rsquo;s done the same with iOS app pricing.</em>
+      </li>
+    </ol>
+
+    <p>Whether this is "strategic genius" or "leaving billions on the table" depends on who you ask. The sharper analysts come down firmly on the "strike while the iron is hot" side &mdash; arguing Nvidia should raise prices, not fully buying the restraint argument. Reasonable people disagree. What&rsquo;s indisputable is that both companies <em>have the option</em> and are <em>choosing not to take it</em>.</p>
+
+    <h2>Where Nvidia is starting to push prices: SOCAMM memory</h2>
+
+    <p>If Nvidia is going to start capturing more value, the cleanest place to do it is not on the GPU itself (antitrust risk, customer backlash) but on the memory attached to it.</p>
+
+    <p>Vera Rubin (Nvidia&rsquo;s next-gen platform, launching 2H 2026) uses a new memory format called <strong>SOCAMM</strong> &mdash; System-On-Chip Attached Memory Module. Unlike previous Blackwell systems where memory was soldered onto the board, SOCAMM is socketed and priced as a separate line item. This is a small architectural change with large pricing consequences:</p>
+
+    <ul>
+      <li>Memory can now be quoted independently from the GPU.</li>
+      <li>Nvidia can apply a different margin to memory than to silicon.</li>
+      <li>Antitrust scrutiny is much weaker on memory than on the GPU itself.</li>
+      <li>SOCAMM volume is dominated by Nvidia, so they have purchasing leverage on the input cost too.</li>
+    </ul>
+
+    <p>Detailed estimates suggest Nvidia could charge a 60% gross margin on SOCAMM with little customer pushback, while keeping the GPU itself at "normal" margins. The math: SOCAMM at ~$10/GB cost, sold to customers at ~$25/GB. Across the GB-scale memory in a Rubin rack, this becomes meaningful incremental margin.</p>
+
+    <p><strong>The SaaS-PM analog</strong> is the platform-vs-add-on pricing play. Salesforce CRM seats are priced moderately; Service Cloud add-ons, AppExchange revenue share, and Data Cloud are all priced to value. AWS EC2 is priced competitively; S3 egress fees are priced to extract. SOCAMM is the new "add-on" line item, and Nvidia is preparing to charge for it.</p>
+
+    <p>If you buy AI capacity in 2027, expect the memory line in your TCO model to grow disproportionately compared to the chip line. That&rsquo;s the lever Nvidia is sharpening.</p>
+
+    <h2>Where Neoclouds and Hyperscalers fit</h2>
+
+    <p>Neoclouds (CoreWeave, Lambda, Crusoe, Nebius) are the cloud companies that exist specifically to rent GPUs. They sit between Nvidia (who sells them the hardware) and the AI labs (who rent capacity from them).</p>
+
+    <p>In 2025 they were squeezed. Hopper prices were falling, customers were demanding shorter contracts, and depreciation schedules were getting nervous. In 2026 the dynamic flipped:</p>
+    <ul>
+      <li>H100 1-year rental contracts are up <strong>40% from the October 2025 bottom</strong>. Same hardware, much higher price.</li>
+      <li>5-year GB300 NVL72 contracts are deploying at ~15.6% project IRR &mdash; a healthy return that justifies more capex.</li>
+      <li>Detailed estimates put the value-based <em>ceiling</em> price for Vera Rubin rentals at ~$12.25/hr/GPU, vs. the cost-based <em>floor</em> of $4.92/hr/GPU. That&rsquo;s a 2.5x gap. Big enough that either Nvidia raises system prices or Neoclouds capture the upside, or both.</li>
+    </ul>
+
+    <p>Hyperscalers (AWS, Azure, GCP) play a different game. They negotiate harder with Nvidia on GPU pricing (because they can credibly threaten to build more custom silicon), but Nvidia&rsquo;s networking gear &mdash; switches, NICs, transceivers &mdash; has wider price discrimination. Industry reporting puts the SN5610 switch at ~2x higher for Neoclouds than for hyperscalers. Same product, different customer, very different price. This is "discount to high-leverage buyers, extract from low-leverage buyers" pricing &mdash; the oldest playbook in enterprise sales.</p>
+
+    <h2>The "One Chart to Rule Them All"</h2>
+
+    <p>A single framework maps every player&rsquo;s pricing power onto one chart. The shape:</p>
+
+    <ul>
+      <li><strong>X-axis:</strong> GPU rental price ($/hour).</li>
+      <li><strong>Y-axis:</strong> Neocloud project IRR.</li>
+      <li><strong>Floor:</strong> the minimum rental price (~$4.92/hr) below which Neoclouds won&rsquo;t deploy.</li>
+      <li><strong>Ceiling:</strong> the maximum rental price (~$12.25/hr) above which customers would rather use the prior generation (GB300).</li>
+      <li><strong>Current position:</strong> for Vera Rubin, current Neocloud pricing sits near the floor &mdash; meaning massive room to push prices up.</li>
+    </ul>
+
+    <p>The point of the chart is that pricing power for any player in the stack can be read as "where in this box are they?" Today, Neoclouds are taking modest IRRs, Nvidia is taking moderate margins, and customers are getting massive surplus value. As the stack matures, one of three things has to happen: Nvidia raises prices (shifting the floor up), Neoclouds raise rents (sliding up the curve), or customers extract sustained surplus (the current happy state). All three are happening at different paces.</p>
+
+    <p><strong>For SaaS PMs, the parallel framework is:</strong> what&rsquo;s the floor price you can charge for your AI feature (the price at which you can sustain unit economics) vs. the ceiling price (the price above which customers would do without)? Most AI features today are priced near the floor because feature ambition is still expanding faster than willingness to pay can be tested. That will reverse as the category matures.</p>
+
+    <h2>Why this matters for your AI roadmap</h2>
+
+    <p>Six things this article changes about how you should think about your AI product strategy:</p>
+
+    <ol>
+      <li>
+        <strong>Your AI cost is going up, not down.</strong>
+        Per-token cost is falling. Per-feature cost is rising because feature ambition is rising and premium SKUs (Mythos, Opus Fast, future tiers) are commanding premium prices. Budget for AI spend growth as a percentage of revenue in your forward planning.
+      </li>
+      <li>
+        <strong>Your AI vendor&rsquo;s gross margin tells you their pricing future.</strong>
+        Anthropic at 70% GM has significant room to raise prices on premium SKUs without losing customers (their alternatives are worse or capacity-constrained). Track AI vendor financials the same way you track Workday, Salesforce, ServiceNow &mdash; margin tells you who has pricing power.
+      </li>
+      <li>
+        <strong>Premium tiers are where the labs will capture the next leg of margin.</strong>
+        Expect more SKUs above Opus 4.5 ($5/$25) at the $25-50/$125-250 range. Expect "fast" variants of every model. Expect "private" / "compliance-grade" tiers in enterprise. If your product needs the premium, plan to pay 4-6x base prices.
+      </li>
+      <li>
+        <strong>Memory cost is a real input cost now.</strong>
+        DRAM is up 6x in 12 months. SOCAMM is the next pricing lever Nvidia is sharpening. If your AI feature requires lots of context (long-context RAG, document Q&amp;A, large KV caches), memory inflation flows into your cost-per-feature directly.
+      </li>
+      <li>
+        <strong>Your AI vendor&rsquo;s chip diversification protects you.</strong>
+        Anthropic on Trainium + TPU + Nvidia is a more reliable supplier than OpenAI on Nvidia + Cerebras. Multi-chip vendor risk is real. Watch which vendors are diversifying and which are betting everything on one supplier.
+      </li>
+      <li>
+        <strong>The "AI is deflationary" thesis is half-true.</strong>
+        It&rsquo;s deflationary on a per-token basis. It&rsquo;s inflationary on a per-task basis because tasks now use 100&times; more tokens. Your CFO needs to hear both halves of this. The first half makes them want to buy more AI. The second half is the bill that arrives in 12 months.
+      </li>
+    </ol>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Six concrete actions.</p>
+
+    <ol>
+      <li>
+        <strong>Build an AI spend forecast tied to feature ambition, not per-token cost.</strong>
+        Most AI cost models today assume "per-token cost falls 30% per year, so AI bill falls." Reality: per-token falls 30%, tokens-per-task rises 200%, premium-tier mix rises, blended AI spend grows 50-100% per year. Forecast feature ambition, agentic intensity, and tier mix &mdash; not headline price per million tokens. <em>Why this matters: if your CFO is anchored on declining per-token cost, your 2027 AI line will surprise them.</em>
+      </li>
+      <li>
+        <strong>Watch your AI vendor&rsquo;s gross margin as a leading indicator of price moves.</strong>
+        Anthropic GM going from 38% to 70% means they have room to raise prices on premium SKUs and probably will. Track it in their disclosures (or in detailed tokenomics models, which estimate the underlying margins per model). When GM compresses, expect new premium SKUs. When GM expands, expect headline price cuts on base SKUs to drive volume. <em>Why this matters: most vendor price changes are predictable if you watch margin and not just price lists.</em>
+      </li>
+      <li>
+        <strong>Decide which side of the deflationary/inflationary fork your pricing sits on.</strong>
+        If your product passes through AI cost (per-task pricing, per-result pricing, usage-metered), inflation is your problem and you need price escalation clauses or surge pricing. If your product abstracts AI cost (flat seat-based pricing), deflation is your friend &mdash; your gross margin expands as token cost falls. Most SaaS companies have not made this decision deliberately. It's now table stakes. <em>Why this matters: this single choice determines whether your AI feature is a margin compressor or a margin expander for the next three years.</em>
+      </li>
+      <li>
+        <strong>Map your supplier risk: chips, memory, power, vendor.</strong>
+        Your AI bill has four upstream inputs. Memory is up 6x. Power is constrained. Chips are constrained. AI vendor pricing is rising on premium SKUs. If you have a one-vendor AI strategy, you have a single point of failure. Multi-vendor (Claude + GPT + Gemini + open source) is now what AWS-vs-Azure-vs-GCP was in 2018: a real strategic choice, not just an engineering preference. <em>Why this matters: vendor concentration risk in AI is much higher than in any prior SaaS category because the model layer hasn&rsquo;t commoditized.</em>
+      </li>
+      <li>
+        <strong>Treat detailed tokenomics and AI TCO models as comp tables.</strong>
+        These models price every major model, every major chip, every major rental contract. If you&rsquo;re negotiating an AI vendor contract, knowing their underlying unit economics gives you a real anchor. Most SaaS PMs negotiate AI contracts the way they&rsquo;d negotiate a Salesforce upgrade &mdash; without any sense of the vendor&rsquo;s margin shape. The data is now public-ish. Use it. <em>Why this matters: enterprise AI contracts in 2026 are still mostly priced on headline rate cards. The smartest buyers are anchoring to underlying cost-to-serve and getting 30-50% better terms.</em>
+      </li>
+      <li>
+        <strong>Watch Nvidia&rsquo;s pricing posture as a market signal.</strong>
+        If Nvidia starts raising prices materially in 2026-27, it means the demand surge is so large that even regulatory restraint is breaking. That&rsquo;s a strong sustained-AI-spend signal. If Nvidia continues to hold pricing, it means they&rsquo;re betting on multi-year market expansion &mdash; also a strong signal, but a different one. Either way, Nvidia&rsquo;s pricing actions in the next four quarters are the cleanest signal the market gives about AI demand sustainability. <em>Why this matters: most public AI demand signals are noisy (revenue includes capacity hoarding, capex includes pre-build). Nvidia&rsquo;s pricing posture is one of the cleaner ones.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>The AI value chain in 2026 has a specific shape that&rsquo;s different from 2024 or 2025. The money has migrated up from the chip layer to the model-lab layer. Anthropic and OpenAI are running at gross margins that any enterprise SaaS CFO would recognize as best-in-class. Their customers (you, your competitors, every AI-adopting enterprise) are getting enormous productivity surplus and paying premium prices willingly. Nvidia and TSMC are deliberately under-pricing relative to what the market would bear &mdash; for reasons of antitrust, ecosystem strategy, and long-term positioning. Memory vendors and Neoclouds are quietly capturing real upside that nobody is paying attention to.</p>
+
+    <p>For a SaaS PM, the practical reality is this: your AI bill will grow, your AI vendor&rsquo;s margins will grow, and the premium-tier SKUs are where the next round of pricing pressure will hit. Plan accordingly. Negotiate accordingly. Forecast accordingly.</p>
+
+    <p>The map will redraw again. Analysts retrace it every quarter. Watch it.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="105-sd-02-eda-the-software-behind-every-chip.html">&larr; EDA: The Software Behind Every Chip</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

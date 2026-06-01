@@ -425,12 +425,120 @@ var BookCovers = (function() {
     });
   }
 
+  // Book 7: Inside the AI Machine — Wafer with reticle grid
+  // Industrial, semiconductor — circular wafer outline, 12x7 reticle stepping pattern,
+  // pulsing dies in slate. Visualizes Cerebras's wafer-scale chip.
+  function WaferCover(canvas, container) {
+    var COLS = 12;
+    var ROWS = 7;
+    var dies = [];
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        dies.push({
+          col: c,
+          row: r,
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.4 + Math.random() * 0.6
+        });
+      }
+    }
+
+    var WAFER_COLOR = '#9ca3af';  // slate
+    var DIE_COLOR   = '#cbd5e1';  // lighter slate
+    var HOT_COLOR   = '#f59e0b';  // amber for hot dies
+
+    return B.animate(canvas, container, function(ctx, w, h, time) {
+      ctx.fillStyle = '#0b0f14';
+      ctx.fillRect(0, 0, w, h);
+      B.drawGrid(ctx, w, h, 60);
+
+      var cx = w / 2;
+      var cy = h / 2;
+      var waferR = Math.min(w, h) * 0.42;
+
+      // Wafer circle outline (pulsing softly)
+      var pulse = 0.5 + 0.5 * Math.sin(time * 0.4);
+      ctx.strokeStyle = wA(WAFER_COLOR, 0.25 + pulse * 0.15);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, waferR, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Notch (the orientation flat at the bottom of a real wafer)
+      ctx.strokeStyle = wA(WAFER_COLOR, 0.5);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(cx - waferR * 0.18, cy + waferR * 0.98);
+      ctx.lineTo(cx + waferR * 0.18, cy + waferR * 0.98);
+      ctx.stroke();
+
+      // Reticle grid — 12 cols x 7 rows of dies, clipped to wafer circle
+      var gridW = waferR * 1.55;
+      var gridH = waferR * 1.05;
+      var dieW = gridW / COLS;
+      var dieH = gridH / ROWS;
+      var gridX = cx - gridW / 2;
+      var gridY = cy - gridH / 2;
+
+      dies.forEach(function(d) {
+        var px = gridX + d.col * dieW + dieW / 2;
+        var py = gridY + d.row * dieH + dieH / 2;
+
+        // Only draw dies whose center is inside the wafer circle
+        var dx = px - cx;
+        var dy = py - cy;
+        var distFromCenter = Math.sqrt(dx * dx + dy * dy);
+        if (distFromCenter > waferR - dieW * 0.35) return;
+
+        // Each die pulses independently (representing compute activity)
+        var pulseLocal = 0.5 + 0.5 * Math.sin(time * d.speed + d.phase);
+        var hot = pulseLocal > 0.85;
+        var color = hot ? HOT_COLOR : DIE_COLOR;
+        var op = 0.18 + pulseLocal * 0.25;
+
+        // Die rectangle
+        ctx.fillStyle = wA(color, op * 0.5);
+        ctx.strokeStyle = wA(color, op * 1.5);
+        ctx.lineWidth = 0.6;
+        var pad = 1.2;
+        ctx.beginPath();
+        ctx.rect(px - dieW / 2 + pad, py - dieH / 2 + pad, dieW - pad * 2, dieH - pad * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Hot dies get a glowing dot in their center (data flowing)
+        if (hot) {
+          B.drawDot(ctx, { x: px, y: py }, 1.2 + pulseLocal, wA(HOT_COLOR, 0.65), 6);
+        }
+      });
+
+      // Cross-die interconnect lines (the scribe-line fabric Cerebras invented)
+      // Horizontal sweeps across the wafer — slow data flow
+      var sweepCount = 3;
+      for (var i = 0; i < sweepCount; i++) {
+        var yFrac = 0.3 + i * 0.2;
+        var y = cy - waferR + yFrac * waferR * 2;
+        var sweepT = (time * 0.2 + i * 0.33) % 1.0;
+        var sweepX = cx - waferR + sweepT * waferR * 2;
+        var halfChord = Math.sqrt(Math.max(0, waferR * waferR - (y - cy) * (y - cy)));
+        if (sweepX >= cx - halfChord && sweepX <= cx + halfChord) {
+          B.drawDot(ctx, { x: sweepX, y: y }, 1.5, wA(HOT_COLOR, 0.5), 8);
+        }
+      }
+
+      // Caption
+      B.drawLabel(ctx, 'WSE-3 · 84 reticles · 1 chip', { x: w * 0.06, y: h * 0.06 },
+        wA(WAFER_COLOR, 0.45), '9px "JetBrains Mono", monospace', 'left');
+    });
+  }
+
   return {
     ConceptsCover: ConceptsCover,
     PatternsCover: PatternsCover,
     MechanicsCover: MechanicsCover,
     EarningsCover: EarningsCover,
     InfraCover: InfraCover,
-    EconomicsCover: EconomicsCover
+    EconomicsCover: EconomicsCover,
+    WaferCover: WaferCover
   };
 })();

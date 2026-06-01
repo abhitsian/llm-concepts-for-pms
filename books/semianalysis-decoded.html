@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inside the AI Machine</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body class="book-page">
+  <div class="book-page-header">
+    <a class="book-page-back" href="../index.html">&larr; All Books</a>
+  </div>
+  <div class="book-page-hero">
+    <div class="book-page-hero-canvas">
+      <canvas id="book-hero-canvas"></canvas>
+    </div>
+    <h1 class="book-page-title">Inside the AI Machine</h1>
+    <p class="book-page-desc">A plain-language guide to how the AI industry actually works &mdash; the chips, the economics, the strategy &mdash; for product managers new to the AI hardware world. Each issue takes one dense, important development in AI infrastructure and decodes it, with three things on every page: <strong>(1) plain language,</strong> no assumed knowledge of semiconductors; <strong>(2) the token economics</strong> behind why a decision matters; <strong>(3) the implication</strong> for the AI features you build, the contracts you sign, and the roadmaps you set. Five Foundations primers build the vocabulary from zero &mdash; and inside any article, hover an underlined term for an instant definition.</p>
+  </div>
+
+  <div class="book-chapters">
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Start Here &mdash; Foundations</h2>
+      <div class="book-category-label">New to chip architecture? Read these five primers first. They build every concept the issues use, from zero. Inside any article, hover an underlined term for an instant definition, or open the full glossary.</div>
+      <a class="book-article-link" href="../articles/111-fd-01-the-physical-stack.html">
+        <div class="book-article-link-title">Primer 1 &mdash; The Physical Stack: From Sand to a Chip</div>
+        <div class="book-article-link-desc">Transistors, wafers, dies, reticles, process nodes (N3/N5), Moore&rsquo;s Law, yield, and why TSMC is the chokepoint of the AI economy.</div>
+      </a>
+      <a class="book-article-link" href="../articles/112-fd-02-memory.html">
+        <div class="book-article-link-title">Primer 2 &mdash; Memory: Why It&rsquo;s the Whole Game</div>
+        <div class="book-article-link-desc">SRAM vs HBM vs DRAM, bandwidth vs capacity vs latency, the Memory Wall, and why inference is memory-bound. The most useful idea in AI hardware.</div>
+      </a>
+      <a class="book-article-link" href="../articles/113-fd-03-compute-and-precision.html">
+        <div class="book-article-link-title">Primer 3 &mdash; Compute &amp; Precision: What Makes a Chip Fast</div>
+        <div class="book-article-link-desc">FLOPs, precision (FP8/FP4), the dense-vs-sparse marketing trick, GPU vs ASIC vs LPU, and arithmetic intensity.</div>
+      </a>
+      <a class="book-article-link" href="../articles/114-fd-04-how-an-llm-runs-on-silicon.html">
+        <div class="book-article-link-title">Primer 4 &mdash; How an LLM Actually Runs on Silicon</div>
+        <div class="book-article-link-desc">Tokens, prefill vs decode, the KV cache, attention vs FFN, MoE, throughput vs interactivity. Where the hardware and the model meet.</div>
+      </a>
+      <a class="book-article-link" href="../articles/115-fd-05-connecting-chips.html">
+        <div class="book-article-link-title">Primer 5 &mdash; Connecting Chips, Scale-Up &amp; the Datacenter</div>
+        <div class="book-article-link-desc">Scale-up vs scale-out, NVLink, SerDes, advanced packaging, racks and world sizes, CPO, megawatts, and the economics layer.</div>
+      </a>
+      <a class="book-article-link" href="../articles/fd-glossary.html">
+        <div class="book-article-link-title">The Glossary &mdash; every term, searchable</div>
+        <div class="book-article-link-desc">A browsable reference for all ~75 terms. The same definitions appear when you hover an underlined term inside any issue.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 11 &mdash; Dark Output</h2>
+      <div class="book-category-label">The measurement gap: AI&rsquo;s costs are precise, its output mostly isn&rsquo;t &mdash; and the same gap is happening inside your product&rsquo;s dashboards.</div>
+      <a class="book-article-link" href="../articles/119-sd-11-dark-output-the-invisible-half.html">
+        <div class="book-article-link-title">Dark Output: AI&rsquo;s Value Will Be Real Before It&rsquo;s Measurable</div>
+        <div class="book-article-link-desc">The other half of the ledger. Why services measurement misreads AI productivity as decline. Substitution vs new vs captured AI &mdash; three behaviors, three completely different metric stories. Why every renewal of an AI line item is about to become &ldquo;justify the token spend&rdquo; &mdash; and how to build the value side yourself.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 10 &mdash; The Silicon Shortage</h2>
+      <div class="book-category-label">The root cause beneath the GPU shortage &mdash; TSMC&rsquo;s N3 wafer bottleneck, the HBM squeeze, and why it takes two years to fix.</div>
+      <a class="book-article-link" href="../articles/118-sd-10-the-silicon-shortage.html">
+        <div class="book-article-link-title">The Silicon Shortage: Why the Chips Themselves Ran Out</div>
+        <div class="book-article-link-desc">Issue 9 was the symptom; this is the cause. Every AI chip converged on one TSMC process at once, that line is past 100% capacity, and it can&rsquo;t expand for two years. The bottleneck moved from power to silicon &mdash; and why supply-chain control became the moat.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 9 &mdash; The Great GPU Shortage</h2>
+      <div class="book-category-label">Why compute got scarce in early 2026 &mdash; H100 rental prices up 40%, and the rental market that decides your AI cost floor.</div>
+      <a class="book-article-link" href="../articles/117-sd-09-the-great-gpu-shortage.html">
+        <div class="book-article-link-title">The Great GPU Shortage: When Renting Compute Got Hard</div>
+        <div class="book-article-link-desc">GPU rental prices surged 40% in five months and capacity sold out through late 2026. The demand-and-supply scissors behind it, the three rental markets, and what a compute shortage does to the cost base under your AI features.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 8 &mdash; Nvidia&rsquo;s Inference Kingdom</h2>
+      <div class="book-category-label">Nvidia at GTC 2026 &mdash; absorbing Groq, building the whole rack, and the copper-to-optics roadmap.</div>
+      <a class="book-article-link" href="../articles/116-sd-08-nvidia-inference-kingdom.html">
+        <div class="book-article-link-title">Nvidia&rsquo;s Inference Kingdom: Eating the Whole AI Stack</div>
+        <div class="book-article-link-desc">The densest issue. Nvidia absorbs Groq, builds CPU and storage racks, and re-architects how chips connect. Attention-FFN Disaggregation, the copper-to-optics roadmap, and the strategy: own the system, not the chip. Read the Foundations primers first.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 7 &mdash; Claude Code &amp; the SaaS Threat</h2>
+      <div class="book-category-label">Why Claude Code is an inflection point &mdash; and why SaaS itself is the disruption target.</div>
+      <a class="book-article-link" href="../articles/110-sd-07-claude-code-inflection-point.html">
+        <div class="book-article-link-title">Claude Code Is the Inflection Point &mdash; and SaaS Is the Target</div>
+        <div class="book-article-link-desc">The most uncomfortable issue for a SaaS PM. The READ/THINK/WRITE/VERIFY loop, why the three SaaS moats are eroding, why seat-based pricing is breaking, and an honest, strategic answer to "so what do I do."</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 6 &mdash; GPU Cluster TCO</h2>
+      <div class="book-category-label">The eight hidden costs of a GPU cluster, and why goodput is the metric that matters.</div>
+      <a class="book-article-link" href="../articles/109-sd-06-gpu-cluster-tco.html">
+        <div class="book-article-link-title">Why the Cheapest GPU Cluster Isn&rsquo;t the Cheapest</div>
+        <div class="book-article-link-desc">Two providers can quote the same $4/GPU-hr and have different real TCO. The Goodput concept. Why a 20% goodput-expense increase = 8 GM points compression on inference. The 8 hidden cost components every AI procurement misses.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 5 &mdash; The Microsoft Pause</h2>
+      <div class="book-category-label">How Microsoft paused, lost the $100B OpenAI Stargate deal, and is scrambling back.</div>
+      <a class="book-article-link" href="../articles/108-sd-05-microsoft-pause.html">
+        <div class="book-article-link-title">How Microsoft Lost the AI Race (and Is Scrambling Back)</div>
+        <div class="book-article-link-desc">A $3T hyperscaler hits pause on 3.5GW of datacenter capacity, loses the $100B OpenAI Stargate contract to Oracle, and now rents from neoclouds to fulfill its own commitments. The cleanest case study of how to lose a step-change market by being too cautious.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 4 &mdash; Coding Agents</h2>
+      <div class="book-category-label">GPT-5.5 vs Opus 4.7 vs DeepSeek V4 &mdash; and why the harness matters as much as the model.</div>
+      <a class="book-article-link" href="../articles/107-sd-04-coding-agents-the-harness-is-the-product.html">
+        <div class="book-article-link-title">Coding Agents in 2026: The Harness Is the Product</div>
+        <div class="book-article-link-desc">GPT-5.5 vs Opus 4.7 vs DeepSeek V4. Why the harness matters more than the model. Cost-per-task as the new pricing unit. Opus 4.7's quiet 35% tokenizer price hike. Why wrappers are losing and the Anthropic-OpenAI duopoly is here to stay.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 3 &mdash; AI Value Capture</h2>
+      <div class="book-category-label">Where the AI money goes now &mdash; and why Nvidia and TSMC haven&rsquo;t raised prices.</div>
+      <a class="book-article-link" href="../articles/106-sd-03-where-ai-money-goes-now.html">
+        <div class="book-article-link-title">Where AI Money Goes Now: The 2026 Value Map</div>
+        <div class="book-article-link-desc">Anthropic GM 38% &rarr; 70% in a year. Nvidia and TSMC haven&rsquo;t raised prices despite full demand visibility. Memory up 6x. The "One Chart" framework for who's capturing AI value &mdash; and what it means for your AI bill in 2027.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 2 &mdash; EDA</h2>
+      <div class="book-category-label">EDA: the $15B software industry that designs every chip on Earth.</div>
+      <a class="book-article-link" href="../articles/105-sd-02-eda-the-software-behind-every-chip.html">
+        <div class="book-article-link-title">EDA: The Software Industry That Builds Every Chip</div>
+        <div class="book-article-link-desc">The $15B software industry behind every chip. Synopsys, Cadence, Siemens EDA. Why verification eats 70% of effort, why a respin costs $30M, and why the chip-cycle clock sets the pace of AI itself.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Issue 1 &mdash; Cerebras</h2>
+      <div class="book-category-label">Cerebras, the $24B OpenAI deal, and the wafer-scale bet on fast tokens.</div>
+      <a class="book-article-link" href="../articles/104-sd-01-cerebras-the-wafer-bet.html">
+        <div class="book-article-link-title">Cerebras and the $24 Billion Wafer Bet</div>
+        <div class="book-article-link-desc">The IPO, the OpenAI deal, what wafer-scale actually means, where it wins, and what any of this has to do with PMs &mdash; the Cerebras deep dive in one read.</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">Where the concepts live</h2>
+      <div class="book-category-label">Background reading from earlier books, in case the wafer piece moves too fast</div>
+      <a class="book-article-link" href="../articles/74-fs-05-the-memory-wall.html">
+        <div class="book-article-link-title">The Memory Wall</div>
+        <div class="book-article-link-desc">Why inference is a bandwidth problem, not a compute problem &mdash; the foundation of the SRAM-vs-HBM tradeoff</div>
+      </a>
+      <a class="book-article-link" href="../articles/86-fs-17-groq-and-the-inference-rebels.html">
+        <div class="book-article-link-title">Groq and the Inference Rebels</div>
+        <div class="book-article-link-desc">The previous chapter of the same story &mdash; what SRAM machines do differently and why Nvidia bought Groq</div>
+      </a>
+      <a class="book-article-link" href="../articles/85-fs-16-what-bottlenecks-claude.html">
+        <div class="book-article-link-title">What Bottlenecks Claude</div>
+        <div class="book-article-link-desc">Where the hardware constraints actually show up in the product you use</div>
+      </a>
+      <a class="book-article-link" href="../articles/67-ec-08-reasoning-consumes-100x-more-compute.html">
+        <div class="book-article-link-title">Reasoning Consumes 100x More Compute</div>
+        <div class="book-article-link-desc">Why fast tokens started mattering &mdash; reasoning models multiply every per-token decision</div>
+      </a>
+      <a class="book-article-link" href="../articles/25-dp-01-the-loop-is-the-product.html">
+        <div class="book-article-link-title">The Loop Is the Product</div>
+        <div class="book-article-link-desc">Why &ldquo;flow state&rdquo; in agentic workflows turned interactivity into the SKU developers will pay a 6x premium for</div>
+      </a>
+      <a class="book-article-link" href="../articles/46-hw-07-how-distillation-changed-who-can-compete.html">
+        <div class="book-article-link-title">How Distillation Changed Who Can Compete</div>
+        <div class="book-article-link-desc">The technique behind GPT-5.3-Codex-Spark &mdash; how a 5T-parameter model becomes a 120B one</div>
+      </a>
+    </div>
+
+    <div class="book-section">
+      <h2 class="book-section-title" style="color: #9ca3af">About this book</h2>
+      <div class="book-category-label">&nbsp;</div>
+      <p style="padding: 0.5em 0.75em; opacity: 0.75; font-size: 0.95em; line-height: 1.55;">The deep mechanics of AI infrastructure are dense, technical, and usually written for chip engineers and traders &mdash; not for product managers. This book takes one important development at a time, keeps the analysis honest, drops the jargon, and builds the vocabulary from the ground up. Read the five Foundations primers first, then the issues in any order. Hover any underlined term for an instant definition.</p>
+    </div>
+  </div>
+
+  <div class="book-page-footer">5 foundation primers + 10 issues + glossary &middot; Book 7 of 7 &middot; Hover any underlined term for a definition</div>
+  <script src="../js/bezier-core.js?v=1774957616"></script>
+  <script src="../js/book-covers.js?v=1774957616"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      BookCovers.WaferCover(document.getElementById('book-hero-canvas'), document.getElementById('book-hero-canvas').parentElement);
+    });
+  </script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

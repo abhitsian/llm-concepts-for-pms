@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Silicon Shortage: Why the Chips Themselves Ran Out</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~3,700 words &middot; ~17 min read &middot; the root cause beneath the GPU shortage</div>
+    <h1>The Silicon Shortage: Why the Chips Themselves Ran Out</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 10 &mdash; the fab-capacity bottleneck under everything</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> <a href="117-sd-09-the-great-gpu-shortage.html">Issue 9</a> explained why renting a GPU got 40% more expensive. This issue is the root cause underneath it. There are not enough AI chips &mdash; because there is not enough of one specific thing: TSMC&rsquo;s N3 wafer capacity, and the HBM memory that has to pair with it. Every major AI chip converged on the same manufacturing line at the same moment; that line is running past 100% of its rated capacity; and it cannot meaningfully expand for roughly two years, because new capacity requires physically building cleanrooms first. The bottleneck of the AI era just moved &mdash; from power to silicon &mdash; and this issue explains what that means for anyone whose product runs on AI.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="111-fd-01-the-physical-stack.html">The Physical Stack</a> &mdash; <strong>the keystone.</strong> Wafers, process nodes (N3, N2), the fab, yield, and why TSMC is the chokepoint. This article is that chokepoint, jammed.</li>
+        <li><a href="112-fd-02-memory.html">Memory</a> &mdash; HBM vs commodity DRAM. The second half of the shortage is a memory story.</li>
+        <li><a href="115-fd-05-connecting-chips.html">Connecting Chips</a> &mdash; advanced packaging (CoWoS) and datacenters, for why those bottlenecks <em>eased</em> while this one tightened.</li>
+      </ol>
+      <div class="buildup-foot">Read with <a href="117-sd-09-the-great-gpu-shortage.html">Issue 9 (The Great GPU Shortage)</a> &mdash; that&rsquo;s the symptom, this is the cause. Hover any underlined term for a definition.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>Token demand went vertical. One frontier lab added <strong>$6 billion of annual recurring revenue in a single month</strong> &mdash; and, by its own account, would have added more if it had been able to get the compute. That last clause is the whole story: demand is no longer the constraint. Supply is.</p>
+
+    <p>You can see it in the hyperscalers&rsquo; spending plans. Through early 2026, consensus estimates for 2026 capital expenditure reset sharply upward across every major cloud &mdash; one of them roughly <em>doubled</em> its planned 2026 capex versus prior expectations. And they would spend even more if they could. The thing stopping them is not money, not power, not datacenter space. It is <strong>silicon supply</strong> &mdash; the physical fabrication of advanced logic and memory chips.</p>
+
+    <p>The AI era has moved through a sequence of bottlenecks. First it was advanced packaging (CoWoS). Then it was datacenter power. Each got solved, with money and ingenuity. The constraint now is the hardest one yet to solve: there is not enough chip-fabrication capacity in the world to build accelerators as fast as the industry wants to deploy them.</p>
+
+    <h2>Quick translation: the silicon shortage in SaaS terms</h2>
+
+    <p>If you've never thought about chip manufacturing, the shortage maps onto a situation you do know: <strong>one shared, maxed-out pipeline that the whole industry has to queue for, owned by a company that now decides who gets served first.</strong></p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3); width: 33%;">Chip-world term</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">What it means, in SaaS terms</th>
+      </tr>
+      <tr><td style="padding:8px; vertical-align:top;">TSMC N3 wafer capacity</td><td style="padding:8px;">The single shared build pipeline every AI chip must queue for. There is essentially one, it&rsquo;s running at 100%+, and a competitor&rsquo;s lane won&rsquo;t help you.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Wafer allocation</td><td style="padding:8px;">Your reserved quota on that pipeline. When the pipeline is full, the owner rations it &mdash; and becomes a kingmaker.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Cleanroom space</td><td style="padding:8px;">The physical floor you must build &mdash; concrete poured, building finished &mdash; before you can install a single new machine. The reason capacity cannot flex for ~2 years.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Effective utilization &gt;100%</td><td style="padding:8px;">The line running on permanent overtime, squeezing extra output from rated capacity, with zero slack left.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">HBM crowding out commodity DRAM</td><td style="padding:8px;">A premium SKU eating the commodity SKU&rsquo;s share of a shared production budget &mdash; because the premium one consumes ~3x the resources per unit.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Foundry diversification</td><td style="padding:8px;">Second-sourcing a critical supplier &mdash; bringing in Intel or Samsung as a backup to the dominant vendor, accepting lower quality for availability.</td></tr>
+    </table>
+
+    <p>Three implications to hold while reading on:</p>
+    <ul>
+      <li><strong>This shortage has a physical floor of about two years.</strong> It is not a pricing blip that clears next quarter. New fab capacity needs buildings constructed before equipment can even be installed. Concrete sets at the speed concrete sets.</li>
+      <li><strong>The AI bottleneck moved.</strong> Whatever you assumed was the limiting factor on AI &mdash; GPUs, power, datacenters &mdash; recheck it. As of early 2026 it is wafer fabrication, and that changes which risks matter.</li>
+      <li><strong>Supply-chain control is now a competitive moat.</strong> Your AI vendor&rsquo;s resilience depends on whether <em>it</em> locked up wafers and memory in advance. Most didn&rsquo;t. One company did.</li>
+    </ul>
+
+    <h2>The TSMC N3 bottleneck: one line, everyone at once</h2>
+
+    <p>Nearly every advanced AI chip in the world is manufactured by one company, TSMC, on one family of manufacturing processes. The current leading-edge family is called <strong>N3</strong> (the "3-nanometer" generation). Two facts collided to create the shortage.</p>
+
+    <p><strong>Fact one: N3 was built for phones, not AI.</strong> N3 started shipping in 2023, and for its first years, demand came overwhelmingly from consumer electronics &mdash; smartphone and PC chips (Apple, Qualcomm, MediaTek, Intel). TSMC sized its N3 capacity around that consumer demand.</p>
+
+    <p><strong>Fact two: in 2026, every major AI chip moved to N3 at once.</strong> Nvidia&rsquo;s new Rubin generation, AMD&rsquo;s MI-series, Google&rsquo;s TPU, Amazon&rsquo;s Trainium, Meta&rsquo;s accelerator &mdash; plus the CPUs and networking chips around them &mdash; all converged on N3 in the same window. AI went from a minor N3 customer to taking the <em>majority</em> of N3 output, and the projections show it consuming the overwhelming bulk of N3 within a year, squeezing consumer chips off the node entirely.</p>
+
+    <p>That is a demand shock, and TSMC was caught flat-footed. Despite the AI buildout starting in late 2022, TSMC&rsquo;s annual capital spending only exceeded its previous peak in 2025 &mdash; it under-built for years, then realized how far demand had run ahead and is now spending at record levels to catch up.</p>
+
+    <p><strong>Why TSMC can&rsquo;t just add more.</strong> Here is the part a SaaS PM should sit with, because it has no software analogue. You cannot scale a fab the way you scale a cloud service. Adding wafer capacity requires <em>cleanroom space</em> &mdash; an extraordinarily controlled physical environment &mdash; and that building has to be constructed before any equipment goes in. TSMC is pushing existing N3 lines past 100% effective utilization and shifting work between fabs to squeeze out every wafer. But genuinely new capacity is gated by construction. For about two years, TSMC structurally cannot make enough N3 wafers to meet demand. The shortage has a concrete-and-steel floor.</p>
+
+    <h2>TSMC as kingmaker</h2>
+
+    <p>When a maxed-out shared pipeline can&rsquo;t expand, its owner stops being a vendor and becomes a kingmaker &mdash; rationing scarce capacity by priority. TSMC is doing exactly that, and in 2026 <strong>AI customers get priority over consumer electronics.</strong></p>
+
+    <p>The logic is straightforward. AI accelerator chips have larger dies and more complex packaging, so they carry much higher prices &mdash; and AI has been the primary engine of TSMC&rsquo;s own growth, backed by multi-year purchase commitments from the AI labs. The smartphone and PC markets, by contrast, are saturated &mdash; flat units, little content growth. So when capacity is rationed, the high-growth, high-price, long-commitment customer wins. Consumer-chip customers that can&rsquo;t secure N3 are being pushed to stretch old product cycles or jump early to the next node (N2).</p>
+
+    <p><strong>What this means for a SaaS PM.</strong> The same dynamic governs any maxed shared resource &mdash; a platform team, a release train, a cloud GPU quota. When it&rsquo;s full, access is rationed by priority, and priority goes to whoever brings the most revenue and the firmest long-term commitment. If your AI feature&rsquo;s compute depends on a vendor low in someone&rsquo;s priority queue, that is a real risk hiding in your stack. The corollary: long-term commitments buy priority. The AI labs signing multi-year offtakes aren&rsquo;t just locking price &mdash; they&rsquo;re buying a place at the front of the line.</p>
+
+    <h2>Memory is the second shortage</h2>
+
+    <p>A wafer of logic is only half an AI chip. It needs <strong>HBM</strong> &mdash; the stacked high-bandwidth memory from Primer 2 &mdash; and HBM is its own shortage, for a reason worth understanding.</p>
+
+    <p>HBM and ordinary "commodity" DRAM (the memory in laptops and phones) are made on the same DRAM production lines. But HBM consumes roughly <strong>three times the wafer capacity per unit of storage</strong> as commodity DRAM &mdash; and that ratio is rising as the industry moves to newer HBM generations. So every bit of HBM the industry makes diverts a disproportionate share of total DRAM capacity away from commodity memory. Building more HBM doesn&rsquo;t just add HBM; it actively starves the commodity-DRAM supply.</p>
+
+    <p>Two things make it worse:</p>
+    <ul>
+      <li><strong>HBM content per chip is exploding.</strong> Each new accelerator generation carries far more memory &mdash; Nvidia&rsquo;s newest designs step HBM capacity up by 50%, then by roughly 4x again in the generation after. The memory demand per chip is growing faster than the chip count.</li>
+      <li><strong>The performance bar keeps rising.</strong> Customers want HBM at ever-higher speeds, which memory makers struggle to manufacture at acceptable yields. Harder-to-make memory means less effective supply.</li>
+    </ul>
+
+    <p>And it&rsquo;s not only HBM &mdash; ordinary server memory demand is also surging, because each new AI server carries far more system DRAM, and an aging fleet of regular cloud servers is due for replacement. Memory is squeezed from every direction at once.</p>
+
+    <p><strong>The SaaS-PM translation:</strong> this is a shared-budget problem. HBM and commodity DRAM draw from one pool of manufacturing capacity, and the premium product is eating the commodity product&rsquo;s share &mdash; which is why memory prices are rising for <em>everyone</em>, not just AI buyers, and why this feeds straight back into the server-cost spiral that <a href="117-sd-09-the-great-gpu-shortage.html">Issue 9</a> described.</p>
+
+    <h2>The bottleneck moved: from power to silicon</h2>
+
+    <p>This is the single most important shift in the article, and the one to actually remember.</p>
+
+    <p>For the past few years, the binding constraint on AI was <strong>datacenters and power</strong>. The industry couldn&rsquo;t build buildings and secure electricity fast enough; that was the thing everyone optimized around, with creative solutions like on-site gas generation.</p>
+
+    <p>That race was won &mdash; arguably too well. Datacenter and power capacity got built out aggressively, while wafer fabrication did <em>not</em> keep pace. The result is an inversion: there is now <strong>power sitting in excess of the AI compute available to fill it</strong>. Empty, powered datacenter space waiting for chips that don&rsquo;t exist yet. Power is no longer the binding constraint. Accelerator silicon is.</p>
+
+    <p>Why this matters for a SaaS PM: <strong>the bottleneck of a fast-moving system moves, and your mental model has to move with it.</strong> A risk assessment of "can our AI vendor get enough power and datacenter space" was the right question in 2024. In 2026 it&rsquo;s the wrong question &mdash; the right one is "can our AI vendor get enough chips." Teams that are still managing last year&rsquo;s bottleneck are defending a wall the attack already moved past. Whenever you depend on a fast-moving supply chain, periodically re-ask <em>what is the binding constraint now</em> &mdash; don&rsquo;t assume it&rsquo;s the same one as last year.</p>
+
+    <h2>Why supply-chain control became the moat</h2>
+
+    <p>When the scarce input is physical and rationed, the winner is whoever locked up supply <em>before</em> the shortage &mdash; and that took foresight, not just money.</p>
+
+    <p>Nvidia is the standout. It secured the majority of available leading-edge logic wafers, locked in memory supply, and tied up the other scarce components &mdash; well ahead of the crunch. The widely-reported detail: Nvidia&rsquo;s leadership spent 2025 personally working the Asian supply chain &mdash; a trip to Korea to secure memory supply was groundwork that later let Nvidia get cheaper memory and even absorb procurement pressure on behalf of its own customers.</p>
+
+    <p>The strategic point: there is a loud, genuine debate about whether Nvidia GPUs or custom ASICs (Google&rsquo;s TPU, Amazon&rsquo;s Trainium) are the better chips. In a shortage, that debate is partly beside the point. The immediate reality is simpler &mdash; <strong>whoever secured the most silicon supply will deploy the most compute</strong>, regardless of whose chip is technically best. Procurement beat architecture, at least for this cycle.</p>
+
+    <p><strong>For a SaaS PM:</strong> when you evaluate an AI vendor, "how good is their model" is no longer the only question. "How secure is their supply chain &mdash; did they lock up wafers and memory" is now equally load-bearing. A brilliant model that can&rsquo;t get chips ships less than a good model that can.</p>
+
+    <h2>Why this could ease (the other side)</h2>
+
+    <p>The shortage is real, but a few release valves exist:</p>
+    <ul>
+      <li><strong>Smartphones as the relief valve.</strong> Rising memory prices are pushing up phone costs, which is softening smartphone demand. Weaker phone demand frees N3 wafers for AI accelerators. Even a modest reallocation of smartphone wafer capacity translates into a meaningful number of additional AI chips &mdash; this is the most likely near-term source of slack.</li>
+      <li><strong>CoWoS eased.</strong> Advanced packaging, an earlier bottleneck, is no longer the binding constraint &mdash; and it can be outsourced to other firms or substituted with alternatives. One downstream step is no longer the jam.</li>
+      <li><strong>2027 capacity.</strong> TSMC&rsquo;s record current spending does eventually become wafers &mdash; just on a two-year delay.</li>
+      <li><strong>Foundry diversification.</strong> If the squeeze persists, customers will be pushed toward Intel and Samsung as second sources, slowly widening total industry capacity.</li>
+    </ul>
+
+    <p>None of these closes the gap quickly. The honest base case is a tight market through 2026 and into 2027. But a SaaS PM should hold the upside too: a fast capacity ramp colliding with any cooldown in AI demand could swing the market from shortage to glut &mdash; supply arrives in big discrete chunks. Plan for scarcity; don&rsquo;t bet the whole roadmap on it being permanent.</p>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Five concrete actions.</p>
+
+    <ol>
+      <li>
+        <strong>Re-ask what the binding constraint is &mdash; this quarter, not last year.</strong>
+        The AI bottleneck moved from power to silicon. It will move again. Any roadmap or vendor assessment built on a year-old model of "the constraint" is defending the wrong wall. Make "what is the binding constraint now" a recurring question, not a one-time one. <em>Why this matters: fast-moving supply chains punish stale mental models; the team still managing last year&rsquo;s bottleneck gets surprised by this year&rsquo;s.</em>
+      </li>
+      <li>
+        <strong>Add supply-chain security to your AI vendor scorecard.</strong>
+        Model quality is necessary but no longer sufficient. Ask, explicitly: has this vendor locked up wafer and memory supply? Is it high or low in TSMC&rsquo;s priority queue? A vendor with a great model and a weak supply position is a capacity risk to your product. <em>Why this matters: in a shortage, your feature&rsquo;s availability is decided upstream, by procurement deals you never see.</em>
+      </li>
+      <li>
+        <strong>Treat the two-year floor as a planning fact.</strong>
+        This shortage cannot resolve quickly &mdash; new fabs need buildings built first. Any roadmap assuming compute gets abundant and cheap in 2026 is assuming something physically impossible. Plan AI-feature scaling against a tight-supply 2026 and a still-tight 2027. <em>Why this matters: "it&rsquo;ll loosen up soon" is the most expensive wrong assumption you can bake into a roadmap right now.</em>
+      </li>
+      <li>
+        <strong>Expect the cost pressure to be broad, not AI-only.</strong>
+        HBM is starving commodity DRAM, so memory prices are rising across the board &mdash; phones, laptops, ordinary servers. If your business has <em>any</em> hardware cost exposure beyond AI, the silicon shortage touches it. Brief your finance partners that this is a component-cost story, not just an AI-vendor story. <em>Why this matters: the shortage leaks out of the AI budget line into places you&rsquo;re not watching.</em>
+      </li>
+      <li>
+        <strong>Sequence compute-hungry features against the supply curve.</strong>
+        If a feature needs a big step-up in inference capacity, its launch is hostage to the silicon shortage. Either sequence it for later, secure committed capacity from your vendor in advance, or design it to be less compute-hungry. Launching a heavy feature into the tightest part of the shortage is a capacity gamble. <em>Why this matters: a feature that can&rsquo;t get compute doesn&rsquo;t degrade gracefully &mdash; it fails visibly.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>The GPU shortage that <a href="117-sd-09-the-great-gpu-shortage.html">Issue 9</a> measured in rental prices is, at its root, a manufacturing shortage. Every major AI chip converged on one company&rsquo;s one leading-edge process at the same moment; that process is running past capacity; and it cannot expand for about two years because new capacity is gated by physical construction. HBM memory is a parallel shortage with the same shape. Advanced packaging and power &mdash; the bottlenecks of the last few years &mdash; got solved, leaving silicon fabrication as the binding constraint, with empty powered datacenters waiting on chips.</p>
+
+    <p>For a SaaS PM, three things are worth carrying out of this. The shortage is physical and slow &mdash; roughly a two-year floor, not a quarterly blip. The bottleneck moved, so the questions you ask about your AI supply have to move with it. And in a shortage, the company that wins is the one that locked up the supply chain early &mdash; which makes "is our AI vendor supply-secure" a question that now belongs on the same page as "is our AI vendor&rsquo;s model good."</p>
+
+    <p>Compute is not a faucet. Right now it is a queue, for a line that is full, owned by a kingmaker. Plan like it.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="117-sd-09-the-great-gpu-shortage.html">&larr; The Great GPU Shortage</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="119-sd-11-dark-output-the-invisible-half.html">Dark Output &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

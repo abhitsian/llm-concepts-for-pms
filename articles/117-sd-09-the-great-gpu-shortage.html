@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Great GPU Shortage: When Renting Compute Got Hard</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~3,800 words &middot; ~18 min read &middot; for SaaS PMs whose AI features run on rented compute</div>
+    <h1>The Great GPU Shortage: When Renting Compute Got Hard</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 9 &mdash; why compute got scarce, and what a shortage does to your costs</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> In early 2026 the price of renting an H100 GPU jumped about 40% in five months, on-demand capacity sold out across every GPU type, and essentially all new datacenter capacity through late 2026 got booked. After years of everyone confidently predicting GPU rental prices would fall, they are surging &mdash; and still rising. This issue explains why compute became genuinely scarce, how the GPU rental market is actually structured (it&rsquo;s three very different markets), and what a compute shortage does to the cost base sitting underneath every AI feature you ship.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="111-fd-01-the-physical-stack.html">The Physical Stack</a> &mdash; TSMC, HBM, the manufacturing chokepoints. The supply side of the shortage starts here.</li>
+        <li><a href="114-fd-04-how-an-llm-runs-on-silicon.html">How an LLM Runs</a> &mdash; tokens and inference. The demand side &mdash; agents and multimodal burning compute &mdash; is a token-volume story.</li>
+        <li><a href="115-fd-05-connecting-chips.html">Connecting Chips</a> &mdash; <strong>the keystone.</strong> Datacenters, megawatts, neoclouds vs hyperscalers, TCO &mdash; the market this article is about.</li>
+      </ol>
+      <div class="buildup-foot">Companion issues: <a href="106-sd-03-where-ai-money-goes-now.html">Issue 3 (where AI money goes)</a> and <a href="109-sd-06-gpu-cluster-tco.html">Issue 6 (GPU cluster TCO)</a>. Hover any underlined term for a definition.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>For two years, the consensus was that renting AI compute would only get cheaper. Newer chips were faster per dollar; older chips would be marked down to clear. Financial analysts publicly scolded any cloud operator that dared assume its GPUs would still be earning money in six years.</p>
+
+    <p>In early 2026, that consensus broke. The hard numbers:</p>
+
+    <ul>
+      <li><strong>H100 one-year rental contracts rose ~40%</strong> &mdash; from a low of $1.70 per GPU per hour in October 2025 to $2.35 by March 2026, and still climbing 15-20% month-on-month.</li>
+      <li><strong>On-demand capacity sold out</strong> across every GPU type. Anyone holding on-demand instances refused to give them back, even at higher prices.</li>
+      <li>Customers were <strong>fighting to pay $14/hr/GPU</strong> for B200 spot instances on AWS. Large GPU-rental clouds stopped selling single servers at all.</li>
+      <li>Old H100s were being renewed at the <em>same</em> rate they were signed at 2-3 years ago &mdash; some locked into fresh 4-year contracts running through 2028.</li>
+      <li>Renters started <strong>subletting</strong> their clusters &mdash; the way you'd sublet an apartment during a festival.</li>
+      <li><strong>Every bit of new capacity through August&ndash;September 2026 was already booked.</strong></li>
+    </ul>
+
+    <p>The reporting in this space put it bluntly: in early 2026, finding GPU compute was less like booking the last flight out and more like trying to buy something illegal. That is the texture of a genuine shortage.</p>
+
+    <h2>Quick translation: the GPU rental market in SaaS terms</h2>
+
+    <p>If you've never had to rent GPUs, the market rhymes with things you already know &mdash; cloud procurement, enterprise contracts, surge pricing.</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3); width: 34%;">GPU rental term</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">What it means, in SaaS terms</th>
+      </tr>
+      <tr><td style="padding:8px; vertical-align:top;">On-demand / spot rental</td><td style="padding:8px;">Pay-as-you-go, month-to-month cloud. Most flexible, priciest per unit, and the first thing to sell out in a crunch.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">1&ndash;3 year contract</td><td style="padding:8px;">A standard annual or multi-year enterprise contract. Negotiated one-on-one, not off a public price list. This is where most rental money actually changes hands.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">4&ndash;5 year "offtake"</td><td style="padding:8px;">A giant prepaid capacity reservation &mdash; one customer commits to a whole datacenter's worth of compute for years. The AI equivalent of a hyperscaler reserved-instance mega-deal.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Prepay (20%+)</td><td style="padding:8px;">Cash upfront to lock a deal &mdash; like a large deposit or an annual-prepaid SaaS commitment. Rising prepay = the seller has the leverage.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Rental price index</td><td style="padding:8px;">A market benchmark price, like a commodity index or a published cloud price-history. Tells you the going rate when every deal is negotiated privately.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">"Surge pricing"</td><td style="padding:8px;">Uber-surge or last-seat airfare. Demand outstrips supply, the price spikes, and it stays high until one side blinks.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Project IRR</td><td style="padding:8px;">The return a cloud operator needs before it will greenlight building a cluster. If rental prices don't clear that hurdle, the capacity simply doesn't get built.</td></tr>
+    </table>
+
+    <p>Two implications to hold while reading on:</p>
+    <ul>
+      <li><strong>"AI is deflationary" has a hidden counter-current.</strong> Per-token cost keeps falling through efficiency gains (<a href="58-hw-19-why-inference-costs-dropped-100x.html">covered elsewhere</a>) &mdash; but the raw GPU rental <em>underneath</em> those tokens is getting sharply more expensive. Your AI vendor's cost <em>floor</em> is rising even while their headline per-token price looks flat.</li>
+      <li><strong>Compute is a constrained commodity right now.</strong> "We'll just scale up when we need to" is a planning assumption that quietly stopped being true. You cannot scale into capacity that is already sold.</li>
+    </ul>
+
+    <h2>Why compute got scarce: a scissors, not a spike</h2>
+
+    <p>A shortage this sharp needs both blades of a scissors &mdash; demand surging <em>and</em> supply tightening at the same time. Both happened.</p>
+
+    <h3>The demand blade</h3>
+
+    <p>Demand didn't grow; it went vertical. The drivers:</p>
+    <ul>
+      <li><strong>Agentic coding.</strong> One frontier lab's revenue run-rate tripled in a single quarter (roughly $9B to over $30B), driven heavily by Claude Code. Agents don't make one request &mdash; they run loops, at high concurrency, iterating continuously. Token consumption per workflow went parabolic.</li>
+      <li><strong>Native media generation.</strong> Image and video models (Seedance, Nano Banana) drove huge jumps in token throughput as users generate and refine media at scale. Pixels are far more tokens than text.</li>
+      <li><strong>Open-weight models.</strong> Strong open models (GLM, Kimi) opened a whole second front of compute demand from companies self-hosting.</li>
+      <li><strong>Capital looking for chips.</strong> Every AI-lab funding round converts directly into GPU demand.</li>
+    </ul>
+
+    <p>The reason this demand is so relentless: the return on AI tooling is now widely accepted as 5&ndash;10x the cost of the tokens. When a tool returns an order of magnitude more value than it costs, demand for it is <em>inelastic</em> &mdash; price can rise a long, long way before anyone consumes less. That inelasticity is the engine under the price surge.</p>
+
+    <h3>The supply blade</h3>
+
+    <p>Here is the less obvious half, and the more interesting one. Supply tightened partly <em>because of its own cost</em>:</p>
+
+    <ol>
+      <li>In January 2026, memory prices went parabolic &mdash; DRAM and NAND contract prices tracking toward 4&ndash;5x year-on-year increases.</li>
+      <li>Memory is a big part of an AI server's bill of materials. So server makers (OEMs) repriced AI servers upward &mdash; and repriced them by <em>more</em> than the component-cost increase alone, to protect their own margins.</li>
+      <li>More expensive servers mean a worse return (project IRR) on building a new cluster. Some operators responded by slow-rolling or abandoning deployments.</li>
+      <li>So capacity that <em>would</em> have come online didn't. Supply was withheld &mdash; which tightened the rental market further, which pushed prices higher still.</li>
+    </ol>
+
+    <p><strong>What this means for a SaaS PM:</strong> the shortage is not a simple "demand spike, wait it out" event. It is a reinforcing loop where high prices, high component costs, and withheld supply all feed each other. That kind of loop does not unwind in a quarter.</p>
+
+    <h2>The three rental markets (they behave nothing alike)</h2>
+
+    <p>"Renting a GPU" is not one market. It's three, and they cater to different buyers and behave very differently. A SaaS PM negotiating any AI-infrastructure deal should know which one they're in.</p>
+
+    <p><strong>1. Short-term &mdash; on-demand, spot, under 3 months.</strong> The very front of the market, often selling residual capacity. The pricing quirk: on-demand prices are <em>fixed and rarely changed</em>. A provider sets a price and leaves it &mdash; then adjusts demand by letting utilization float. If utilization is maxed, they eventually step the price up; if it's low, they step it down. So a chart of on-demand prices looks flat for months, then jumps. The real-time demand signal in this market is <em>utilization</em>, not price. Providers like Runpod and Lambda specialize here.</p>
+
+    <p><strong>2. Mid-term &mdash; 3-month to 3-year-plus contracts.</strong> Where most rental money by value actually changes hands. Negotiated privately, one buyer at a time &mdash; no public price list. The <strong>1-year contract</strong> is the bellwether: it captures marginal demand from non-AI-lab buyers, so it's the most sensitive early indicator of the market tightening. AI-native startups and smaller labs live in the 1-3 year range &mdash; though in this shortage they're increasingly reaching for 4-year-plus terms and accepting 20%+ prepay just to lock supply.</p>
+
+    <p><strong>3. Long-term offtakes &mdash; 4-to-5-year contracts.</strong> Dominated by the big AI labs locking enormous capacity early &mdash; single deals for 50MW or 100MW clusters (roughly 24,000-48,000 of the latest GPUs). These are usually "bare metal" deals where the lab customizes the whole stack. The financial mechanics are elegant and worth understanding:</p>
+    <ul>
+      <li><strong>The neocloud</strong> loves a 5-year offtake because it can take that signed contract to a bank and borrow against it cheaply &mdash; locking in a low-teens return with almost no risk.</li>
+      <li><strong>The hyperscaler</strong> often "backstops" the deal &mdash; it becomes the contractual customer (its AAA credit rating is what makes the neocloud's loan cheap), then resells the compute to the AI lab. The hyperscaler collects a slice of the revenue <em>without</em> putting the datacenter on its own balance sheet.</li>
+    </ul>
+    <p>So a single offtake can involve a lab, a neocloud, a bank, and a hyperscaler &mdash; each taking a defined slice of risk and return. That layered structure is itself a sign of how much money is now flowing through compute.</p>
+
+    <p><strong>The structural flip.</strong> Before late 2025, this whole market was a buyer's market &mdash; operators competed hard, prioritizing utilization so their expensive chips never sat idle. It has now flipped 180 degrees. Operators are price-makers: they dictate prepay, contract length, even which start and end dates they'll accept to match their own inventory. The same posture change a SaaS vendor undergoes when it goes from "please sign, we'll discount" to "here's the price, here's the 3-year minimum."</p>
+
+    <h2>Why this is self-reinforcing &mdash; and where it goes</h2>
+
+    <p>The loop: operators see supply tightening and prices rising, so they rush to buy more hardware <em>ahead</em> of the next price increase &mdash; which consumes supply and pushes prices higher still. It echoes the 2023-24 GPU shortage.</p>
+
+    <p>Three checkpoints decide whether prices keep climbing:</p>
+    <ol>
+      <li><strong>The GB300 ramp.</strong> A large wave of next-generation capacity is scheduled through 2026. If it comes online faster than token demand grows, it eases the crunch. If demand outpaces it, the crunch continues.</li>
+      <li><strong>The silicon shortage.</strong> The constraints upstream &mdash; TSMC's leading-edge wafer capacity, HBM, DRAM, NAND &mdash; can always get worse. Any manufacturing hiccup tightens everything downstream.</li>
+      <li><strong>AI-lab revenue.</strong> How fast lab ARR keeps scaling is the cleanest read on whether token demand &mdash; and therefore compute demand &mdash; keeps growing.</li>
+    </ol>
+
+    <p>The honest base case: prices are more likely to keep rising than to fall. And a second-order effect matters for anyone modeling AI costs &mdash; higher rental rates <em>extend the economic useful life of existing GPUs</em>. An H100 that earns more per hour, for longer, is an H100 that doesn't need replacing as soon. The "GPUs depreciate to zero in three years" assumption is being quietly rewritten.</p>
+
+    <h3>The sentiment disconnect</h3>
+
+    <p>One genuine oddity: even as the data showed tightening supply and surging prices &mdash; conditions that are unambiguously good for GPU-rental companies &mdash; the stock prices of the public neoclouds (CoreWeave, Nebius, IREN) sat near the bottom of their trading range. The market was still pricing in an old story of eventual oversupply and commoditization, while the ground truth said sustained scarcity. Whether the market or the ground truth is right is the open question &mdash; but the gap between them is real.</p>
+
+    <h2>Why this could go wrong (the other side of the bet)</h2>
+
+    <p>The "prices keep rising" base case is not a certainty. Three things would break it:</p>
+    <ul>
+      <li><strong>The capacity ramp outpaces demand.</strong> If the GB300 wave &mdash; and the chips after it &mdash; come online faster than agents and multimodal can soak up, the shortage flips to glut, fast. Compute supply is lumpy; it arrives in big discrete chunks.</li>
+      <li><strong>The ROI proves less inelastic than assumed.</strong> The whole price surge rests on the belief that AI tooling returns 5-10x. If that return turns out to be narrower, or concentrated in fewer use cases than hoped, demand becomes price-sensitive and the surge stalls.</li>
+      <li><strong>A demand cooldown.</strong> Any broad pullback in AI spending &mdash; a funding-market freeze, a confidence shock &mdash; hits compute demand directly.</li>
+    </ul>
+
+    <p>For a SaaS PM the takeaway isn't to predict which way it breaks &mdash; it's to <em>not build a roadmap that only works in one scenario</em>. Plan for compute staying scarce and expensive; have a fallback if it doesn't.</p>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Six concrete actions.</p>
+
+    <ol>
+      <li>
+        <strong>Treat compute capacity as a planning constraint, not a faucet.</strong>
+        "We'll scale up when we need it" assumed availability that, right now, does not exist &mdash; capacity through late 2026 is booked. If a feature launch depends on a step-up in inference volume, confirm the capacity exists <em>before</em> you commit the roadmap date. <em>Why this matters: a feature that can't get compute doesn't slip gracefully &mdash; it fails at launch, publicly.</em>
+      </li>
+      <li>
+        <strong>Model your AI vendor's rising cost floor.</strong>
+        Headline per-token prices look flat or falling because of efficiency gains. Underneath, the GPU rental those tokens run on is up 40%+ and climbing. That squeeze eventually surfaces &mdash; as premium-tier price increases, as rate limits, as quiet quality changes. Budget for your AI cost going <em>up</em>, and watch vendor gross margins for the early signal. <em>Why this matters: the "AI keeps getting cheaper" assumption baked into most 2026 plans is half the picture.</em>
+      </li>
+      <li>
+        <strong>If you rent compute directly, commit &mdash; don't sit on-demand.</strong>
+        On-demand is the worst place to be in a shortage: it sells out first and reprices hardest. The market rewards commitment &mdash; a 1-3 year contract at a locked rate is cheaper and, more importantly, <em>guaranteed</em>. Trading flexibility for certainty is the right trade in a scarcity market. <em>Why this matters: in a shortage, the risk isn't paying a bit more &mdash; it's having no capacity at all.</em>
+      </li>
+      <li>
+        <strong>Watch the GPU rental price index as a leading indicator.</strong>
+        The 1-year contract rate moves <em>before</em> headline token prices and before vendor announcements. A public H100 rental index now exists; treat it like a commodity price you track. A sharp move there is an early warning that your AI costs &mdash; and your vendor's behavior &mdash; are about to change. <em>Why this matters: most PMs learn about a cost shift when the invoice arrives. This lets you see it a quarter early.</em>
+      </li>
+      <li>
+        <strong>Diversify AI vendors before you need to.</strong>
+        A single AI vendor caught in a capacity crunch becomes <em>your</em> outage and <em>your</em> price shock. Multi-vendor capability (a second model provider wired up, even if lightly used) is cheap insurance against a shortage you don't control. <em>Why this matters: vendor concentration risk is invisible until the vendor can't get compute &mdash; and then it's your incident.</em>
+      </li>
+      <li>
+        <strong>Price compute-hungry features against shortage conditions.</strong>
+        Multimodal generation and heavy multi-agent features are the most token-intensive things you can ship &mdash; and they're being launched into the tightest compute market in years. Model their unit economics at <em>today's</em> rental rates plus a rising trend, not last year's. A feature that's marginal at $1.70/GPU-hr can be underwater at $2.35 and climbing. <em>Why this matters: the features most worth building right now are also the ones most exposed to the shortage.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>For two years the AI story was deflation: compute would get cheaper, prices would fall, GPUs would commoditize. In early 2026 that story acquired a powerful counter-current. Renting a GPU got 40% more expensive in five months, on-demand capacity sold out, and the entire near-term buildout got booked &mdash; because demand went vertical (agents, multimodal, open models) at the same moment supply tightened (a memory-price spike that made new clusters too expensive to build).</p>
+
+    <p>Both things are now true at once: the cost to <em>produce</em> a token keeps falling through efficiency, while the cost to <em>rent the GPU</em> underneath keeps rising through scarcity. A SaaS PM has to hold both. The deflation story tells you AI features keep getting more viable. The shortage story tells you the floor under your costs is rising, capacity is not guaranteed, and the compute-hungry features you most want to ship are the ones most exposed.</p>
+
+    <p>Plan for scarcity. Commit to capacity early. Watch the rental index. And don't build a roadmap that only survives if compute stays cheap and available &mdash; right now, it is neither.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="116-sd-08-nvidia-inference-kingdom.html">&larr; Nvidia&rsquo;s Inference Kingdom</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

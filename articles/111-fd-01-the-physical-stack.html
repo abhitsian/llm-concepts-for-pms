@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foundations 1: The Physical Stack — From Sand to a Chip</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">Foundations &middot; Primer 1 of 5 &middot; ~12 min read</div>
+    <h1>The Physical Stack: From Sand to a Chip</h1>
+    <div class="article-subtitle">Inside the AI Machine &mdash; Foundations. Read these five primers and the terminology in every issue becomes readable. Start here.</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>What this primer gives you:</strong> after reading it, you will know what a chip physically <em>is</em>, how one gets made, what "N3" or "5nm" means, why chips can&rsquo;t simply be made bigger or faster forever, and why one company in Taiwan is the chokepoint of the entire AI economy. Every later primer and every issue builds on these words. No prior hardware knowledge assumed.</p>
+
+    <h2>Start with one switch</h2>
+
+    <p>The entire digital world is built from one component: the <strong>transistor</strong>. A transistor is a microscopic electrical switch. It is either on or off &mdash; and we call those two states 1 and 0. That is the whole trick. Everything a computer does &mdash; arithmetic, memory, running an AI model &mdash; is ultimately enormous numbers of these switches flipping on and off in patterns.</p>
+
+    <p>One transistor is useless. A few of them wired together can do simple logic ("if both these switches are on, turn that one on"). Billions of them, wired in the right pattern, can run a large language model. A modern AI chip contains <strong>tens to hundreds of billions of transistors</strong>. The AMD MI455X, discussed in the EDA issue, has 320 billion of them.</p>
+
+    <p>So the first mental model: a <strong>chip</strong> is a single slab of material with billions of tiny switches etched into it, wired together to do useful work. The questions that follow are all variations of "how do you etch billions of switches into a slab, and how small and fast can you make them?"</p>
+
+    <h2>From sand to a wafer</h2>
+
+    <p>Chips are made of <strong>silicon</strong>, which is refined from ordinary sand. Sand is purified into a cylinder of near-perfect crystalline silicon, and that cylinder is sliced into thin, round discs called <strong>wafers</strong> &mdash; usually 300 millimeters across, about the size of a dinner plate. A wafer is the canvas. Chips get printed onto it.</p>
+
+    <p>The printing process is called <strong>photolithography</strong> &mdash; literally "writing with light." A pattern of circuitry is projected through a stencil onto the wafer&rsquo;s light-sensitive coating, and chemical steps etch that pattern into the silicon. This is repeated layer by layer &mdash; a modern chip has dozens of stacked layers of transistors and the metal wiring that connects them. The whole sequence runs to thousands of individual steps and takes months. (Book 5, <a href="72-fs-03-the-fab.html">The Fab</a>, walks the manufacturing line in more detail.)</p>
+
+    <p>The stencil that holds one chip&rsquo;s pattern is called a <strong>reticle</strong>. The lithography machine steps the reticle across the wafer, printing the same chip pattern over and over &mdash; 80 or 100 times on a single wafer. Then the wafer is sliced up, and each individual rectangle of circuitry is one <strong>die</strong>. "Die" and "chip" mean almost the same thing; a die is the bare silicon rectangle, a chip is that die once it&rsquo;s packaged up and ready to use.</p>
+
+    <p>Hold this picture: <strong>sand &rarr; purified silicon &rarr; a round wafer &rarr; the same chip pattern printed across it many times &rarr; the wafer sliced into individual dies.</strong> That is chip manufacturing in one sentence.</p>
+
+    <h2>Process nodes: what "N3" and "5nm" mean</h2>
+
+    <p>You will see chips described as being made on "N3," "N5," "5nm," "3nm," "SF4," or "18A." These are <strong>process nodes</strong> &mdash; generations of manufacturing technology. A process node is, loosely, how small the features on the chip can be made.</p>
+
+    <p>Smaller features matter for a simple reason: smaller transistors mean you can fit <em>more</em> of them in the same area, they switch <em>faster</em>, and they use <em>less power</em> each. So a newer (smaller-number) node means more capable, more efficient chips. "N5" is TSMC&rsquo;s 5-nanometer-class node; "N3" is its 3-nanometer-class node and is newer and denser. (The nanometer numbers stopped being literal physical measurements years ago &mdash; today they&rsquo;re essentially generation labels &mdash; but smaller still means newer and better.)</p>
+
+    <p>This is why the issues care so much about which node a chip uses. When the Cerebras article notes the WSE-3 is on "N5" while Nvidia&rsquo;s newest GPUs move to "N3-class" processes, it&rsquo;s telling you Cerebras is a generation behind on the underlying manufacturing. When the Groq chapter notes the old LPU was on a "14nm" node while competitors were on "7nm" and now "3nm," that node gap is a real performance and cost handicap.</p>
+
+    <h2>Moore&rsquo;s Law, and why it&rsquo;s slowing</h2>
+
+    <p>For about fifty years, the number of transistors that fit on a chip roughly doubled every two years. This trend is called <strong>Moore&rsquo;s Law</strong>, and it is the engine that took computers from room-sized machines to the phone in your pocket. Every couple of years, the next node arrived, transistors got smaller, chips got better, and the price per transistor fell.</p>
+
+    <p>That trend is now slowing badly. Transistors are approaching the size of individual atoms, and the physics of making them smaller gets harder and more expensive at every node. Two consequences run through every issue:</p>
+
+    <ul>
+      <li><strong>SRAM (on-chip memory) has nearly stopped shrinking.</strong> The Cerebras article points this out directly: their wafer&rsquo;s memory barely grew from one node to the next, because the part of the chip that stores data no longer benefits much from smaller nodes. "SRAM scaling is dead" is a real, load-bearing fact.</li>
+      <li><strong>Progress now comes from packaging and architecture, not just smaller transistors.</strong> Because you can&rsquo;t simply shrink your way to a better chip anymore, the industry now stitches multiple chips together, stacks them vertically, and co-designs the whole system. That is what Primer 5 is about.</li>
+    </ul>
+
+    <h2>The reticle limit: why chips can&rsquo;t just get bigger</h2>
+
+    <p>If transistors can&rsquo;t shrink much further, why not just make the chip bigger &mdash; more area, more transistors? Because of a hard physical ceiling called the <strong>reticle limit</strong>.</p>
+
+    <p>The reticle &mdash; the stencil that prints one chip &mdash; has a maximum size the lithography machine can project in one exposure: about <strong>858 square millimeters</strong> (roughly 26mm &times; 33mm). You cannot print a single continuous chip pattern larger than that. The reticle limit is the maximum size of one die.</p>
+
+    <p>This single constraint explains a surprising amount:</p>
+    <ul>
+      <li>It is why <strong>Cerebras is remarkable</strong>: their Wafer Scale Engine deliberately breaks past the reticle limit by stitching 84 reticle-sized tiles into one continuous chip the size of the whole wafer. Almost nobody else does this because it is extraordinarily hard.</li>
+      <li>It is why modern Nvidia and AMD chips are built from <strong>chiplets</strong> &mdash; several reticle-sized dies packaged together to act as one bigger chip. If you can&rsquo;t print one big die, you assemble several smaller ones.</li>
+    </ul>
+
+    <p>So the three escape routes from the reticle limit are: live within it (most chips), tile past it (Cerebras), or assemble multiple dies into a package (chiplets &mdash; almost every high-end AI chip). Primer 5 covers the third route.</p>
+
+    <h2>Yield: why not every chip works</h2>
+
+    <p>Printing billions of atomic-scale features is imperfect. Dust, tiny material flaws, and process variation mean some dies on every wafer come out broken. The percentage that come out working is the <strong>yield</strong>.</p>
+
+    <p>Yield is a core cost driver, and it gets worse as dies get bigger &mdash; a single defect ruins a larger area. A reticle-sized die can have a yield well below 50%. This is the hidden reason chiplets exist: four small dies have far better combined yield than one big die, because a defect only kills one small chiplet instead of the whole thing. It is also why Cerebras&rsquo;s wafer-scale engineering is so impressive &mdash; they built in spare circuitry and custom wiring so that defects can be routed around and almost every wafer still ships.</p>
+
+    <p>Yield is also why chips are "binned": chips that come out a little slower aren&rsquo;t thrown away, they&rsquo;re sold as cheaper, lower-tier products. The Intel Core i5/i7/i9 ladder is largely yield binning.</p>
+
+    <h2>TSMC: the chokepoint</h2>
+
+    <p>One more piece, and it is the most strategically important. The companies whose chips you hear about &mdash; Nvidia, AMD, Apple, Google&rsquo;s TPU team, Amazon&rsquo;s Trainium team &mdash; mostly do not manufacture their own chips. They <em>design</em> chips. The actual manufacturing is done by a <strong>foundry</strong>: a contract chip factory.</p>
+
+    <p>The leading-edge foundry, by a wide margin, is <strong>TSMC</strong> &mdash; Taiwan Semiconductor Manufacturing Company. Nearly every advanced AI chip in the world is physically made by TSMC. Samsung Foundry and Intel Foundry exist but trail at the leading edge.</p>
+
+    <p>This makes TSMC the single biggest chokepoint in the AI economy. When the issues say the industry is "compute constrained," a large part of what they mean is: TSMC&rsquo;s most advanced node (N3) is running at or above 100% utilization, and you cannot get more chips than TSMC can physically make. It is why the Cerebras article highlights that Groq&rsquo;s chip runs on Samsung&rsquo;s node &mdash; that&rsquo;s capacity that doesn&rsquo;t compete for TSMC&rsquo;s scarce N3 supply. It is why the "AI Value Capture" article notes TSMC has enormous unused pricing power. The factory is the bottleneck, and there is essentially one factory.</p>
+
+    <h2>Vocabulary check</h2>
+
+    <p>You can now read the physical-layer vocabulary of any issue:</p>
+    <ul>
+      <li><strong>Transistor</strong> &mdash; the on/off switch; billions per chip.</li>
+      <li><strong>Silicon / wafer</strong> &mdash; the material, and the 300mm disc chips are printed on.</li>
+      <li><strong>Die / chip</strong> &mdash; one rectangle of circuitry cut from a wafer.</li>
+      <li><strong>Photolithography</strong> &mdash; printing circuits with light.</li>
+      <li><strong>Reticle</strong> &mdash; the stencil for one chip; the <strong>reticle limit</strong> (~858mm²) caps die size.</li>
+      <li><strong>Process node</strong> (N3, N5, 5nm) &mdash; a manufacturing generation; smaller number = newer, denser, better.</li>
+      <li><strong>Moore&rsquo;s Law</strong> &mdash; the slowing trend of transistor doubling.</li>
+      <li><strong>Yield</strong> &mdash; the fraction of chips that come out working.</li>
+      <li><strong>Foundry / TSMC</strong> &mdash; the contract factory; TSMC is the leading-edge chokepoint.</li>
+    </ul>
+
+    <h2>Where this shows up in the issues</h2>
+
+    <ul>
+      <li><a href="104-sd-01-cerebras-the-wafer-bet.html">Issue 1 (Cerebras)</a> &mdash; the entire article is about a chip that breaks the reticle limit by using the whole wafer.</li>
+      <li><a href="105-sd-02-eda-the-software-behind-every-chip.html">Issue 2 (EDA)</a> &mdash; the software used to design the billions of transistors before they&rsquo;re manufactured.</li>
+      <li><a href="106-sd-03-where-ai-money-goes-now.html">Issue 3 (AI Value Capture)</a> &mdash; TSMC&rsquo;s pricing power as the manufacturing chokepoint.</li>
+    </ul>
+
+    <p>Next, Primer 2: <a href="112-fd-02-memory.html">Memory &mdash; Why It&rsquo;s the Whole Game</a>. A chip full of transistors is useless without data to work on, and how that data is stored and moved turns out to decide almost everything about AI hardware.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; primer 1 of 5 &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="../books/semianalysis-decoded.html">&larr; Inside the AI Machine</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="112-fd-02-memory.html">Primer 2: Memory &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

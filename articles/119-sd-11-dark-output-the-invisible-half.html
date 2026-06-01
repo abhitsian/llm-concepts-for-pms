@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dark Output: AI's Value Will Be Real Before It's Measurable</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~3,400 words &middot; ~16 min read &middot; why AI value won't show up in your dashboards</div>
+    <h1>Dark Output: AI's Value Will Be Real Before It's Measurable</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 11 &mdash; the measurement problem that makes AI look like a bubble</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> The previous SD issues were about AI's <em>costs</em> &mdash; chips, power, capex, supply chain. This one is about its <em>output</em>, and a measurement gap that should change how PMs argue for and defend AI work. The economic statistics that decide whether AI is &ldquo;working&rdquo; were designed for an economy that sold goods in countable units. AI mostly produces invisible work: services that have no natural unit, internal tasks that never had a receipt, brand-new tasks that were too expensive to do before. The cost of AI &mdash; tokens, GPUs, datacenters, jobs displaced &mdash; is visible and loud. The value is largely invisible, and in some cases the conventional way of measuring services will read AI&rsquo;s impact as <em>lower</em> productivity even as productivity rises. We&rsquo;ll call that gap <strong>Dark Output</strong>, and explain why it has very direct consequences for how you justify AI features, defend AI spend, and read what your customers are actually doing.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="07-01-tokens-are-the-new-api-calls.html">Tokens Are the New API Calls</a> &mdash; <strong>the keystone.</strong> Tokens are the only clean unit of AI consumption. They&rsquo;re also the <em>only</em> place AI value reliably shows up in financial systems &mdash; which is why so much of the value goes uncounted.</li>
+        <li><a href="97-ae-02-software-ate-the-world-ai-burns-it.html">Software Ate the World, AI Burns It</a> &mdash; the cost-side framing that makes the value-side gap obvious.</li>
+        <li><a href="103-ae-08-the-bionic-bar.html">The Bionic Bar</a> &mdash; AI as augmentation rather than wholesale replacement is exactly the regime where Dark Output is largest.</li>
+      </ol>
+      <div class="buildup-foot">Read with the prior SD issues on the cost side &mdash; <a href="117-sd-09-the-great-gpu-shortage.html">Issue 9</a> (GPU prices) and <a href="118-sd-10-the-silicon-shortage.html">Issue 10</a> (silicon supply). Those are about the bill. This is about the half of the ledger you can&rsquo;t see.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>For the past three years, AI&rsquo;s costs have been on the cover page of every analyst report: capex, watts, water, layoffs, token spend. Hundreds of billions of dollars are physically visible in datacenters and electricity bills. The press writes about it daily.</p>
+
+    <p>And yet, ask the standard economic statistics &mdash; GDP, productivity, sectoral output &mdash; whether AI is producing commensurate value, and the answer is mostly silence. Some of the boldest claims about AI&rsquo;s economic impact (compressed legal work, automated research, AI-written code shipped to production) leave almost no trace in the official numbers. The clearest place AI revenue shows up is in the income statements of a handful of model labs and chip companies. Everything downstream of that &mdash; the work AI actually did for someone &mdash; tends to vanish.</p>
+
+    <p>This isn&rsquo;t new. In the 1980s, an economist quipped that you could see the computer age everywhere except in the productivity statistics. That gap persisted for nearly a decade before the data caught up. The current AI gap looks the same but bigger, and it&rsquo;s arriving inside the service economy &mdash; the part of the economy that the statistics have always struggled to measure.</p>
+
+    <p>The reason this matters for a PM is not academic. It&rsquo;s that the same measurement gap shows up inside your company: the dashboards you use to justify AI investment, the ROI cases you build for AI features, and the financial reports your customers use to decide whether AI &ldquo;worked&rdquo; were all built for an economy of countable goods. Most of what AI produces isn&rsquo;t countable in those terms. So a lot of real value gets read as no value at all, and a lot of cost gets read as waste.</p>
+
+    <h2>Quick translation: Dark Output in SaaS-PM terms</h2>
+
+    <p>If you&rsquo;ve never thought about national accounts, the Dark Output problem maps cleanly onto a situation any PM has lived: <strong>you shipped something users obviously love, and none of your dashboards moved.</strong></p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3); width: 33%;">Economic-statistics term</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">What it means, in SaaS-PM terms</th>
+      </tr>
+      <tr><td style="padding:8px; vertical-align:top;">Production boundary</td><td style="padding:8px;">The line your KPIs draw between &ldquo;counted&rdquo; and &ldquo;uncounted.&rdquo; Revenue, seats, MAU, ticket-deflection are inside. Time saved, decisions improved, anxiety reduced are outside.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Substitution Dark Output</td><td style="padding:8px;">AI quietly does work a paid human used to do, but nobody updates the price or the contract. The work is the same; the line item for it shrinks or disappears.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">New Dark Output</td><td style="padding:8px;">AI does work that <em>nobody was paying for</em> because it used to be too expensive (a personal dossier before every meeting, a literature review before every project). Value created, no transaction generated.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Captured AI</td><td style="padding:8px;">AI replaces a human cost while the price holds &mdash; margin expands. This is the one case where the value <em>does</em> show up cleanly &mdash; in operating margin, not in output.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Boundary shift</td><td style="padding:8px;">A customer used to buy a thing from you. Now they make it internally with AI. Your revenue drops; their value is unchanged or higher.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Receipts &divide; price = &ldquo;quantity&rdquo;</td><td style="padding:8px;">The default way services are measured. When AI collapses price 99%, the statistics read it as a 99% drop in <em>output</em> &mdash; not a productivity gain.</td></tr>
+    </table>
+
+    <p>Three implications to hold while reading on:</p>
+    <ul>
+      <li><strong>Your AI feature&rsquo;s value will mostly land somewhere your dashboards don&rsquo;t look.</strong> The cost (tokens, vendor invoices) is precise to the cent. The value (faster decisions, work that never needed to happen, work that nobody used to do at all) is diffuse. Default measurement will under-report the value &mdash; sometimes by a lot.</li>
+      <li><strong>The same gap is happening to your customers.</strong> When they use AI to do work in-house, the budget line they used to spend with you may shrink, but their underlying need hasn&rsquo;t. Churn signals can mislead in both directions.</li>
+      <li><strong>Token spend is the cleanest number you have, and it&rsquo;s a cost line.</strong> If you only measure what&rsquo;s clean, AI looks like all cost and no output. The job is to build the value side of the ledger yourself, because nobody&rsquo;s going to do it for you.</li>
+    </ul>
+
+    <h2>Why services don&rsquo;t behave like goods</h2>
+
+    <p>To see why this gap is so wide, contrast a screw with a legal memo.</p>
+
+    <p>The price of a screw collapsed by something like 99.999% over six centuries as manufacturing improved &mdash; and economic statistics handled that gracefully, because the unit of output is a screw. As the price fell, the <em>number</em> of screws produced rose by something like ten billion times. The accounts could divide spending by price to count physical output, and productivity growth showed up as productivity growth.</p>
+
+    <p>Now contrast a legal memo. There is no &ldquo;unit&rdquo; of legal services &mdash; just receipts from law firms and surveys of what they charge per hour. The way services get measured is essentially &ldquo;dollars spent, deflated by a price index built from surveyed hourly rates.&rdquo; That works fine when the underlying productivity is changing slowly. It breaks when AI collapses the price of a basic legal document from ~$150 to a few cents in a year. The receipts for that work fall to near zero. The surveyed hourly rate of senior lawyers <em>rises</em> because the simplest work has been peeled off the bottom of their billable hours. Plug those into the standard formula and you get a worse output number and a higher inflation number &mdash; even though more legal work is being done, faster, at lower cost.</p>
+
+    <p>This is not a quirk. Most of the service economy &mdash; healthcare, education, professional services, finance, design, software &mdash; is measured the same way. Whenever AI compresses a task from hours to seconds, the same arithmetic produces the same backwards reading.</p>
+
+    <p><strong>The PM translation:</strong> any AI feature that automates &ldquo;a unit of work&rdquo; with no natural physical unit (a brief, a triage, a summary, a draft, a review, a recommendation) is in exactly the regime where impact is hardest to measure. The cleaner the automation, the more invisible the value. If your AI feature compressed a five-hour task to ninety seconds, your usage metrics will likely show <em>lower engagement</em>. That is a feature working, not a feature failing &mdash; but only if you measure it correctly.</p>
+
+    <h2>The two flavors of Dark Output</h2>
+
+    <p>The single biggest move when reasoning about AI value is to separate substitution from new work, because they create value in different places and they fail to be measured in different ways.</p>
+
+    <h3>Substitution Dark Output: the same work, fewer receipts</h3>
+
+    <p>A task that used to cost paid human hours now costs tokens. The output is roughly the same. The visible economic trace shrinks dramatically.</p>
+
+    <p>Inside a SaaS company this looks like: a $200/hr lawyer&rsquo;s contract review becomes a five-minute Claude session. A $120/hr designer&rsquo;s first-pass mock becomes a Figma Make export reviewed in ten minutes. A $90/hr support agent&rsquo;s tier-1 ticket becomes an AI response with one-line human approval. The <em>work is done</em>; the budget line that used to fund it shrinks; the only line that grows is &ldquo;AI vendor spend.&rdquo;</p>
+
+    <p>For a PM, this matters in two opposite directions:</p>
+    <ul>
+      <li><strong>If you sell into a function being substituted</strong> (legal-tech, design tools, support tooling), your seat count and seat-price assumptions are at risk before your competitive position is. The customer&rsquo;s spend is going to AI; whether it comes back to you depends on whether you become the harness around the AI or the casualty of it.</li>
+      <li><strong>If your customer is doing the substitution internally</strong>, expect their financial pressure to be visible (their CFO sees the token line growing) while the value to them is largely not. Their internal champions for AI work will struggle to defend it on standard ROI &mdash; which means they will look to you for value-side metrics they can show their finance team. Bring them.</li>
+    </ul>
+
+    <h3>New Dark Output: work that simply didn&rsquo;t happen before</h3>
+
+    <p>This is the larger and stranger half. When the price of a literature review falls from $2,000 to two cents, people don&rsquo;t do the same number of literature reviews and pocket the savings &mdash; they do one before every meeting. When the price of a personal dossier falls to near zero, you write one before every customer call. When the price of a contract redline falls to a few tokens, you redline things you wouldn&rsquo;t have bothered with at $400/hr.</p>
+
+    <p>None of this work was on anyone&rsquo;s P&amp;L before. It was too expensive to do, so nobody did it. Now it gets done, value gets created &mdash; but no receipt is generated beyond the token spend, because there was no transaction to compare it against.</p>
+
+    <p>For a PM, the right way to think about new Dark Output is as <strong>induced demand for tasks that used to be priced out</strong>. Three patterns are emerging:</p>
+    <ul>
+      <li><strong>&ldquo;Belt and suspenders&rdquo; checks.</strong> Reviews, audits, and sanity passes that used to be done at major milestones now get done at every step. Quality goes up; nobody&rsquo;s budget shifts.</li>
+      <li><strong>Pre-meeting / pre-call prep.</strong> Background on the person, the company, the prior thread &mdash; nontrivial work that nobody used to pay for. Now done by default, value captured by whoever showed up better prepared.</li>
+      <li><strong>&ldquo;What if&rdquo; exploration.</strong> Customers running variants and side-by-sides they wouldn&rsquo;t have asked for. Higher decision quality, no countable output.</li>
+    </ul>
+
+    <p>If your AI feature drives any of these behaviors, your conventional usage metrics will not capture the value &mdash; because the value is in the work that wouldn&rsquo;t have happened at all, not in displacing work that would have. Build the metric for it explicitly.</p>
+
+    <h3>Captured AI: the one case where the value is visible</h3>
+
+    <p>There is one regime where AI value shows up cleanly in financials: when an AI vendor or an internal AI workflow does work that used to require humans, and the buyer keeps paying the old price. Cost drops, price holds, margin expands. This is the &ldquo;captured AI&rdquo; case &mdash; and it&rsquo;s the most attractive position to occupy commercially, because it&rsquo;s the only one the CFO can see without help.</p>
+
+    <p>The captured-AI position is only sustainable where there&rsquo;s genuine pricing power: regulated industries, sticky enterprise contracts, products with strong network effects or switching costs, brands that customers won&rsquo;t question. Where pricing power is weak, the price will fall to track the cost &mdash; and the value will go dark again.</p>
+
+    <p><strong>The PM takeaway:</strong> when you&rsquo;re packaging an AI feature, the pricing decision is also a measurability decision. Bundle it &ldquo;for free&rdquo; into an existing seat price and you&rsquo;ve created captured AI &mdash; visible in renewal rates and margins. Charge for it per token or per use and you&rsquo;ve created a tiny visible revenue line that is much less than the value generated, and you&rsquo;ll have a harder argument for what it&rsquo;s worth.</p>
+
+    <h2>The fingerprints of Dark Output in real data</h2>
+
+    <p>Even when you can&rsquo;t see Dark Output directly, you can see its shadow in patterns that don&rsquo;t quite make sense under the old model. Three of them are already visible:</p>
+
+    <p><strong>Wages rising while employment falls in AI-exposed roles.</strong> The cheapest, most junior workers in a function get displaced first. They drop out of the &ldquo;average wage&rdquo; calculation. Average wage of the remaining workers goes up &mdash; nobody got a raise, the floor just left. If you see this pattern in your own customer base (smaller customer support teams, but the remaining seats are more senior), that&rsquo;s the fingerprint.</p>
+
+    <p><strong>Token spend concentrated in functions that aren&rsquo;t shedding jobs.</strong> Heavy AI usage by engineers and analysts isn&rsquo;t showing up as layoffs, and isn&rsquo;t showing up as visibly bigger output either. The work is going somewhere &mdash; into &ldquo;new Dark Output&rdquo; tasks that augment rather than replace. If your customers&rsquo; engineering teams aren&rsquo;t getting smaller despite heavy Claude / Copilot usage, the value is going into higher per-engineer throughput, more parallel experimentation, more refactors, more reviews &mdash; almost all of which is uncounted by standard productivity metrics.</p>
+
+    <p><strong>Sector misrouting: the value gets booked in the wrong place.</strong> A hospital uses AI to compress paperwork. The cost shows up as software spend (good for the software vendor&rsquo;s revenue). The value shows up as &hellip; nothing visible in the hospital&rsquo;s output statistics, because hospital output is measured by patient throughput and other clinical metrics. The vendor looks like the source of the value; the adopter looks stagnant. The same misrouting happens inside companies, between teams: your customers&rsquo; AI vendors look healthy on revenue, while the adopting departments look unchanged on output.</p>
+
+    <p><strong>The PM signal:</strong> these patterns mean that the standard playbook for proving AI ROI &mdash; &ldquo;show me the jobs reduced or the throughput increased&rdquo; &mdash; will systematically miss the bulk of the value in augmentation use cases. Augmentation is the dominant pattern in the evidence to date. Plan accordingly.</p>
+
+    <h2>The four ways the numbers fail</h2>
+
+    <p>To make this actionable rather than abstract, here are the four specific failure modes &mdash; each of which has a concrete analog in how SaaS metrics will misread AI.</p>
+
+    <ol>
+      <li><strong>Boundary shift.</strong> Work that was bought in the market moves inside the firm. A paid research brief becomes an internal AI workflow. A vendor task becomes an employee prompt. The value is intact; the transaction that made it visible is gone. <em>SaaS analog:</em> customers cancel an &ldquo;assistance&rdquo; or &ldquo;services&rdquo; SKU because they can run the equivalent in Claude internally. Your revenue moves, their value doesn&rsquo;t.</li>
+      <li><strong>Price collapse with no unit of quantity.</strong> Services have no natural &ldquo;unit&rdquo; &mdash; just receipts and surveyed prices. When AI compresses the cost by 99%, the formula reads it as 99% less output. <em>SaaS analog:</em> usage metrics built on &ldquo;time spent in app&rdquo; or &ldquo;tasks completed manually&rdquo; will fall as your AI feature lets users finish in seconds. Looks like a feature failing. Is the feature working.</li>
+      <li><strong>Sector misrouting.</strong> AI creates value in one place; the receipt lands in another. <em>SaaS analog:</em> your AI feature creates value in your customer&rsquo;s ops team; the cost lands on IT&rsquo;s vendor budget; the ops leader has no line item to credit for the saving. The team that benefited has no way to defend the spend. This is one of the most common silent killers of AI feature renewal.</li>
+      <li><strong>New work invisibility.</strong> If there&rsquo;s no prior transaction for the task, there&rsquo;s no baseline to be measured against. <em>SaaS analog:</em> your AI feature induces an entire class of new behavior (pre-meeting research, every-PR review, every-call summary) that wasn&rsquo;t happening before. Every conventional metric reads it as &ldquo;more usage of an expensive feature.&rdquo; That&rsquo;s the wrong frame &mdash; it&rsquo;s an entirely new category of work that wouldn&rsquo;t have happened without you. Name it as such or it gets cut in the next budget review.</li>
+    </ol>
+
+    <h2>Why this matters now, not later</h2>
+
+    <p>Two reasons.</p>
+
+    <p>First, AI spend is moving from R&amp;D budgets (where it&rsquo;s easy to defend on potential) into operating budgets (where it has to defend itself on measured outcomes). The same gap that made the dot-com economy look like a bubble &mdash; visible costs, invisible output &mdash; is about to be aimed at every AI line item in your finance system. Token spend is precise to the cent and going up. The output line is largely missing. The natural reading of that gap is &ldquo;over-investment.&rdquo;</p>
+
+    <p>Second, the parts of the economy where Dark Output is largest are the parts where most SaaS PMs work. Software, finance, professional services, design, support, marketing &mdash; the entire white-collar service economy is exactly the regime that the measurement system handles worst. So this isn&rsquo;t an abstract macro concern. It&rsquo;s a direct headwind to anyone trying to justify an AI investment with conventional metrics.</p>
+
+    <p>The right response is not to argue with the dashboards. It&rsquo;s to build the missing half &mdash; metrics that capture the boundary-shifted work, the price-collapsed work, the misrouted value, the brand-new work that nobody used to do.</p>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Five concrete actions.</p>
+
+    <ol>
+      <li>
+        <strong>Build the value-side ledger your finance system won&rsquo;t.</strong>
+        Token spend, vendor invoices, GPU bills &mdash; the cost side &mdash; is captured by default. The value side is not. For any AI feature, you need a parallel ledger that names what work was substituted, what work was newly enabled, and where the value landed. Without it, the cost line wins every renewal conversation. <em>Why this matters: in a system where only cost is precise, the precise number wins &mdash; even if it&rsquo;s only half the picture.</em>
+      </li>
+      <li>
+        <strong>Pick a unit of work your AI replaces, and own it.</strong>
+        Services don&rsquo;t have natural units. That&rsquo;s the whole problem. Your job is to pick one: tickets resolved, briefs drafted, hours of manual labor avoided, reviews completed, decisions made. Track <em>that</em>, not raw engagement. Without a unit of output, productivity gains read as engagement losses. <em>Why this matters: the right unit converts &ldquo;less time in app&rdquo; from a churn signal into a productivity story.</em>
+      </li>
+      <li>
+        <strong>Separate substitution, new work, and captured AI &mdash; in your own metrics.</strong>
+        These three behave completely differently. Substitution will show up as flat or shrinking spend on the displaced function. New work will show up as token growth with no countervailing reduction anywhere. Captured AI will show up as margin. If you don&rsquo;t separate them, you&rsquo;ll mistake one for another and tell the wrong story to your finance team. <em>Why this matters: the same token spend can mean three completely different things; conflating them is how good AI features get cut.</em>
+      </li>
+      <li>
+        <strong>Watch for boundary shift in your own customers.</strong>
+        If a service-heavy SKU is starting to soften, check whether your customers are bringing the work in-house with AI rather than buying less of it. If yes, the right move is usually to become the harness for the in-house workflow rather than defend the old SKU. Misread it as plain churn and you&rsquo;ll cut investment exactly when you should pivot. <em>Why this matters: boundary shift looks identical to churn in the data and is the opposite problem &mdash; the customer&rsquo;s need just moved, not their value.</em>
+      </li>
+      <li>
+        <strong>Don&rsquo;t price an AI feature based on its cost &mdash; price it based on which side of the visibility line you want it on.</strong>
+        Per-token pricing creates a tiny visible revenue line that is dwarfed by the value generated, and forces every conversation back to &ldquo;is the token spend justified.&rdquo; Bundled pricing makes the AI invisible in revenue but visible in renewal and margin &mdash; which is the regime where Dark Output works for you. The decision is strategic, not arithmetic. <em>Why this matters: pricing decides where the value gets to show up &mdash; per-use makes it look small, bundled makes it look like loyalty.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>The standard economic statistics &mdash; and most of your internal dashboards &mdash; were built for an economy that sold goods in countable units. They handle that economy well. They handle the service economy badly even in calm times, and they handle the AI-augmented service economy worst of all, because AI&rsquo;s biggest impact lands in three places the system was never built to see: work that quietly moves from paid humans to tokens (substitution), work that nobody used to pay for at all (new), and value that gets credited to the AI vendor instead of the team that benefited (misrouting).</p>
+
+    <p>For a SaaS PM, the practical consequence is straightforward. The cost of AI in your business will always be measured precisely. The value of AI in your business mostly won&rsquo;t be &mdash; unless you build the metric for it. If you don&rsquo;t, every AI line item in your finance system will look like a bet, and every renewal cycle will turn into &ldquo;justify the token spend.&rdquo; If you do, you&rsquo;ll be the team that can answer that question with a number instead of a vibe &mdash; and AI investment in your area will compound, while it stalls everywhere else.</p>
+
+    <p>The visible costs of AI are real. The invisible output is real too. The half of the ledger that&rsquo;s in the dark is yours to put a light on.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="118-sd-10-the-silicon-shortage.html">&larr; The Silicon Shortage</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foundations 2: Memory — Why It's the Whole Game</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">Foundations &middot; Primer 2 of 5 &middot; ~12 min read</div>
+    <h1>Memory: Why It&rsquo;s the Whole Game</h1>
+    <div class="article-subtitle">Inside the AI Machine &mdash; Foundations. Primer 2 of 5. If you understand one thing about AI hardware, make it this.</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>What this primer gives you:</strong> the single most useful idea in all of AI hardware. After this you will understand why "memory" &mdash; not raw computing speed &mdash; is the constraint that decides which chip wins which job, why there are three completely different kinds of memory, and why a chip can be fast on paper and slow in practice. This is the primer that makes the Cerebras and Groq stories click.</p>
+
+    <h2>Why a chip needs memory</h2>
+
+    <p>Primer 1 left us with a chip: billions of transistors wired to do math. But math needs something to chew on. To run an AI model, the chip needs the model itself &mdash; billions of numbers, the <strong>parameters</strong> &mdash; plus the data it&rsquo;s working on. Those numbers have to be <em>stored somewhere</em> and <em>fed to the compute transistors</em>.</p>
+
+    <p>That storing-and-feeding is the job of <strong>memory</strong>. And here is the thing almost nobody outside the industry realizes: in AI, the feeding is harder than the computing. The compute transistors are fast. Getting data to them fast enough to keep them busy is the actual problem.</p>
+
+    <p>Think of a chef (the compute) and a pantry (the memory). A world-class chef who has to walk to a distant pantry for every ingredient cooks slowly &mdash; not because they&rsquo;re a slow chef, but because they spend all their time fetching. AI chips have exactly this problem. The chef is fast. The walk to the pantry is the bottleneck.</p>
+
+    <h2>The memory hierarchy</h2>
+
+    <p>There is no single perfect memory. Memory technologies trade off three things against each other &mdash; speed, capacity, and cost &mdash; and you cannot win all three. So every computer uses a <strong>memory hierarchy</strong>: several kinds of memory layered from "tiny, blazing fast, right next to the compute" down to "enormous, slow, far away."</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">Layer</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">Speed</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">Capacity</th>
+      </tr>
+      <tr><td style="padding:8px;"><strong>SRAM</strong> (on the chip itself)</td><td style="padding:8px;">Fastest</td><td style="padding:8px;">Tiny (megabytes)</td></tr>
+      <tr><td style="padding:8px;"><strong>HBM / DRAM</strong> (next to the chip)</td><td style="padding:8px;">Fast</td><td style="padding:8px;">Medium (hundreds of GB)</td></tr>
+      <tr><td style="padding:8px;"><strong>SSD / flash</strong> (storage)</td><td style="padding:8px;">Slow</td><td style="padding:8px;">Large (terabytes)</td></tr>
+      <tr><td style="padding:8px;"><strong>Hard disk</strong> (archival)</td><td style="padding:8px;">Slowest</td><td style="padding:8px;">Huge, cheap</td></tr>
+    </table>
+
+    <p>The closer to the compute, the faster and smaller and more expensive. For AI hardware, the top two rows are where the whole drama happens. So let&rsquo;s zoom in on them.</p>
+
+    <h2>The three kinds of memory that matter</h2>
+
+    <p><strong>SRAM &mdash; Static RAM.</strong> This memory is built directly onto the compute chip, out of the same transistors. It is extraordinarily fast: the data is right there, no walk required. But it is physically large per bit of storage, so a chip can only hold a small amount &mdash; megabytes, not gigabytes. And from Primer 1: SRAM has almost stopped shrinking with new process nodes, so you can&rsquo;t expect much more of it. SRAM is the pantry built into the kitchen counter: instant access, but it only holds a few ingredients.</p>
+
+    <p><strong>DRAM &mdash; Dynamic RAM.</strong> This is the bulk "main memory" of any computer &mdash; the RAM in your laptop. It stores far more per bit than SRAM and is much cheaper, but it sits in separate chips and is slower to reach. DRAM is the pantry down the hall: big, affordable, but a walk away.</p>
+
+    <p><strong>HBM &mdash; High Bandwidth Memory.</strong> This is the clever middle option, and it is the memory of the AI era. HBM takes DRAM, stacks the chips vertically into towers, and places those towers right next to the compute chip with an extremely wide connection. It is still DRAM &mdash; bigger and cheaper than SRAM &mdash; but the wide, short connection makes it much faster to reach than ordinary DRAM. HBM is the pantry rebuilt right beside the kitchen with a very wide doorway. Almost every AI GPU uses HBM. Its supply is chronically constrained, which is why "memory prices went up 6x" appears in the value-capture issue.</p>
+
+    <h2>The three dimensions: bandwidth, capacity, latency</h2>
+
+    <p>When the articles compare memory, they&rsquo;re measuring three different things. Keep them separate &mdash; conflating them is the most common mistake.</p>
+
+    <p><strong>Capacity</strong> &mdash; how much data fits. Measured in gigabytes (GB). More capacity means you can hold a bigger model, serve more users at once, or support longer context. A WSE-3 wafer holds 44GB of SRAM; a top GPU package holds ~288GB of HBM.</p>
+
+    <p><strong>Bandwidth</strong> &mdash; how fast data flows between memory and compute. Measured in gigabytes or terabytes per second (GB/s, TB/s). This is the width of the doorway between pantry and kitchen. Cerebras&rsquo;s on-wafer SRAM delivers ~21 <em>petabytes</em> per second &mdash; thousands of times more bandwidth than HBM. This is the number that makes SRAM chips special.</p>
+
+    <p><strong>Latency</strong> &mdash; the delay before the first byte arrives. The time the chef waits at the pantry door before anything comes back. Low latency matters for anything where a fast first response is the product.</p>
+
+    <p>The headline tradeoff of AI hardware, in one line: <strong>SRAM gives you spectacular bandwidth and low latency but almost no capacity. HBM gives you large capacity and good bandwidth. You pick your poison.</strong> Groq and Cerebras bet everything on SRAM&rsquo;s bandwidth. Nvidia, Google, and Amazon bet on HBM&rsquo;s capacity. Every architecture argument in the issues is, underneath, this one tradeoff.</p>
+
+    <h2>The Memory Wall</h2>
+
+    <p>Here is the historical problem that created the whole situation. Over the past two decades, chip <em>compute</em> got dramatically faster &mdash; many thousands of times faster. Chip <em>memory bandwidth</em> improved too, but far more slowly. The two lines diverged. Compute sprinted; memory jogged.</p>
+
+    <p>The result is a permanent gap called the <strong>memory wall</strong>: modern compute is so fast that, for many workloads, the compute transistors spend most of their time idle, waiting for data to arrive from memory. You bought a Ferrari engine and it&rsquo;s stuck in traffic.</p>
+
+    <p>This is not a minor inefficiency. It is <em>the</em> defining problem of AI hardware. When you read that a chip has "125 petaFLOPs of compute," the honest follow-up question is always: <em>can its memory feed those FLOPs fast enough to ever use them?</em> Usually the answer is "not even close." (Book 5&rsquo;s <a href="74-fs-05-the-memory-wall.html">The Memory Wall</a> covers the history.)</p>
+
+    <h2>Why this matters for AI: inference is memory-bound</h2>
+
+    <p>Now the payoff. Running an AI model to answer a request &mdash; <strong>inference</strong> &mdash; works roughly like this: to produce each new word, the chip must read the model&rsquo;s billions of parameters out of memory, do a relatively modest amount of math with them, and write the result. Then do it again for the next word. Thousands of times per response.</p>
+
+    <p>Notice the shape of that: <em>a lot of reading from memory, a moderate amount of math.</em> The bottleneck is the reading. Inference is what the next primers will call a <strong>memory-bound</strong> workload &mdash; its speed is set by memory bandwidth, not by compute. The Ferrari engine is barely revving; the data pipe is the limit.</p>
+
+    <p>This single fact explains the whole Cerebras and Groq story. Their chips trade away memory <em>capacity</em> (they can&rsquo;t hold huge models) to get extraordinary memory <em>bandwidth</em> (the data pipe is enormous). For the memory-bound work of generating tokens fast, that is exactly the right trade &mdash; if, and only if, the model is small enough to fit in their limited capacity. When the Cerebras article says the wafer is unbeatably fast but can&rsquo;t economically serve large models, that sentence is just the bandwidth-vs-capacity tradeoff playing out.</p>
+
+    <p>And it explains why memory, not chips, is increasingly where the money and the shortages are. The "AI Value Capture" article&rsquo;s point that memory vendors had a 6x price increase, and that Nvidia&rsquo;s next pricing lever is the memory module &mdash; that is the memory wall expressing itself as a profit pool.</p>
+
+    <h2>Vocabulary check</h2>
+
+    <ul>
+      <li><strong>Memory hierarchy</strong> &mdash; layered memory, fast-and-small at the top, slow-and-huge at the bottom.</li>
+      <li><strong>SRAM</strong> &mdash; on-chip memory; fastest, tiny, expensive; barely shrinks anymore.</li>
+      <li><strong>DRAM</strong> &mdash; bulk main memory; big, cheap, slower.</li>
+      <li><strong>HBM</strong> &mdash; stacked DRAM beside the chip; the AI standard; supply-constrained.</li>
+      <li><strong>Capacity</strong> &mdash; how much data fits (GB).</li>
+      <li><strong>Bandwidth</strong> &mdash; how fast data flows (GB/s, TB/s).</li>
+      <li><strong>Latency</strong> &mdash; the delay before data starts arriving.</li>
+      <li><strong>Memory wall</strong> &mdash; compute outran memory; chips wait on data.</li>
+      <li><strong>Memory-bound</strong> &mdash; a workload whose speed is set by memory, not compute. Inference is memory-bound.</li>
+    </ul>
+
+    <h2>Where this shows up in the issues</h2>
+
+    <ul>
+      <li><a href="104-sd-01-cerebras-the-wafer-bet.html">Issue 1 (Cerebras)</a> &mdash; the SRAM-vs-HBM tradeoff is the spine of the whole piece.</li>
+      <li><a href="106-sd-03-where-ai-money-goes-now.html">Issue 3 (AI Value Capture)</a> &mdash; HBM/DRAM scarcity as a profit pool and Nvidia&rsquo;s memory pricing lever.</li>
+      <li><a href="109-sd-06-gpu-cluster-tco.html">Issue 6 (GPU Cluster TCO)</a> &mdash; storage tiers extend the same hierarchy idea down to the datacenter.</li>
+    </ul>
+
+    <p>Next, Primer 3: <a href="113-fd-03-compute-and-precision.html">Compute &amp; Precision &mdash; What Makes a Chip Fast</a>. Now that you know memory is usually the bottleneck, we look at the compute side &mdash; FLOPs, number precision, and the different kinds of chips &mdash; and learn to tell a real performance number from a marketing one.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; primer 2 of 5 &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="111-fd-01-the-physical-stack.html">&larr; Primer 1: The Physical Stack</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="113-fd-03-compute-and-precision.html">Primer 3: Compute &amp; Precision &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

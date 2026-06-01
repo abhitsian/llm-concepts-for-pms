@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Code Is the Inflection Point — and SaaS Is the Target</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~4,100 words &middot; ~20 min read &middot; the most uncomfortable &mdash; and most important &mdash; issue in this series for a SaaS PM</div>
+    <h1>Claude Code Is the Inflection Point &mdash; and SaaS Is the Target</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 7 &mdash; Claude Code and the SaaS threat</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> Claude Code is not a coding tool. It is the proof that an AI agent can run the universal information-work loop &mdash; READ, THINK, WRITE, VERIFY &mdash; and that loop is what SaaS <em>is</em>. The blunt argument: the three classic SaaS moats (data lock-in, workflow lock-in, integration complexity) are eroding at the margins, seat-based pricing is structurally broken, and &mdash; bluntly &mdash; do not believe anyone who tells you this is simply good for software companies who will sell more software. For a SaaS PM this is the most uncomfortable issue in this series. It is also the most important. Here is the argument, told honestly, and a genuinely strategic answer to "so what do I do."</p>
+
+    <p style="font-size: 0.92em; opacity: 0.8;"><em>Where this sits: this is the foundational argument that <a href="106-sd-03-where-ai-money-goes-now.html">Issue 3 (AI Value Capture)</a> and <a href="107-sd-04-coding-agents-the-harness-is-the-product.html">Issue 4 (Coding Agents)</a> build on. If you read those first, this is the origin point.</em></p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="112-fd-02-memory.html">Memory</a> &mdash; a light touch: why very long context degrades a model&rsquo;s coherence.</li>
+        <li><a href="114-fd-04-how-an-llm-runs-on-silicon.html">How an LLM Runs</a> &mdash; <strong>the keystone</strong>, and nearly all you need. Tokens, agents, the harness, context, reasoning models.</li>
+      </ol>
+      <div class="buildup-foot">The lightest-hardware issue in the series &mdash; Primer 4 alone gets you there. Hover any underlined term as you read.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>As of early 2026, an estimated <strong>4% of all public GitHub commits are authored by Claude Code</strong>, with projections of 20%+ of all daily commits by the end of 2026. This is an inflection point comparable to the ChatGPT moment of early 2023 &mdash; possibly bigger.</p>
+
+    <p>The supporting evidence in the piece:</p>
+    <ul>
+      <li><strong>Anthropic&rsquo;s quarterly ARR additions have overtaken OpenAI&rsquo;s</strong> (per detailed tokenomics modeling). Anthropic is adding more revenue per month than OpenAI, driven almost entirely by Claude Code.</li>
+      <li><strong>Cowork launched January 12 2026</strong> &mdash; "Claude Code for general computing." Four engineers built it in 10 days, and most of the code was written by Claude Code itself. Same architecture (Agent SDK, MCP, sub-agents), minus the terminal, plus a desktop. It creates spreadsheets from receipts, organizes files by content, drafts reports from scattered notes.</li>
+      <li><strong>The named engineers are capitulating.</strong> Ryan Dahl (creator of Node.js): "the era of humans writing code is over." Boris Cherny (creator of Claude Code): "pretty much 100% of our code is written by Claude Code + Opus 4.5." Even Linus Torvalds is vibe coding.</li>
+    </ul>
+
+    <p>The core claim is not "AI is good at coding." It is that coding was a <strong>beachhead</strong> &mdash; the first beach stormed in a much larger invasion of all information work.</p>
+
+    <h2>Why a SaaS PM should read this as a threat assessment</h2>
+
+    <p>The other six issues of this book translate the AI hardware world for you. This one is different. This one is about your industry, and possibly your employer. So instead of the usual "your world &harr; AI world" table, here is the uncomfortable mapping you actually need.</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 38%;">What SaaS sells today</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">What an agent does to it</th>
+      </tr>
+      <tr><td style="padding:8px; vertical-align:top;">A UI for a repeatable workflow (CRM forms, ticketing screens, dashboards)</td><td style="padding:8px;">The agent doesn&rsquo;t need the UI. It queries the database, applies the logic, and produces the output directly. The UI was built for human hands and eyes.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Per-seat licenses (you pay per human who logs in)</td><td style="padding:8px;">When an agent does the clicking, "seats" stop mapping to value. One human supervising ten agents breaks the pricing model.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Integration complexity as a moat (Slack&harr;Jira took years to wire)</td><td style="padding:8px;">MCP and agent-to-API access make integration close to trivial. The wiring was the moat; the moat is dissolving.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Workflow lock-in (your team learned <em>our</em> way of doing it)</td><td style="padding:8px;">The agent doesn&rsquo;t need to learn a UI. It reads the data and the goal. Workflow familiarity stops being switching-cost friction.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Data lock-in (your data is trapped in our schema)</td><td style="padding:8px;">Agents migrate data between systems at a fraction of the old cost. The trapped data is less trapped.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">~75% gross margin on crystallized workflow software</td><td style="padding:8px;">Analysts call that margin "a huge opportunity" &mdash; meaning a target. High-margin repeatable information processing is exactly what agents are cheapest at.</td></tr>
+    </table>
+
+    <p>The thesis, stated directly: <em>SaaS itself is just crystallized information processing of workflows into code.</em> If an agent can do information processing, it can do what a SaaS product does &mdash; without the UI, without the seat license, without the integration project.</p>
+
+    <p>Three things to hold in your head, honestly:</p>
+    <ul>
+      <li><strong>This is an argument, not a settled fact.</strong> It is a strong directional call. As of early 2026 the moats are eroding at the margins &mdash; not collapsed. The erosion is real and directional; the timeline is genuinely uncertain.</li>
+      <li><strong>The threat is uneven.</strong> Software that is "a UI wrapped around a multi-industry workflow built for humans" is most exposed. Software that owns proprietary data, carries regulatory weight, or is the system of record is far less exposed. Where your product sits on that spectrum is the whole game.</li>
+      <li><strong>The opportunity is real too.</strong> The same forces that threaten the UI-wrapper part of SaaS create demand for agent-addressable systems of record, proprietary data products, and accountability layers. The end of one model is the start of another. This is the part most "SaaS is dead" takes skip.</li>
+    </ul>
+
+    <h2>The universal loop: READ, THINK, WRITE, VERIFY</h2>
+
+    <p>The central idea worth committing to memory. Almost every information-work job &mdash; coding, financial analysis, legal review, consulting, customer support, research &mdash; runs the same four-step loop:</p>
+
+    <ol>
+      <li><strong>READ</strong> &mdash; ingest unstructured information (a codebase, a spreadsheet, a stack of filings, a customer ticket).</li>
+      <li><strong>THINK</strong> &mdash; apply domain knowledge to that information.</li>
+      <li><strong>WRITE</strong> &mdash; produce structured output (code, a model, a memo, a resolution).</li>
+      <li><strong>VERIFY</strong> &mdash; check the output against a standard (tests, rules, precedent, a rubric).</li>
+    </ol>
+
+    <p>Claude Code proved this loop works for software. The argument is that the loop is <em>substrate-independent</em> &mdash; it&rsquo;s the same loop whether the domain is code, contracts, or quarterly forecasts. There are ~1 billion information workers globally (roughly one-third of the 3.6B workforce), inside a ~$15 trillion information-work economy. Coding is the beachhead. The economy is the destination.</p>
+
+    <p><strong>For a SaaS PM, the practical use of this loop</strong> is as a diagnostic. Take any feature in your product. Ask: which of READ / THINK / WRITE / VERIFY does it do for the user? If your feature mostly does READ and WRITE (move data, reformat it, display it), an agent does that natively and your feature is exposed. If your feature&rsquo;s value is in THINK (proprietary domain logic the agent doesn&rsquo;t have) or VERIFY (an authoritative standard only you hold), it&rsquo;s far more defensible. Run every feature through this test.</p>
+
+    <h2>The task-horizon curve: why the pie keeps growing</h2>
+
+    <p>The single most important chart in the AI-disruption argument is the <strong>task-horizon curve</strong> from METR. It measures: how long a task can an agent work on autonomously before it fails?</p>
+
+    <p>METR&rsquo;s data shows autonomous task horizons <strong>doubling every 4-7 months</strong> &mdash; and accelerating to roughly every 4 months in 2024-2025. Each doubling unlocks a new tier of work:</p>
+    <ul>
+      <li>At a <strong>30-minute</strong> horizon, an agent can auto-complete code snippets.</li>
+      <li>At a <strong>~5-hour</strong> horizon, it can refactor a whole module.</li>
+      <li>At a <strong>multi-day</strong> horizon, it can run an entire audit.</li>
+    </ul>
+
+    <p>This is the mechanism behind "the pie keeps growing." Every doubling of task horizon makes a new category of longer, more valuable work automatable. A SaaS PM should treat the task-horizon curve the way a 2010 PM treated the smartphone-penetration curve: it&rsquo;s the clock your roadmap runs against. Features that are safe at a 1-hour horizon are exposed at an 8-hour horizon, which arrives in roughly a year.</p>
+
+    <p>One important counter-current, supported by Anthropic&rsquo;s own research: <strong>models become less coherent the longer they run.</strong> Reasoning quality degrades over very long horizons. So the curve is real but not infinite &mdash; which is exactly why token efficiency (below) matters so much.</p>
+
+    <h2>The three SaaS moats, and why they&rsquo;re eroding</h2>
+
+    <p>There are three classic moats of enterprise SaaS, and each is being eroded at the margins:</p>
+
+    <p><strong>1. Data lock-in.</strong> The traditional moat: your data lives in our schema, and getting it out is painful and expensive. The erosion: agents migrate data between systems at dramatically lower cost. The "switching cost" of extracting and re-mapping data &mdash; once measured in a multi-quarter migration project &mdash; drops when an agent can do the extraction and transformation.</p>
+
+    <p><strong>2. Workflow lock-in.</strong> The traditional moat: your team has learned our UI, our way of doing things; retraining on a competitor is costly. The erosion: an agent doesn&rsquo;t learn a UI. It reads the data and the objective. Workflow familiarity stops being a switching cost when the human is no longer the one navigating the workflow.</p>
+
+    <p><strong>3. Integration complexity.</strong> The traditional moat: wiring our product into your stack (Slack to Jira to Salesforce) took a long, expensive integration project, and once wired, you don&rsquo;t want to rewire. The erosion: MCP and agent-to-API access make integration close to trivial. The connective-tissue work that used to take a quarter of professional-services time becomes a configuration step.</p>
+
+    <p>The ~75% gross margin of enterprise SaaS is best read not as a sign of strength but as a target: to an agent builder, a 75% margin on repeatable workflow software looks like a huge opportunity. High margins on repeatable, crystallized workflow software are exactly the profit pool an agent can compete for.</p>
+
+    <p><strong>The honest caveat:</strong> the moats are eroded only partially, and at the margins, as of early 2026. A system of record holding years of regulated, proprietary data with deep operational entanglement is not migrating next quarter. But the <em>direction</em> is unambiguous, and the direction is what a roadmap has to be built against.</p>
+
+    <h2>The seat-based pricing collapse</h2>
+
+    <p>The clearest near-term casualty is <strong>seat-based pricing.</strong></p>
+
+    <p>The seat model assumes a stable mapping: one human, one login, one unit of value, one unit of price. That mapping holds only while humans are the ones doing the clicking. When one human supervises ten agents that each do the work of a former seat-holder, the customer&rsquo;s "seat count" collapses while their actual usage explodes. The vendor&rsquo;s revenue, tied to seats, falls even as value delivered rises.</p>
+
+    <p>The canonical example is Microsoft Office 365 &mdash; "the definition of human-clickable buttons." Microsoft is caught in a documented bind (covered in depth in <a href="108-sd-05-microsoft-pause.html">Issue 5</a>): it must invest in Copilot to defend Office 365&rsquo;s relevance, while its own Azure business rents GPUs to Anthropic and OpenAI &mdash; renting GPUs to the barbarians who will ruin its castle in productivity software. Notably, <em>Claude for Excel</em> is, arguably, what Copilot for Excel should have been &mdash; launched by an outside party on top of Microsoft&rsquo;s own product.</p>
+
+    <p><strong>For a SaaS PM, the pricing implication is direct.</strong> If your product is priced per seat, model what happens when your customer&rsquo;s effective seat count drops 40% because agents absorb the work &mdash; while the actual workload your system handles triples. Your revenue falls; your costs rise. Seat-based pricing in an agentic world is a structural short position on your own product. The repricing toward consumption, outcomes, or value-delivered is not optional; it&rsquo;s a survival question, and the vendors who do it deliberately and early will do it on their own terms.</p>
+
+    <h2>Why Anthropic is winning: token efficiency, not benchmarks</h2>
+
+    <p>A puzzle worth sitting with: by raw benchmark scores (SWE-bench, MMLU-Pro, AIME), GPT-5.2 High and Opus 4.5 were roughly comparable in early 2026 &mdash; in some metrics GPT was ahead. Yet Claude Code dominated agentic coding. Why?</p>
+
+    <p>The answer: <strong>token efficiency.</strong> Opus 4.5 accomplishes a task using far fewer tokens than GPT-5.2 High. This matters enormously for long-horizon agentic work, and the reason is compounding:</p>
+
+    <ul>
+      <li>A long-horizon task is many steps chained across multiple context windows.</li>
+      <li>Each step has some error rate. Errors compound across steps.</li>
+      <li>A model that uses 10x more tokens to do the same task injects 10x more opportunities for noise &mdash; and that noise compounds into long-horizon task failure.</li>
+      <li>Anthropic appears to have deliberately optimized for the cleanest signal-to-noise ratio per token, not the highest benchmark score.</li>
+    </ul>
+
+    <p>This connects to Anthropic&rsquo;s own published research finding: <em>"the longer models spend reasoning and taking actions, the more incoherent they become."</em> A model that needs fewer tokens to reach the answer spends less time in the incoherence-accumulating zone.</p>
+
+    <p><strong>The SaaS-PM lesson</strong> generalizes well beyond model selection. The thing that wins agentic work is not the highest peak capability &mdash; it&rsquo;s the cleanest, most efficient path to a correct result, sustained over a long horizon. When you spec an AI feature, optimize for "fewest steps, cleanest signal, most coherent over a long task," not "highest benchmark number." The benchmark-leading model can be the wrong choice. (This is also the cost-per-task point from <a href="107-sd-04-coding-agents-the-harness-is-the-product.html">Issue 4</a>.)</p>
+
+    <h2>Agent orchestration is the new chain-of-thought</h2>
+
+    <p>The final forward-looking idea. 2025&rsquo;s capability unlock was reasoning / chain-of-thought. 2026&rsquo;s unlock is <strong>agent orchestration</strong> &mdash; coordinating many agents, sub-agents, tools, memory, and verification loops into a single outcome.</p>
+
+    <p>They point to Kimi 2.5 from Moonshot AI, which open-sourced almost everything <em>except</em> its agent orchestration layer (PARL &mdash; Parallel Agent Reinforcement Learning). The orchestration layer is the new secret sauce. Anthropic&rsquo;s rumored Sonnet 5 is described as oriented toward agent swarms.</p>
+
+    <p>The "model is the new TCP/IP" analogy ties it together. TCP/IP was a foundational protocol, and there was real competition to it in the 1980s (OSI, IBM SNA, Novell IPX/SPX). Today nobody thinks about TCP/IP &mdash; the value moved entirely to what was <em>built on top</em>. The argument: the LLM is becoming the same &mdash; a foundational layer whose individual quality matters less and less, while the orchestration built on top captures the value.</p>
+
+    <p><strong>For a SaaS PM, the implication is a strategic relief and a warning at once.</strong> Relief: you do not need to own a frontier model to build a valuable agentic product &mdash; the value is in orchestration, and orchestration is buildable. Warning: orchestration is also where the model labs are heading with their own first-party products (Claude Code, Cowork). The orchestration layer is contested ground, not open ground.</p>
+
+    <h2>What this means for you, as a SaaS PM &mdash; honestly</h2>
+
+    <p>Most "AI disrupts SaaS" commentary ends in either denial ("it&rsquo;ll sell more software!") or doom ("software is dead"). Both are lazy. Here is the honest middle.</p>
+
+    <p><strong>What is genuinely exposed:</strong></p>
+    <ul>
+      <li>Products whose core value is a UI wrapped around a generic, multi-industry, human-operated workflow.</li>
+      <li>Seat-based pricing on any product where agents will do the work humans used to do.</li>
+      <li>Features whose value is READ + WRITE (move data, reformat it, display it) with little proprietary THINK or VERIFY.</li>
+      <li>Integration / connectivity products whose moat was the difficulty of wiring systems together.</li>
+    </ul>
+
+    <p><strong>What is genuinely defensible &mdash; and worth investing in:</strong></p>
+    <ul>
+      <li><strong>System-of-record status.</strong> Being the authoritative source of a domain&rsquo;s data. Agents need a source of truth; the system that <em>is</em> the source of truth is in a strong position &mdash; if it&rsquo;s agent-addressable.</li>
+      <li><strong>Proprietary data and proprietary domain logic.</strong> The THINK step the agent can&rsquo;t do without you. Data the agent can&rsquo;t get elsewhere. This is the durable moat.</li>
+      <li><strong>Accountability and trust.</strong> Regulated industries, compliance-bound workflows, decisions that need an accountable owner. An agent can draft; someone still has to be answerable. Owning the accountability layer is defensible.</li>
+      <li><strong>Being agent-native.</strong> If agents are the new primary users of your system, the product that serves agents well &mdash; clean APIs, MCP endpoints, machine-readable everything &mdash; wins the agent traffic. The parity principle: anything a human can do in your UI, an agent should be able to do through your API.</li>
+    </ul>
+
+    <p>The strategic move is to migrate your product&rsquo;s center of gravity from the exposed list to the defensible list &mdash; deliberately, before the market forces it. The harsh closing line of the argument: <em>do not believe anyone who tells you this is good for software companies who will simply sell more software. Radio over the internet is not a thing.</em> The point isn&rsquo;t that software dies. It&rsquo;s that the <em>old shape</em> of software &mdash; the human-operated UI sold by the seat &mdash; is the radio, and the internet is coming.</p>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Six concrete actions.</p>
+
+    <ol>
+      <li>
+        <strong>Run every feature through the READ / THINK / WRITE / VERIFY test.</strong>
+        For each feature in your product, score which steps it does and how much proprietary value sits in each. Features that are mostly READ + WRITE with generic THINK are your exposed surface. Features with proprietary THINK or authoritative VERIFY are your defensible core. Build the inventory. Share it with your leadership. <em>Why this matters: most product roadmaps still allocate investment by usage or revenue. In an agentic world, you should also allocate by defensibility &mdash; and you can&rsquo;t do that without the inventory.</em>
+      </li>
+      <li>
+        <strong>Model the seat-based pricing collapse explicitly.</strong>
+        Build the scenario: customer effective seat count drops 30-50% as agents absorb work, while system workload doubles or triples. What happens to your revenue? If the answer is "it falls," you have a repricing project, and it&rsquo;s urgent. Start the consumption / outcome / value-based pricing design now, on your terms, before a competitor or a churn wave forces it. <em>Why this matters: repricing a whole customer base is a multi-year change-management effort. The vendors who start in 2026 will finish before the vendors who start in 2028 have begun.</em>
+      </li>
+      <li>
+        <strong>Make your product agent-addressable &mdash; treat agents as a first-class user.</strong>
+        Audit: can an agent do, through your API / MCP endpoints, everything a human can do in your UI? If not, that gap is your exposure. Anything human-only in the UI is a workflow an agent will route around &mdash; possibly to a competitor that <em>is</em> agent-addressable. The parity principle (UI action = API action) should become a product requirement, not a nice-to-have. <em>Why this matters: when agents become the primary users, the product that serves them best wins the traffic. Being agent-hostile is the new being mobile-hostile in 2010.</em>
+      </li>
+      <li>
+        <strong>Identify and double down on your proprietary data and domain logic.</strong>
+        The durable moat is the THINK the agent can&rsquo;t do without you and the data it can&rsquo;t get elsewhere. Find those assets in your product. Invest in them. Make them harder to replicate, not easier to export. If you can&rsquo;t name a proprietary data or logic asset, that is itself the most important finding &mdash; and the most urgent gap. <em>Why this matters: in an agentic world, the moat is no longer the UI or the integration. It&rsquo;s the irreplaceable input. If you don&rsquo;t have one, the strategic priority is building one.</em>
+      </li>
+      <li>
+        <strong>Track the task-horizon curve as your roadmap clock.</strong>
+        METR&rsquo;s autonomous-task-horizon doubles every 4-7 months. Map your features against it: which features are safe at today&rsquo;s horizon but exposed at 2x, at 4x? A feature safe at a 1-hour agent horizon is exposed at an 8-hour horizon &mdash; roughly a year away. Plan the defensible-side migration to land before the horizon reaches your exposed features. <em>Why this matters: most roadmaps run on a quarterly clock. The disruption runs on the task-horizon clock. If your roadmap clock is slower than the horizon clock, you ship your defenses late.</em>
+      </li>
+      <li>
+        <strong>Decide whether you&rsquo;re building the orchestration layer or being orchestrated by it.</strong>
+        Agent orchestration is the contested high ground. Either your product becomes part of how agents accomplish multi-step outcomes (a tool agents call, a step in the loop), or it becomes a thing agents route around. Pick deliberately. "Be a great tool in someone else&rsquo;s agentic workflow" is a viable, defensible strategy &mdash; if you choose it on purpose and build for it. Drifting into it is not. <em>Why this matters: the model labs (Claude Code, Cowork) are building first-party orchestration. You won&rsquo;t out-orchestrate them on general computing. You can win as an irreplaceable tool inside the orchestration &mdash; but only if you design for that role.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>Claude Code matters far beyond coding. It is the existence proof that the universal information-work loop &mdash; READ, THINK, WRITE, VERIFY &mdash; can be run by an agent. That loop is the thing SaaS crystallized into UIs and sold by the seat. The argument, made in early 2026 and borne out by the issues that followed it, is that the old shape of SaaS is exposed: the human-operated UI, the seat license, the integration-complexity moat, the generic multi-industry workflow.</p>
+
+    <p>The argument is directional and the timeline is uncertain &mdash; the moats are eroding at the margins, not collapsed. But the direction is not in serious doubt, and a roadmap has to be built against the direction.</p>
+
+    <p>The constructive read, the one most commentary skips: the same forces that threaten the UI-wrapper layer create real demand for agent-addressable systems of record, proprietary data products, accountability layers, and great tools inside agentic orchestration. Software is not dying. The <em>shape</em> of software is changing, and the change rewards the products that own irreplaceable inputs and serve agents as first-class users.</p>
+
+    <p>For a SaaS PM the work is concrete and it starts now: inventory your features by the READ/THINK/WRITE/VERIFY test, model the seat-pricing collapse, make your product agent-addressable, double down on proprietary THINK and VERIFY, run your roadmap on the task-horizon clock, and decide deliberately where you sit in the orchestration. The companies that do this in 2026 get to do it on their own terms. The ones that wait will do it under duress.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="109-sd-06-gpu-cluster-tco.html">&larr; Why the Cheapest GPU Cluster Isn&rsquo;t the Cheapest</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

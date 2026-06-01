@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EDA: The Software Industry That Builds Every Chip</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~3,800 words &middot; ~18 min read &middot; for SaaS PMs new to the chip-design world</div>
+    <h1>EDA: The Software Industry That Builds Every Chip</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 2 &mdash; the software industry that designs every chip</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> Three companies you have probably never heard of &mdash; Synopsys, Cadence, and Siemens EDA &mdash; write the software that turns "we want a chip that does X" into actual manufacturable silicon. They are the AWS / Azure / GCP of chip design. Their tools are why a $30M tapeout doesn&rsquo;t end an engineering team&rsquo;s career, why a 2-year chip cycle isn&rsquo;t a 10-year chip cycle, and why every AI chip generation arrives roughly when it does. This is what their world looks like, and why a SaaS PM should care.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="111-fd-01-the-physical-stack.html">The Physical Stack</a> &mdash; <strong>the keystone.</strong> Transistors, wafers, dies, process nodes, tape-out, yield &mdash; EDA is the software that designs all of it. Read this one closely.</li>
+        <li><a href="113-fd-03-compute-and-precision.html">Compute &amp; Precision</a> &mdash; a light touch: what the chips being designed actually do (GPU, ASIC, FLOPs).</li>
+        <li><a href="115-fd-05-connecting-chips.html">Connecting Chips</a> &mdash; advanced packaging, for the chip-and-system co-design (DTCO/STCO) the article covers.</li>
+      </ol>
+      <div class="buildup-foot">New here? Climb the ladder first. Fluent already? Skim, and hover any underlined term as you read.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>AI demand pushed chip complexity to roughly 50% growth per year, while design productivity is only improving at about 20% per year. The latest AMD MI455X packs 320 billion transistors across 12 dies, fabricated on 2nm and 3nm processes, with HBM4 memory and 224G SerDes. Designing something like that is not a "hire more engineers" problem &mdash; the engineering talent isn&rsquo;t there. One-third of the US semiconductor workforce is over 55. EE graduates aren&rsquo;t entering the field fast enough to replace them. Apple is now funding education programs to widen the pipeline, and even that barely moves the needle.</p>
+
+    <p>The bottleneck on faster, bigger, better chips is no longer physics or lithography alone. It is the <em>software</em> that designs chips, and the engineers who use it. That software is called EDA &mdash; Electronic Design Automation &mdash; and it is the most consequential ~$15B software industry that almost nobody outside chip design has heard of.</p>
+
+    <p>Without EDA, no chip designed since the mid-1980s would exist.</p>
+
+    <h2>Quick translation: what EDA looks like to a SaaS PM</h2>
+
+    <p>If you build software, the chip-design world rhymes with what you already know &mdash; just with $30M deploys and 2-year release cycles.</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 32%;">Your SaaS world</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">The chip-design world</th>
+      </tr>
+      <tr><td style="padding:8px; vertical-align:top;">Source code</td><td style="padding:8px;"><strong>RTL</strong> (Register Transfer Level). Written in SystemVerilog. Describes what every register, mux, and state machine in the chip does on every clock cycle.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Compiler (gcc, rustc, tsc)</td><td style="padding:8px;"><strong>Synthesis tool.</strong> Turns RTL into a gate-level netlist &mdash; the actual logic gates that get printed on silicon. Industry standard: Synopsys Design Compiler.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Linter (ESLint, pylint)</td><td style="padding:8px;"><strong>RTL linting.</strong> Catches coding mistakes and race conditions before simulation. Synopsys VC SpyGlass dominates.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Unit tests + integration tests + QA</td><td style="padding:8px;"><strong>Verification.</strong> Simulates the chip in software, runs billions of test cases. Consumes ~70% of total project effort. Three tools: VCS (Synopsys), Xcelium (Cadence), Questa (Siemens).</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">CI/CD pipeline</td><td style="padding:8px;"><strong>Place-and-route tools.</strong> IC Compiler II (Synopsys) and Innovus (Cadence) turn the netlist into a physical layout the foundry can actually print.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Production deploy</td><td style="padding:8px;"><strong>Tapeout.</strong> The final layout file (GDSII) is sent to TSMC / Samsung / Intel. Mask set + first wafers cost $20M&ndash;$50M. Wait 8&ndash;12 weeks for first silicon.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Production hotfix</td><td style="padding:8px;"><strong>Respin.</strong> A new mask set, $10M&ndash;$30M each time, plus 3 months added to schedule. Most chips need 2&ndash;4 respins before volume production. A0 silicon (the first version back from the fab) rarely ships.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">SDK / API docs</td><td style="padding:8px;"><strong>PDK</strong> (Process Design Kit). The foundry&rsquo;s package of files, models, and rules that translates "what TSMC&rsquo;s N2 process can manufacture" into terms EDA tools can use. NDA-protected. Access is tiered by relationship.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Open source libraries (npm, PyPI)</td><td style="padding:8px;"><strong>IP licensing.</strong> 70&ndash;80% of a modern chip is pre-designed blocks bought from ARM (CPU cores), Synopsys DesignWare (PCIe, DDR, USB), and others. You almost never design a PCIe controller from scratch.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">AWS / Azure / GCP</td><td style="padding:8px;"><strong>The Big Three of EDA.</strong> Synopsys, Cadence, Siemens EDA. Every chip taped out today uses tools from at least two of them.</td></tr>
+    </table>
+
+    <p>Three things worth holding in your head before going further:</p>
+    <ul>
+      <li><strong>Every "deploy" costs tens of millions of dollars and takes months.</strong> This is why verification matters so much, and why the EDA industry exists at all.</li>
+      <li><strong>The tooling vendor controls the workflow.</strong> The Big Three don&rsquo;t just sell tools &mdash; they sell the methodology, the file formats, and the integrations. Switching vendors mid-project is a multi-quarter, multi-million-dollar move.</li>
+      <li><strong>This is the actual gating function on AI chip cadence.</strong> When you read "Nvidia&rsquo;s Rubin slips by six months" or "AMD MI455X taped out," you are reading the output of an EDA pipeline. The pace of AI infrastructure is the pace of this software industry.</li>
+    </ul>
+
+    <h2>The Big Three</h2>
+
+    <p>The EDA industry is effectively a duopoly-plus-one. Three companies own essentially every chip designed today.</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">Company</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">Founded</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">Strongest in</th>
+      </tr>
+      <tr><td style="padding:8px;"><strong>Synopsys</strong></td><td style="padding:8px;">1986 (Aart de Geus, ex-GE)</td><td style="padding:8px;">Logic synthesis (Design Compiler invented the category in 1987), verification (VCS), physical design (IC Compiler II), and the device-physics simulator Sentaurus. Market leader.</td></tr>
+      <tr><td style="padding:8px;"><strong>Cadence</strong></td><td style="padding:8px;">1988 (SDA + ECAD merger)</td><td style="padding:8px;">Place-and-route (Innovus), simulation (Xcelium), formal verification (JasperGold), and emulation hardware (Palladium).</td></tr>
+      <tr><td style="padding:8px;"><strong>Siemens EDA</strong></td><td style="padding:8px;">2017 (Siemens acquired Mentor Graphics for $4.5B)</td><td style="padding:8px;">Verification (Questa), signoff and physical verification (Calibre &mdash; the industry-standard DRC/LVS tool).</td></tr>
+    </table>
+
+    <p><strong>Why this is a near-perfect oligopoly.</strong> Each company owns specific stages of the chip-design flow with tools that have decades of institutional knowledge baked in. Switching from Design Compiler to Genus mid-project means retraining your synthesis team, rewriting your scripts, and re-running months of optimization. The lock-in is closer to enterprise ERP than to typical SaaS &mdash; the cost of switching is measured in quarters of lost productivity, not migration fees.</p>
+
+    <p><strong>The implication for SaaS PMs:</strong> EDA is the cleanest example of a "workflow monopoly" still operating in tech. The Big Three&rsquo;s combined revenue is ~$15B and growing &gt;10% annually with no real new entrants in 40 years. If you sell developer tools or workflow software, the EDA business model (deep workflow integration, decades-long contracts, customer-specific tuning) is the upper bound of what enterprise lock-in looks like.</p>
+
+    <h2>The chip-design waterfall, compressed</h2>
+
+    <p>There are 13 formal stages from idea to volume production. For a SaaS PM, six matter:</p>
+
+    <ol>
+      <li><strong>Planning + architecture (months 0&ndash;3).</strong> What is this chip for? What&rsquo;s the area / power / performance budget? What are the cache hierarchies and bus widths? PPACt &mdash; Performance, Power, Area, Cost, Time-to-market &mdash; is the optimization function. Being late by a year usually kills a project.</li>
+      <li><strong>RTL design (months 3&ndash;12).</strong> Engineers write SystemVerilog code that describes every register, every state machine. Roughly 20&ndash;30% of this is custom; the rest is licensed IP (ARM cores, Synopsys DesignWare blocks for PCIe / DDR / USB). This is where the design lives as code.</li>
+      <li><strong>Verification (months 6&ndash;18, in parallel with RTL).</strong> Prove the design works for billions of input combinations. Eats ~70% of total engineering effort. Two complementary approaches: UVM-based simulation (run a testbench, observe outputs) and formal verification (mathematically prove specific properties always hold). <a href="105-sd-02-eda-the-software-behind-every-chip.html#verification">More on why this dominates</a> below.</li>
+      <li><strong>Physical design (months 12&ndash;20).</strong> Take the RTL, synthesize it into a gate-level netlist, then place those gates on physical silicon and route the wires between them. Optimize for timing, area, power. This is where the chip becomes a physical object.</li>
+      <li><strong>Signoff + tapeout (month ~20).</strong> Run final checks: DRC (design rule check &mdash; does the layout obey TSMC&rsquo;s manufacturing rules?), LVS (does the layout match the intended circuit?), STA (does every signal arrive on time?), power signoff. Then export GDSII, send to the foundry. This is the "production deploy" moment.</li>
+      <li><strong>Fabrication + validation (months 20&ndash;24+).</strong> Wait 8&ndash;12 weeks for first silicon. Real chips come back. Test them, find errata, fix them via Engineering Change Orders, do a respin if needed. Multiple steppings (A0 &rarr; A1 &rarr; B0 &rarr; ...) until you have a qualification sample. Then ramp to volume.</li>
+    </ol>
+
+    <p><strong>Why this matters.</strong> The 2-year cycle from idea to volume production isn&rsquo;t a marketing artifact &mdash; it&rsquo;s structural. You cannot run RTL design without verification. You cannot do physical design without RTL. You cannot tape out without signoff. Each stage gates the next. AI features that depend on a specific chip (Nvidia&rsquo;s Rubin, AMD&rsquo;s MI455X, OpenAI&rsquo;s rumored custom silicon) won&rsquo;t arrive faster than the waterfall allows, no matter how much money is thrown at it.</p>
+
+    <p><strong>The exception that&rsquo;s emerging:</strong> EDA vendors are now selling "unified flows" &mdash; Synopsys Fusion Compiler and Cadence iSpatial &mdash; that collapse synthesis, place-and-route, and timing analysis into one engine. The promise is the same as DevOps "shift left" in SaaS: catch problems early, in one tool, instead of bouncing between teams. The chip industry calls this "Shift Left." Same idea, much larger stakes.</p>
+
+    <h2 id="verification">Why verification eats 70% of the effort</h2>
+
+    <p>This is the core economic asymmetry of chip design. Walk through what a bug costs at each stage:</p>
+
+    <ul>
+      <li><strong>Bug found while writing RTL:</strong> a few hours. The engineer reads the warning from the linter and fixes the code. This is the SaaS-equivalent of catching a typo in code review.</li>
+      <li><strong>Bug found during verification:</strong> days to weeks. The verification team writes a targeted test, the design team patches the RTL, equivalence checking confirms the fix didn&rsquo;t break anything else. Costly but recoverable.</li>
+      <li><strong>Bug found post-tapeout, in first silicon:</strong> $10M&ndash;$30M for a new mask set, plus 3 months in the fab. Major silicon bugs have ended product lines and contributed to CEO departures (Intel&rsquo;s Pat Gelsinger era was haunted by silicon delays).</li>
+      <li><strong>Bug found in the customer&rsquo;s hands:</strong> recall, lawsuit, reputational damage. AMD&rsquo;s 2024 Sapphire Rapids comparison points and Intel&rsquo;s 13th-gen instability issues are reminders that the cost can extend years past launch.</li>
+    </ul>
+
+    <p>This is why companies hire more verification engineers than designers. The ideal ratio is 1 design engineer to 4 verification engineers; no company actually achieves it. Most run 1:2 or 1:3, and designers end up writing some of their own verification because they know the design best.</p>
+
+    <p><strong>The SaaS-PM translation.</strong> Imagine if every production bug cost $20M and 3 months of schedule. You would suddenly want 4 QA engineers per developer, formal proofs on every critical path, and an obsessive focus on catching things before "deploy." That is exactly what chip design does. The 70% verification share is the rational response to a cost asymmetry that doesn&rsquo;t exist in SaaS.</p>
+
+    <p><strong>Why it&rsquo;s getting worse.</strong> Modern AI accelerators (Nvidia GB300, AMD MI455X, Google TPUv7) have hundreds of billions of transistors and dozens of complex IP blocks that need to interoperate. The combinatorial space of "things that could go wrong" grows faster than the verification team can hire. This is the bottleneck most analysts miss when they project AI chip roadmaps.</p>
+
+    <h2>The talent gap that&rsquo;s getting worse</h2>
+
+    <p>The numbers are stark:</p>
+    <ul>
+      <li>One-third of the US semiconductor workforce is over 55.</li>
+      <li>Chip complexity is growing at ~50% per year. EE graduates entering the workforce are growing at low single digits.</li>
+      <li>Verification engineers are the fastest-growing job category in chip development. The industry still cannot hire them fast enough.</li>
+      <li>Apple&rsquo;s "New Silicon Initiative" funds engineering education programs. Even that barely moves the needle against the manpower curve.</li>
+    </ul>
+
+    <p>The SaaS industry has absorbed most of the high-end engineering talent for two reasons: better salaries (until very recently), and far more flexible working conditions. Designing chips is a "be in the lab, three steppings a year, don&rsquo;t leave for two years" kind of job. Software pays you $400K to work from a coffee shop. The economics don&rsquo;t favor chip design for new graduates.</p>
+
+    <p><strong>The implication.</strong> The "AI is doubling every six months" narrative is partly bottlenecked by a workforce that physically cannot scale to design more chips faster. This is also why <strong>AI inside EDA</strong> &mdash; tools that automate verification, place-and-route, design-space exploration &mdash; is the most consequential development in semiconductors in decades. If AI can do 30% of what a verification engineer does, the bottleneck loosens.</p>
+
+    <h2>What&rsquo;s coming next: AI designing chips</h2>
+
+    <p>Synopsys&rsquo;s <strong>DSO.ai</strong> already accelerates design-space exploration &mdash; the early-stage step where engineers explore "what if we made the cache 2MB bigger / the bus 256 bits wider / the matrix multiplication unit 2x deeper" across thousands of possible configurations. AI is well-suited to this because the reward function (PPA) is clearly measurable, and the search space is huge.</p>
+
+    <p>Nvidia, AMD, and Google have all built internal agentic chip-design flows. AWS deploys 1 million Graviton cores internally to run EDA tools that design future Graviton, Trainium, and Nitro chips. The recursive loop &mdash; using AI accelerators to design future AI accelerators &mdash; is the most exciting (and most strategically important) development in the industry. It is the asymptote-breaker for the talent gap and the design-productivity gap.</p>
+
+    <p><strong>Why this matters for your AI roadmap:</strong> if AI-in-EDA delivers on its promise &mdash; say, halving verification time and doubling design-space exploration speed &mdash; chip generations could compress from 2 years to 14&ndash;18 months. That would feed back into AI feature pace. Faster chips, faster inference cost declines, faster model improvements, faster new product possibilities. The market is currently underpricing this recursive loop.</p>
+
+    <h2>The IP black box, and why it matters</h2>
+
+    <p>70&ndash;80% of a modern chip is licensed IP. ARM provides the CPU cores (the Apple M-series, AWS Graviton, Nvidia Grace are all ARM-licensed). Synopsys DesignWare provides PCIe, DDR, USB, ethernet controllers. Broadcom provides high-speed SerDes IP. Each licensed block is delivered as a <em>black box</em>: the licensee sees the inputs, outputs, and timing requirements, but never the underlying RTL.</p>
+
+    <p>This creates two problems verification engineers deal with constantly:</p>
+    <ol>
+      <li>When a timing bug appears at the boundary of a licensed block, the engineer cannot inspect the internals. They have to either work around it or escalate to the IP vendor, who may take weeks to respond.</li>
+      <li>Compressed design cycles push companies to use IP that hasn&rsquo;t fully signed off yet. The bleeding-edge IP often has subtle bugs that only surface late.</li>
+    </ol>
+
+    <p><strong>Why this matters for SaaS PMs:</strong> the same dynamic exists in any system where you integrate third-party components into a critical workflow. Calendly integrating Zoom&rsquo;s API. Snowflake integrating dbt. Anthropic depending on AWS Trainium. The black-box problem is universal &mdash; chip design just makes it $30M-expensive.</p>
+
+    <h2>Why this matters for your AI roadmap</h2>
+
+    <p>Five specific implications if you build software that runs on or sells to AI infrastructure:</p>
+
+    <ol>
+      <li><strong>Chip release timelines are a leading indicator of your AI roadmap reality.</strong> When Nvidia&rsquo;s next-gen GPU slips by six months, every AI feature that depends on it slips too. When AMD&rsquo;s MI455X tapes out on schedule, you can plan your 2027 cost curves on tighter assumptions. Read chip-launch announcements like you&rsquo;d read AWS region launches in 2014.</li>
+      <li><strong>Verification quality is a silent moat.</strong> A well-verified chip ships fewer respins, hits production faster, and has lower errata. Customers don&rsquo;t see verification quality directly, but they see it as "this generation actually shipped on time and works reliably." Nvidia&rsquo;s execution advantage over the past decade is partly a verification-organization advantage.</li>
+      <li><strong>Synopsys and Cadence stock prices are a real-time read on AI infrastructure spend.</strong> If you want a clean signal on whether AI capex is sustainable, watch EDA revenue. These companies bill upfront for tool licenses tied to active chip programs. A slowdown shows up in their bookings before it shows up in Nvidia&rsquo;s revenue.</li>
+      <li><strong>"Time to silicon" is the new "time to market" for AI infrastructure.</strong> The competitive question used to be "can you ship the feature in 3 months?" For AI infra, it&rsquo;s "can you tape out the chip 6 months before the competitor?" Companies designing custom silicon (Amazon Trainium, Google TPU, Microsoft Maia, OpenAI rumored custom chips) all live or die by this metric.</li>
+      <li><strong>The AI-in-EDA loop could compress everything.</strong> If Synopsys DSO.ai or Cadence&rsquo;s equivalent halves chip-design time by 2027, we get AI hardware generations every 14 months instead of every 24. Every cost curve, every capability projection, every "by 2030" forecast bends. Most public roadmap projections do not yet price this in.</li>
+    </ol>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Five concrete things to do differently.</p>
+
+    <ol>
+      <li>
+        <strong>Add chip-cycle math to your AI-feature roadmap.</strong>
+        If your feature depends on capabilities that need new hardware (longer context, lower latency, multimodal at scale), the gating function is a 2-year chip cycle, not a 6-month feature cycle. Build your roadmap with the right clock. <em>Why this matters: most SaaS roadmaps assume capability grows monotonically. The chip cycle is the actual constraint, and it lumpy &mdash; capabilities arrive in discrete steps tied to chip launches.</em>
+      </li>
+      <li>
+        <strong>Treat your AI vendor&rsquo;s chip supplier as a dependency you must understand.</strong>
+        Anthropic depends on AWS Trainium. OpenAI depends on Nvidia (and increasingly Cerebras). Google depends on TPU. When Trainium has a verification issue, Anthropic has a capacity issue, and your product has a latency issue. Knowing the supplier chain protects you from being surprised. <em>Why this matters: AI vendor outages and degradations often trace back to specific chip issues. Reading the chip news gives you a 60-day lead time on vendor problems.</em>
+      </li>
+      <li>
+        <strong>Track Synopsys and Cadence earnings like you track AWS earnings.</strong>
+        Their backlog and bookings are a cleaner read on AI capex sustainability than any AI lab&rsquo;s press release. If Synopsys reports flat bookings, the underlying chip pipeline is slowing. If they raise guidance, more chips are being designed, which means more AI infrastructure is coming. <em>Why this matters: AI vendors&rsquo; own forecasts are increasingly marketing. EDA bookings are accounting.</em>
+      </li>
+      <li>
+        <strong>Watch for "AI-in-EDA" pilots from your customers or your competitors.</strong>
+        If you sell developer tools, workflow software, or anything where the user is doing rule-heavy structured work, the EDA industry&rsquo;s move toward AI assistance is a forward indicator of where your category is going. The chip industry has higher stakes per decision, so they&rsquo;ll figure out the right human-AI workflow patterns before most other industries do. Steal them. <em>Why this matters: chip design is a fast-mover on AI-augmented expert workflows because the cost of bugs justifies aggressive experimentation. Watch them; copy what works.</em>
+      </li>
+      <li>
+        <strong>If you build infrastructure software, study the EDA business model.</strong>
+        Synopsys and Cadence have demonstrated that workflow-deep enterprise software with high switching costs can sustain &gt;10% revenue growth for 40 years against essentially no new entrants. This is the playbook for any "operating system for [expert workflow X]" company. The structure works in chip design because the stakes are so high. Find an industry where stakes are similar (defense, pharma, healthcare imaging) and the model travels. <em>Why this matters: the EDA business model is the upper bound of enterprise software defensibility. If you can replicate even half of it in your category, you have a generational business.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>EDA is the most consequential software industry you have probably never thought about. Three companies own it. Their tools make every chip in every device you use possible. Their bookings are a leading indicator of AI infrastructure spend. Their move toward AI-augmented design is the most likely path to breaking the chip-cycle bottleneck that currently caps how fast AI capabilities can grow.</p>
+
+    <p>The 2-year clock from "idea for a chip" to "chip in your laptop" is set by this software. If that clock compresses, every downstream AI forecast bends faster. If it doesn&rsquo;t, the limits on AI feature pace are baked in, no matter how much capex flows.</p>
+
+    <p>Two threads deserve their own deep dives: the business of EDA &mdash; revenue models, the Chinese EDA effort, customer-owned tooling for hyperscaler ASICs &mdash; and how AI is reshaping chip design from the inside.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="104-sd-01-cerebras-the-wafer-bet.html">&larr; Cerebras and the $24B Wafer Bet</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

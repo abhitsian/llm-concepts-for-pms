@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Microsoft Lost the AI Race (and Is Scrambling Back)</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~4,000 words &middot; ~19 min read &middot; for SaaS PMs studying how a $3T company misread a step-change market</div>
+    <h1>How Microsoft Lost the AI Race (and Is Scrambling Back)</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 5 &mdash; how Microsoft lost the AI race</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> Microsoft was the AI leader in 2023-24, having built the largest datacenters in human history for OpenAI. In mid-2024, they hit the brakes, pausing 3.5+ GW of planned capacity. Oracle stepped in and took the $100B OpenAI Stargate contract that Microsoft expected to win &mdash; costing Microsoft an estimated $150B in gross profits over five years. Now Microsoft is scrambling back, renting GPUs from neoclouds at compressed margins, building vertical integration across apps, models, chips, and platforms. Their saving grace is contractual: <strong>they retain rights to 100% of OpenAI API inference revenue through 2032.</strong> For SaaS PMs, this is the cleanest available case study of how a dominant incumbent loses a market by being one quarter too cautious during a step change &mdash; and what it costs to come back.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="113-fd-03-compute-and-precision.html">Compute &amp; Precision</a> &mdash; what an ASIC is, for the Maia custom-chip story.</li>
+        <li><a href="114-fd-04-how-an-llm-runs-on-silicon.html">How an LLM Runs</a> &mdash; training vs inference and tokens, for the "AI Token Factory Stack."</li>
+        <li><a href="115-fd-05-connecting-chips.html">Connecting Chips</a> &mdash; <strong>the keystone.</strong> Datacenters, megawatts, hyperscalers vs neoclouds &mdash; the "Big Pause" is a story about gigawatts of these.</li>
+      </ol>
+      <div class="buildup-foot">New here? Climb the ladder first. Fluent already? Skim, and hover any underlined term as you read.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>Three phases tell the story:</p>
+
+    <ol>
+      <li><strong>2023-24: Pedal to the floor.</strong> Microsoft was the only hyperscaler that fully internalized the "ChatGPT moment." From Q1 2023 to Q2 2024, Microsoft alone accounted for more than 60% of all hyperscaler datacenter pre-leasing in North America. In Q3 2023, Microsoft alone leased nearly as much capacity as the entire North American market did in full-year 2022. They were building OpenAI&rsquo;s training clusters at unprecedented scale (the "Fairwater" facilities at 300MW each &mdash; equivalent to the power consumption of 200,000 households per building).</li>
+      <li><strong>Mid-2024: The Pause.</strong> Microsoft hit the brakes hard. They dropped multi-gigawatt LOIs in Phoenix, Chicago, the UK, the Nordics, Australia, Japan, India, LatAm. They slowed self-build on ~950MW of capacity that would have been built by 2028. Other hyperscalers (Oracle, Meta, Google, Amazon, CoreWeave) stepped into the vacated demand. Microsoft&rsquo;s share of total hyperscaler pre-leased capacity dropped from &gt;60% to &lt;25%.</li>
+      <li><strong>2025-26: The scramble back.</strong> Microsoft realized they had under-built. They re-entered the market aggressively, but capacity takes 18-24 months to bring online. Their tactical answer: rent capacity from neoclouds (CoreWeave, others) and resell it. This is the worst margin profile of any cloud strategy &mdash; paying someone else&rsquo;s gross margin to fulfill your own customer commitments.</li>
+    </ol>
+
+    <p>The cost of the pause: the OpenAI Stargate contract went to Oracle. $420B of contract value over the last 12 months. ~$150B in gross profit dollars over five years. <strong>Microsoft&rsquo;s entire current gross profit run rate is $194B annually.</strong> They effectively let Oracle book the equivalent of 18% of Microsoft&rsquo;s yearly gross profit, recurring.</p>
+
+    <h2>Quick translation: the AI Token Factory Stack</h2>
+
+    <p>The most useful framework in this entire article, and one a SaaS PM should commit to memory. It is best understood as the <strong>AI Token Factory Economics Stack.</strong> Every dollar spent on an AI token flows through six layers, and the gross margin at each layer is up for grabs:</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 18%;">Stack layer</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">What it is, in SaaS terms</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">Current margin profile</th>
+      </tr>
+      <tr><td style="padding:8px;"><strong>Apps</strong></td><td style="padding:8px;">The end-user product. ChatGPT, Claude Code, Microsoft Copilot, Cursor, your AI feature.</td><td style="padding:8px;">Highly variable. Frontier apps with workflow lock-in (Claude Code, Cursor) earning 60-70% GM. Wrappers earning 20-30%.</td></tr>
+      <tr><td style="padding:8px;"><strong>Models</strong></td><td style="padding:8px;">The trained AI itself. Opus 4.7, GPT-5.5, Gemini 3, DeepSeek V4.</td><td style="padding:8px;">60%+ for frontier labs (Anthropic, OpenAI). 30-40% for distilled / smaller models. Open-source models race to zero.</td></tr>
+      <tr><td style="padding:8px;"><strong>PaaS</strong></td><td style="padding:8px;">Managed AI platforms. AWS Bedrock, Azure Foundry, GCP Vertex AI. The "developer cloud" of AI.</td><td style="padding:8px;">50-60% GM at scale, with significant variance based on managed-services attach rates.</td></tr>
+      <tr><td style="padding:8px;"><strong>IaaS</strong></td><td style="padding:8px;">Bare-metal GPU clusters. CoreWeave, Nebius, Oracle, Crusoe.</td><td style="padding:8px;">15-25% project IRRs are typical. Margin compressed when you rent and resell vs. self-build.</td></tr>
+      <tr><td style="padding:8px;"><strong>Chips</strong></td><td style="padding:8px;">The actual GPU / ASIC. Nvidia GPUs, Google TPU, AWS Trainium, Microsoft Maia.</td><td style="padding:8px;"><strong>Nvidia at 75% GM.</strong> Currently the largest margin pool in the stack. Custom ASICs aim to capture this margin internally.</td></tr>
+      <tr><td style="padding:8px;"><strong>System / DC</strong></td><td style="padding:8px;">Power, cooling, networking, real estate. The physical datacenter.</td><td style="padding:8px;">10-15% IRR for the operator. Memory, power, and land are all currently constrained.</td></tr>
+    </table>
+
+    <p><strong>Two implications a SaaS PM should hold in their head:</strong></p>
+    <ul>
+      <li><strong>Every layer&rsquo;s gross margin is a separate strategic decision.</strong> You can run a great app on a great model on someone else&rsquo;s GPUs (Claude on AWS Trainium) and capture app-layer margin. Or you can vertically integrate (Microsoft trying to own apps + models + PaaS + chips) and try to capture all of them. There&rsquo;s no single right answer &mdash; but the cost of being mediocre at three layers is worse than being great at one.</li>
+      <li><strong>The biggest single margin pool is at the chip layer.</strong> Nvidia&rsquo;s 75% gross margin on a $30K GPU is the biggest lump of unclaimed margin in the entire stack. This is why every hyperscaler is trying to build custom chips. It&rsquo;s also why most of them are losing money on those efforts in the short run.</li>
+    </ul>
+
+    <h2>The Big Pause: a $150B "no" that should have been "yes"</h2>
+
+    <p>This is the core strategic mistake, and it&rsquo;s worth understanding in detail because the pattern repeats in every industry going through a step change.</p>
+
+    <p><strong>Microsoft&rsquo;s reasoning for the pause (as best as can be reconstructed):</strong></p>
+    <ol>
+      <li>OpenAI was on track to become &gt;50% of Azure&rsquo;s revenue. Heavy single-customer concentration is bad for any cloud business.</li>
+      <li>The margin profile of bare-metal GPU rental to OpenAI was &mdash; and is &mdash; lower than Azure&rsquo;s historical cloud margin (15-25% project IRR vs. 35-40% blended Microsoft ROIC).</li>
+      <li>OpenAI&rsquo;s demand might not materialize at the projected scale; building 3.5 GW for them was a binary bet.</li>
+      <li>Microsoft might be able to redirect that capacity to higher-margin enterprise workloads.</li>
+    </ol>
+
+    <p>Every one of those points is defensible in isolation. None of them aged well.</p>
+
+    <p><strong>What actually happened:</strong></p>
+    <ul>
+      <li>OpenAI&rsquo;s demand did materialize, and then doubled. They are now signing $100B+ contracts.</li>
+      <li>Oracle (Oracle!) stepped in, took the Stargate deal, and is delivering the Abilene Texas facility on time. Oracle broke ground in May 2024 and was operational by September 2024. Microsoft&rsquo;s parallel Stargate-equivalent in Wisconsin broke ground 2+ years ago and Phase 1 still isn&rsquo;t operational as of late 2025.</li>
+      <li>OpenAI then diversified further, signing contracts with CoreWeave, Nscale, SB Energy, Amazon, and Google. Microsoft&rsquo;s "we&rsquo;ll be OpenAI&rsquo;s sole infrastructure partner" expectation evaporated.</li>
+      <li>Meta&rsquo;s demand exploded, which Microsoft also underestimated. Other hyperscalers booked materially more RPO (remaining performance obligation, i.e. signed contracts) than Microsoft in 2024-25.</li>
+      <li>Microsoft is now <em>renting</em> capacity from neoclouds to fulfill their own AI commitments. They&rsquo;re paying CoreWeave&rsquo;s margin to deliver tokens to their own customers.</li>
+    </ul>
+
+    <p><strong>The SaaS-PM lesson is uncomfortable.</strong> When a market is going through a step change, the "what if demand doesn&rsquo;t materialize" risk is much smaller than the "what if demand materializes elsewhere" risk. Microsoft optimized for the wrong tail. The companies that won the AI infrastructure race &mdash; Oracle, CoreWeave, Crusoe &mdash; were ones willing to over-build into uncertainty. The company that lost &mdash; Microsoft &mdash; tried to be disciplined and got beaten by a 30-year-old database company doing Oracle Cloud Infrastructure.</p>
+
+    <p>The pattern generalizes. Every time a SaaS PM has been told "we can&rsquo;t commit to that scale until we see the revenue," consider that the alternative outcome is "the revenue went to someone else who did commit."</p>
+
+    <h2>Microsoft&rsquo;s scramble back: renting to resell</h2>
+
+    <p>The current situation is rough. Microsoft can&rsquo;t physically build new datacenters fast enough to meet 2026-27 demand. So they are doing what they swore they&rsquo;d never do: <strong>renting bare-metal GPU capacity from neoclouds and reselling it to their own customers.</strong></p>
+
+    <p>The margin math on this is brutal:</p>
+    <ul>
+      <li>Microsoft rents bare-metal compute from a neocloud at, say, $4/hr/GPU (the neocloud earns ~15% IRR).</li>
+      <li>Microsoft resells that compute to an enterprise customer at, say, $5/hr/GPU.</li>
+      <li>Microsoft&rsquo;s gross margin on this transaction is roughly 20% &mdash; vs. their historical Azure cloud margin of 60-70% on workloads they own.</li>
+    </ul>
+
+    <p>One analysis frames it bluntly: <em>Microsoft shunned away building their own datacenters, only to pay margin to neoclouds once they realized they messed up.</em></p>
+
+    <p><strong>The SaaS-PM analog</strong> is the situation a SaaS company finds itself in when it over-discounts a key product, then realizes the discount has set a market expectation it can&rsquo;t walk back. The cost isn&rsquo;t just the immediate margin compression; it&rsquo;s the long-term repositioning that becomes necessary. Microsoft is now structurally a middle-of-the-stack player in AI infrastructure &mdash; not the top of stack they were headed toward in 2023.</p>
+
+    <h2>The OpenAI IP rights through 2032: Microsoft&rsquo;s saving grace</h2>
+
+    <p>Here&rsquo;s the most important contractual detail of all: <strong>Microsoft retains rights to 100% of OpenAI&rsquo;s API inference revenue through 2032, regardless of which cloud actually runs the workload.</strong></p>
+
+    <p>Translated: when a customer calls the OpenAI API and gets back tokens, Microsoft gets a cut of that revenue. Even if the actual compute happened on Oracle&rsquo;s Abilene facility (not Microsoft), Microsoft still books revenue share. This is the "rev-share leg" of the original 2019 investment, and it&rsquo;s the single most valuable contractual position in AI.</p>
+
+    <p>Through 2032, this revenue stream alone is worth tens of billions per year as OpenAI&rsquo;s API volume scales. It&rsquo;s what lets Microsoft&rsquo;s overall AI ROIC stay reasonable despite losing Stargate. It&rsquo;s also why Microsoft is willing to play the long game on rebuilding its infrastructure position &mdash; the OpenAI rev share underwrites the rebuild.</p>
+
+    <p><strong>What expires:</strong> these rights end somewhere between 2030 and 2032. Microsoft&rsquo;s AI strategy post-2032 has to be built entirely on its own assets &mdash; its own models, its own chips, its own apps, its own infrastructure. Everything we&rsquo;re seeing from Microsoft today (Maia, MAI, Foundry) is preparation for the day the OpenAI rev share stops.</p>
+
+    <p><strong>The SaaS-PM analog:</strong> Microsoft&rsquo;s OpenAI position is the cloud-era equivalent of a perpetual royalty on a hit product. Microsoft has a finite window to use that royalty to build the next thing. They&rsquo;re six years in, six to go.</p>
+
+    <h2>GitHub Copilot: owning the workflow, losing the model</h2>
+
+    <p>This is one of the most interesting strategic moments in the article. Microsoft launched GitHub Copilot in 2021 with exclusive access to OpenAI&rsquo;s code models. They owned VS Code (the default developer IDE) and GitHub (the default source repository). They had a workflow moat that should have been impenetrable.</p>
+
+    <p>Then Cursor happened. Then Claude Code happened. Cursor forked VS Code and built tighter integrations between the codebase and the model &mdash; specifically Anthropic&rsquo;s Claude, which was better at coding than GPT for most of 2024-25. Claude Code launched as Anthropic&rsquo;s own first-party harness in early 2026 and accelerated the dynamic.</p>
+
+    <p>By early 2025, Microsoft had no choice. They added Anthropic&rsquo;s models to GitHub Copilot. This was at great cost to their margins: a chunk of GitHub Copilot&rsquo;s revenue now goes to Anthropic at 50-60% gross margin, instead of going to OpenAI inside Microsoft&rsquo;s OpenAI-rev-share envelope.</p>
+
+    <p><strong>The structural insight:</strong> owning the workflow is necessary but not sufficient. Microsoft owned the IDE, the source repo, the enterprise sales motion, and exclusive access to the leading model for two years. They still lost share to Cursor and Claude Code because the integration between model and harness wasn&rsquo;t tight enough. <em>The harness is the product, but the harness has to be co-designed with the model that&rsquo;s actually best at the task.</em> When Anthropic took the model lead, Microsoft&rsquo;s workflow moat became a workflow tax.</p>
+
+    <p>Microsoft&rsquo;s response: <strong>Agent HQ</strong>, a "model supermarket" within GitHub that plugs into agents from OpenAI, Anthropic, Google, xAI. The bet is that GitHub remains the connective tissue regardless of which model wins. It might work. It also might be the same mistake Yahoo made in becoming a portal of other people&rsquo;s products instead of building anything proprietary that matters.</p>
+
+    <h2>Maia: the chip program that&rsquo;s years behind</h2>
+
+    <p>Every hyperscaler is trying to build their own AI accelerator. The economic logic is clear: Nvidia&rsquo;s 75% gross margin is the biggest single line item in any AI buildout. If a hyperscaler can replace Nvidia GPUs with their own chips at 50%+ cost reduction, the savings compound across every workload they run.</p>
+
+    <p>Google has succeeded. TPU v7 is on par with Nvidia Blackwell on many workloads. Google now sells TPU capacity to Anthropic ($1M+ TPU commitment), Meta, xAI, OpenAI, and SSI. They&rsquo;ve graduated from "internal use" to "merchant AI hardware."</p>
+
+    <p>Amazon has succeeded. Trainium 2 anchored on Anthropic (Project Rainier) is shipping at scale. AWS&rsquo;s recent revenue re-acceleration is in part the Trainium ramp.</p>
+
+    <p>Meta is on the cusp. MTIA "Athena" is shipping. Iris and Arke are on the roadmap.</p>
+
+    <p><strong>Microsoft is failing.</strong> Maia 100 was the late entrant in 2023. Maia 200 had multiple design issues, late tape-out, and is internally considered a failure. Microsoft has reportedly stopped software development for Maia 200 to focus on future generations. Maia 300 is targeted for late 2027 &mdash; competing against Nvidia&rsquo;s Vera Rubin (2H 2026) and Vera Rubin Ultra (2027). Given the mismanagement of the Maia teams so far, there is little confidence they will do well in 2027 either.</p>
+
+    <p><strong>The fallback plan:</strong> Microsoft retains rights to OpenAI&rsquo;s "Titan" chip program (also through 2032). OpenAI is co-designing custom silicon with Broadcom, and the OpenAI ASIC trajectory appears to be tracking better than Maia&rsquo;s. Microsoft may end up using Titan to serve OpenAI workloads &mdash; rather than running them on their own failing Maia. This is the chip version of the model story: Microsoft is dependent on OpenAI for both the model and the silicon that runs it.</p>
+
+    <p><strong>The SaaS-PM lesson:</strong> when a competitive moat depends on vertical integration, the integration has to actually work at every layer. Microsoft has the right strategy on paper (own apps + models + chips + infra). They&rsquo;re failing at three of those four layers in practice. A vertical integration story is only as strong as its weakest layer.</p>
+
+    <h2>The depreciation debate: why Burry&rsquo;s argument matters</h2>
+
+    <p>This part of the analysis is the most underrated for a SaaS PM, because it&rsquo;s about how to read hyperscaler earnings &mdash; which directly shape AI infrastructure pricing.</p>
+
+    <p>Michael Burry (yes, that one) recently claimed that all major hyperscalers (Meta, Google, Oracle, Microsoft, Amazon) are artificially boosting earnings by extending the useful life of their IT assets from 3-5 years (the 2020 norm) to 5-6 years (the 2025 norm). His argument: Nvidia ships a new chip every 2-3 years that makes the old ones less competitive, so 6-year depreciation overstates the actual useful life and inflates current GAAP earnings.</p>
+
+    <p>There&rsquo;s a strong counterargument, with a useful illustration:</p>
+    <ul>
+      <li>V100 GPUs (launched 2017) are still being sold on AWS as of 2026 &mdash; 9 years after launch.</li>
+      <li>IBM Summit ran from 2018 to 2024 &mdash; 6.5 years.</li>
+      <li>Fugaku (2020), Sierra (2018), Sunway TaihuLight (2016) are all still operational on the Top500 supercomputer list.</li>
+      <li>Microsoft&rsquo;s own Eagle cluster (14,400 H100s, installed 2023) sits at #5 on the Top500 and is "highly utilized."</li>
+    </ul>
+
+    <p>The reality: <strong>GPUs don&rsquo;t physically wear out at 3-4 years. They become economically obsolete when newer GPUs offer better revenue per MW.</strong> Hyperscalers rip out V100s and A100s not because they&rsquo;re broken, but because the rack space and power are more valuable for B300s and Rubins. The decision is economic, not technical.</p>
+
+    <p><strong>Why this matters for a SaaS PM:</strong></p>
+    <ul>
+      <li>Hyperscaler earnings &mdash; which signal AI infrastructure sustainability &mdash; depend partly on whether 5-6 year depreciation holds.</li>
+      <li>Older GPUs (H100, A100) will continue to generate revenue as long as their operating cost stays below customer willingness to pay. This is a real moat for hyperscalers with diverse customer bases.</li>
+      <li>Microsoft&rsquo;s "fungible fleet" strategy (geographic distribution + enterprise upsell of non-AI services) is specifically designed to extract maximum revenue from older GPUs by bundling them with higher-margin services like Cosmos DB or Azure Government.</li>
+    </ul>
+
+    <p><strong>The "fungible fleet" thesis</strong> deserves a special note. Microsoft has 70 regions and 400+ datacenters globally. They&rsquo;re betting that future enterprise AI workloads will need data locality, compliance handling, and non-AI workload colocation. That bet hasn&rsquo;t paid off yet &mdash; today&rsquo;s biggest AI workloads (ChatGPT, Claude Code) don&rsquo;t care about latency or data locality. But if enterprise AI deployment looks more like SAP than like ChatGPT, Microsoft&rsquo;s global footprint becomes the highest-margin part of the stack. This is the single largest bet inside Microsoft&rsquo;s current AI strategy.</p>
+
+    <h2>What Microsoft is actually betting on now</h2>
+
+    <p>Stripping away the noise, Microsoft&rsquo;s current AI strategy has four legs:</p>
+
+    <ol>
+      <li><strong>The OpenAI rev share runway through 2032.</strong> This is the cash machine that funds everything else.</li>
+      <li><strong>Vertical integration across the stack.</strong> MAI (own models), Foundry (own PaaS), Maia / Titan (own chips), Copilot family (own apps). The bet is that owning four out of six stack layers compounds into a margin advantage no pure-play competitor can match.</li>
+      <li><strong>The "fungible fleet" for enterprise AI.</strong> 400 datacenters, 70 regions, ability to colocate AI and non-AI workloads. Bet: enterprise AI demand will look more like classic enterprise SaaS than like consumer ChatGPT.</li>
+      <li><strong>The model supermarket via Agent HQ and Azure Foundry.</strong> Multi-vendor AI access becomes the platform play. Microsoft becomes the connective tissue regardless of which lab wins.</li>
+    </ol>
+
+    <p>A clear-eyed read is skeptical of legs 2 and 3, neutral on leg 4, and positive on leg 1. The OpenAI rev share buys time. Whether Microsoft uses that time well is the open question of the next four years.</p>
+
+    <h2>Why this matters for your AI roadmap</h2>
+
+    <p>Six implications for a SaaS PM watching this play out:</p>
+
+    <ol>
+      <li><strong>Don&rsquo;t under-build into a step-change market.</strong> The Microsoft pause is the cleanest available case study of a $3T company optimizing for the wrong risk. If your company is debating "should we wait for revenue before committing capacity / hiring / capex," the Microsoft story is the case for committing now. The cost of under-building in a step change is structurally higher than the cost of over-building.</li>
+      <li><strong>Workflow moats are necessary but not sufficient.</strong> Microsoft owned VS Code, GitHub, the IDE, the model exclusivity. They still lost coding-agent share to Cursor and Claude Code because the harness-model integration wasn&rsquo;t tight enough. If your moat is workflow-only and not co-designed with the model, you&rsquo;re vulnerable to a startup that does the co-design.</li>
+      <li><strong>Vertical integration only works if every layer works.</strong> Microsoft has a coherent vertical-integration story across apps + models + PaaS + chips + IaaS + DC. They&rsquo;re failing at three of those layers in execution. A clean strategic story does not protect you from operational disappointments. Be ruthless about layer-by-layer self-assessment.</li>
+      <li><strong>Contractual rights matter more than you think.</strong> Microsoft&rsquo;s OpenAI rev-share rights through 2032 are worth tens of billions in revenue regardless of which cloud actually runs the workload. If you negotiate AI partnerships, the contract details (rev share, exclusivity windows, IP access) matter more than the strategic narrative. The strategic narrative changes; the contract doesn&rsquo;t.</li>
+      <li><strong>"Renting to resell" is the worst margin position in any market.</strong> Microsoft renting GPUs from neoclouds to deliver Azure compute is the cloud equivalent of a SaaS company white-labeling another company&rsquo;s product. Be vigilant about whether your AI feature is in that position. If you&rsquo;re paying a foundation model lab to serve tokens that you mark up by 20%, you&rsquo;re renting to resell.</li>
+      <li><strong>Hyperscaler earnings are a leading indicator on AI infrastructure sustainability.</strong> Watch depreciation schedules, RPO, capex guidance. The accounting maneuvers around GPU useful life (3-6 year debate) tell you whether the hyperscalers themselves believe AI demand is durable. Microsoft&rsquo;s capex re-acceleration in late 2025 is a stronger signal than any analyst&rsquo;s forecast.</li>
+    </ol>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Six concrete actions.</p>
+
+    <ol>
+      <li>
+        <strong>Map your product to the AI Token Factory Stack.</strong>
+        Which layer(s) does your product play in? Which layers are you paying margin to? Which layers do you depend on but not control? Most SaaS PMs have never mapped this explicitly. The Microsoft case shows that doing the mapping is the first step in any honest AI strategy conversation. <em>Why this matters: most teams overestimate how much margin they capture and underestimate how much they pay upstream. The map forces clarity.</em>
+      </li>
+      <li>
+        <strong>Pick your vertical integration battles deliberately, not aspirationally.</strong>
+        Microsoft is trying to own four layers at once and failing at three. Vertical integration is a multi-year, multi-billion-dollar bet that requires execution at every layer. For a SaaS PM, the question is "which one layer can we actually own, and which layers should we pay margin to?" Most successful AI companies in 2026 are not vertically integrated &mdash; they&rsquo;re tightly focused on one layer where they&rsquo;re world-class. <em>Why this matters: spreading vertical-integration ambition across multiple layers is the most expensive way to be mediocre.</em>
+      </li>
+      <li>
+        <strong>Audit your contract terms with AI vendors.</strong>
+        Microsoft&rsquo;s OpenAI rev-share rights through 2032 illustrate how the long-tail contract terms are often worth more than the visible strategic positioning. When you negotiate with Anthropic, OpenAI, AWS, Azure: what are the IP access terms, exclusivity windows, rev-share provisions, MFN clauses, termination conditions? These details will compound into real money over 3-5 years. <em>Why this matters: most SaaS enterprise contracts have an "AI rider" that&rsquo;s ten years behind on sophistication compared to base SaaS terms. The vendors know this.</em>
+      </li>
+      <li>
+        <strong>Identify whether you&rsquo;re in a "rent-to-resell" position.</strong>
+        If your AI feature&rsquo;s gross margin is below 30% and you pay a foundation model lab for the underlying tokens, you might be in the same structural position as Microsoft renting from CoreWeave. The fix is either (a) build something proprietary at one layer (your own model, your own harness, your own data advantage) or (b) accept commodity margins and compete on distribution. <em>Why this matters: rent-to-resell businesses are stable in the short run and structurally weak in the long run. Recognize the position before the market reprices it.</em>
+      </li>
+      <li>
+        <strong>Build "step-change scenarios" into your roadmap planning.</strong>
+        The Microsoft pause came from optimizing for "what if demand doesn&rsquo;t materialize" risk. The Oracle win came from absorbing "what if demand explodes" risk. Both are real. Most SaaS roadmap processes are biased toward the former. Add explicit scenario planning for the latter &mdash; specifically, what would your roadmap look like if your AI feature consumed 10x more compute than your current plan? If you can&rsquo;t answer that, you&rsquo;re building the Microsoft pause into your own planning. <em>Why this matters: step-change markets reward over-commitment, not optimization.</em>
+      </li>
+      <li>
+        <strong>Watch the "fungible fleet" thesis play out as a leading indicator for enterprise AI.</strong>
+        Microsoft is betting that enterprise AI workloads will look more like classic enterprise SaaS (data locality, compliance, colocation with non-AI services) than like consumer ChatGPT (latency-insensitive, centralized, single-purpose). If they&rsquo;re right, the Azure global footprint becomes a moat. If they&rsquo;re wrong, the Fairwater-style hyperscale facilities of competitors win. The answer is probably visible by mid-2027. Your enterprise AI product positioning should be testable against this fork. <em>Why this matters: whether your AI feature&rsquo;s buyer cares about region, compliance, and integration vs. just price and capability tells you which side of this fork your category is on.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>Microsoft in 2026 is a strange beast: a $3T company that simultaneously has the most valuable contractual position in AI (the OpenAI rev share through 2032), the most expensive recent strategic mistake in AI (the $150B Stargate loss), and the most ambitious vertical integration plan in AI (apps + models + PaaS + chips + IaaS + DC). They are winning on the contract, losing on the execution, and betting on the vertical integration to pay off before 2032.</p>
+
+    <p>For a SaaS PM, none of these are abstract. The same dynamic plays out at every scale:</p>
+    <ul>
+      <li>The risk of under-committing during a step change is structurally higher than over-committing.</li>
+      <li>Workflow moats decay when the underlying model changes hands.</li>
+      <li>Vertical integration sounds great on a slide and fails at the weakest layer.</li>
+      <li>Contract terms outlast strategic narratives.</li>
+      <li>Rent-to-resell is the worst margin position in any market.</li>
+      <li>Step-change markets reward over-commitment, not optimization.</li>
+    </ul>
+
+    <p>Microsoft has time and money to recover. Most SaaS companies don&rsquo;t. The case study is free; the lessons cost $150B.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="107-sd-04-coding-agents-the-harness-is-the-product.html">&larr; Coding Agents: The Harness Is the Product</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

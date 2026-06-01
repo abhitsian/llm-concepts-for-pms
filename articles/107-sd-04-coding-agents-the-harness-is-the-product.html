@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coding Agents in 2026: The Harness Is the Product</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~3,900 words &middot; ~18 min read &middot; for SaaS PMs sizing up AI coding tools and their broader implications</div>
+    <h1>Coding Agents in 2026: The Harness Is the Product</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 4 &mdash; why the harness is the product</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> GPT-5.5 just landed and is finally back at the frontier &mdash; the first OpenAI model that&rsquo;s competitive with Anthropic&rsquo;s Opus on coding in six months. Opus 4.7 dropped with a quiet 35% price hike hidden in a new tokenizer. DeepSeek V4 is impressive but still ~6&ndash;12 months behind closed source. The bigger insight underneath all of this: the <strong>agent harness</strong> (the CLI, the IDE plugins, sandboxing, remote control) is now as important as the underlying model. Benchmarks are mostly broken. <strong>Cost-per-task, not cost-per-token</strong>, is the new north star. Wrappers like Cursor and Cognition are losing ground. And Anthropic has reportedly passed OpenAI in ARR. Here&rsquo;s the SaaS-PM-friendly map.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="112-fd-02-memory.html">Memory</a> &mdash; a light touch: why context length and the KV cache shape cost-per-task.</li>
+        <li><a href="114-fd-04-how-an-llm-runs-on-silicon.html">How an LLM Runs</a> &mdash; <strong>the keystone</strong>, and nearly all you need. Tokens, the harness, distillation, reasoning models, the KV cache &mdash; this article&rsquo;s whole vocabulary.</li>
+      </ol>
+      <div class="buildup-foot">A lighter-hardware issue &mdash; Primer 4 alone gets you most of the way. Hover any underlined term as you read.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>The last two weeks of April 2026 are the most concentrated set of model releases since the launch of GPT-4. In order:</p>
+
+    <ul>
+      <li><strong>Opus 4.7</strong> (Anthropic, ~April 16). Drop-in upgrade to Opus 4.6. Small quality improvement. New tokenizer that consumes up to 35% more tokens per task &mdash; an effective price hike, called out openly but quietly.</li>
+      <li><strong>DeepSeek V4 Pro / Flash</strong> (Apr ~22). Open-source, 1.6T total / 49B active parameters. Moves from 128K to <strong>1M-token context</strong>. 90% reduction in KV cache size vs V3. Architecturally impressive, still behind frontier closed-source on real tasks.</li>
+      <li><strong>GPT-5.5</strong> (OpenAI, Apr 24-25). First public model based on the "Spud" pre-training run. ~2x more expensive than GPT-5.4. Finally at the frontier. Available in standard and Pro variants, with reasoning effort dials (low / medium / high / xhigh).</li>
+    </ul>
+
+    <p>The dynamic underneath all three releases: Anthropic and OpenAI have separated from everyone else. DeepSeek, GLM, Kimi, Qwen, Gemini, Cursor Composer, Meta Muse all released coding-focused checkpoints in the past three months. Combined, their actual market share is single-digit percentage of the agentic coding market. The two-horse race is real.</p>
+
+    <p>And the most interesting development inside one analyst firm&rsquo;s own engineering team: they had been Claude-exclusive for six months. After two weeks of GPT-5.5 alpha access, most of them are now <em>using both</em> &mdash; with a specific division of labor that tells you what each model is actually good at.</p>
+
+    <h2>Quick translation: SaaS terms for the coding-agent stack</h2>
+
+    <p>If you build SaaS, the coding-agent space maps onto a familiar shape, with one twist: the "front end" matters as much as the "back end."</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 32%;">Your SaaS world</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">The coding-agent world</th>
+      </tr>
+      <tr><td style="padding:8px; vertical-align:top;">IDE / editor / front-end</td><td style="padding:8px;"><strong>Harness</strong> &mdash; the CLI, plugins, sandboxing, context-management, and tool-use machinery wrapped around the model. Examples: Claude Code, OpenAI Codex, Cursor, Aider, OpenCode.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Database / engine / back-end</td><td style="padding:8px;"><strong>Underlying model</strong>. Claude Opus 4.7, GPT-5.5, DeepSeek V4. Same harness can run different models; same model performs differently in different harnesses.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">API call</td><td style="padding:8px;">Token transaction. Priced per million input tokens and per million output tokens, with cached input usually 10x cheaper.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Pro / Enterprise tier</td><td style="padding:8px;"><strong>Fast mode</strong> (premium speed, ~6x price for ~2.5x speed) and <strong>priority tier</strong> (concrete SLA &mdash; "&gt;50 tok/sec, 99% of the time"). Both labs offer both. They are not the same product.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">"Marginal cost per request"</td><td style="padding:8px;"><strong>Cost per task</strong>, not cost per token. Mythos is 5x more expensive per token than Opus, but solves many tasks in fewer tokens and can end up cheaper. Per-token pricing alone is a misleading anchor.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Production bug</td><td style="padding:8px;">Model bug? Harness bug? Tokenizer change? Often you cannot tell which. Anthropic shipped three Claude Code bugs that lived 1&ndash;5 weeks in production before anyone caught them. Users blamed "the model getting dumber."</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Open-source software</td><td style="padding:8px;">Open weights. DeepSeek V4, GLM, Kimi K2, Qwen. Currently the cost floor, not the quality ceiling.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Wrapper / vertical SaaS on top of a platform</td><td style="padding:8px;">Cursor, Cognition (Windsurf), Replit, Vercel V0, Lovable, Base44. All growing 3x+ in revenue. All <em>losing share</em> to the first-party agents (Claude Code, Codex). Combined ARR &lt; $5B vs Anthropic ~$40B.</td></tr>
+    </table>
+
+    <p>Three implications to hold in your head while you read on:</p>
+    <ul>
+      <li><strong>The agent you use is not the model you use.</strong> "Claude is better than GPT-5" is a model statement. "Claude Code is better than Codex" is a product statement. They&rsquo;re separate questions and you need both answers.</li>
+      <li><strong>Price-per-million-tokens is a marketing number.</strong> What you actually pay per finished task depends on the model, the harness, the cache hit rate, the input/output ratio, the tokenizer, and the tier. The same task on different stacks can vary 3-5x in real cost.</li>
+      <li><strong>The two-horse race shapes everyone&rsquo;s pricing leverage.</strong> If Anthropic decides you&rsquo;re a low-margin customer and rate-limits you, OpenAI is the only credible alternative. That duopoly is the cleanest pricing dynamic in modern SaaS.</li>
+    </ul>
+
+    <h2>The frontier is now two horses, with different strengths</h2>
+
+    <p>After two weeks of side-by-side use, one firm&rsquo;s engineers reported a consistent split. Direct quotes from that team:</p>
+
+    <p><em>"What I have really appreciated about Codex recently is how it pulls in a lot of context before making changes to code. 4.7 often feels like it just does a quick Explore and then #yolos changes whereas codex pulls in a shit ton of more granular context and then makes a directed effort at the ask."</em></p>
+
+    <p><em>"Currently I use Codex for reviewing PRs / bug hunting, explaining existing code, and creating / revising documentation. It&rsquo;s better at understanding code structure and reasoning about it."</em></p>
+
+    <p>The pattern that emerged across the team:</p>
+    <ul>
+      <li><strong>Claude Code (Opus 4.7)</strong> wins on open-ended scaffolding, greenfield builds, inferring vague intent from terse prompts. Better at "I want a new dashboard that looks like this other one" with no further specification.</li>
+      <li><strong>Codex (GPT-5.5)</strong> wins on narrow code analysis, complex data-structure reasoning, PR review, bug hunting. More conservative about making changes &mdash; which improves token efficiency but sometimes misses what you actually wanted.</li>
+    </ul>
+
+    <p>The workflow most of their engineers settled on: <strong>plan in Claude, execute in Codex.</strong> Use Claude for the initial scaffolding and architecture decisions. Switch to Codex for the actual bug fixes and tightly-scoped implementation tasks.</p>
+
+    <p><strong>Why this matters for SaaS PMs.</strong> If you&rsquo;re building AI features and have been making the "which single model" decision, you&rsquo;re asking the wrong question. The right question is "which model for which sub-task in our workflow." This is closer to how a Slack PM decides which transcription / search / summarization service to use for different surfaces &mdash; portfolio decisions, not winner-take-all.</p>
+
+    <h2>Cost per task is the new north star</h2>
+
+    <p>This is the single most important conceptual shift in this article. It deserves slowing down on.</p>
+
+    <p>Mythos (Anthropic&rsquo;s new high-end SKU) is priced at <strong>$25 input / $125 output</strong> per million tokens &mdash; 5x more expensive per token than regular Opus. On paper, that looks like a luxury markup. In practice, hands-on testing finds Mythos:</p>
+    <ul>
+      <li>Often completes the same task in fewer tokens (better reasoning, fewer wrong turns).</li>
+      <li>Generally finishes faster end-to-end (the latency that actually matters for a developer waiting for output).</li>
+      <li>Ends up <strong>cheaper per finished task</strong> than Opus for many workloads, even though more expensive per token.</li>
+    </ul>
+
+    <p>This is the cost equivalent of comparing two SUVs on "miles per gallon" vs "dollars per trip to work." Per-mile fuel cost is the wrong unit if one car drives a shorter route or doesn&rsquo;t get stuck in traffic. The same is true here: <strong>per-token cost is the engineering unit; per-task cost is the business unit.</strong></p>
+
+    <p>OpenAI is explicitly leaning into this with GPT-5.5&rsquo;s marketing. Their model card claims GPT-5.5 hits higher benchmark scores than GPT-5.4 while using <em>fewer</em> tokens to do so. "Token efficiency" is the new comparison axis. Expect it to dominate model marketing for the next 12 months.</p>
+
+    <p><strong>What this means for your AI feature pricing.</strong> Three concrete consequences:</p>
+    <ol>
+      <li>If you bill customers per token (passthrough pricing), you are over-charging users of efficient premium models and under-charging users of inefficient cheap models. The mismatch is going to grow.</li>
+      <li>If you bill customers per task or per output (results-based pricing), your gross margin <em>improves</em> when you upgrade to more expensive but more efficient premium models. This inverts the intuition.</li>
+      <li>If you do flat-rate per-seat pricing on top of AI usage, the premium-model-is-cheaper-per-task dynamic means you should bias toward premium models in your feature implementation, not budget models. The math is opposite of what most SaaS PMs assume.</li>
+    </ol>
+
+    <h2>The harness is the product</h2>
+
+    <p>For most of 2024-25, the AI conversation was about model capability. "Which model is smartest?" was the only question. That stopped being the right question somewhere around the Claude Code inflection point in February 2026.</p>
+
+    <p>One analysis frames it bluntly: <em>"The real complete product is a harness and a model. Without one of the two, you&rsquo;re missing out, and the harder product is the model."</em></p>
+
+    <p>What the harness does, in plain terms:</p>
+    <ul>
+      <li><strong>Context management.</strong> Decides what files, snippets, and conversation history get sent to the model on each turn. Bad context = bad output, regardless of model quality.</li>
+      <li><strong>Tool use orchestration.</strong> Decides which tools the model can call (web search, code execution, file edit, screenshot, MCP servers) and in what order.</li>
+      <li><strong>Sandboxing.</strong> Decides what the model is and isn&rsquo;t allowed to touch. A bad sandbox produces "the model deleted my repo" stories.</li>
+      <li><strong>Caching.</strong> Determines what gets reused across turns. Cache hit rates of 90%+ are normal for good harnesses; cache hit rates of 30% are a sign of poor design.</li>
+      <li><strong>Latency hiding.</strong> Streaming output, predictive prefetching, parallel tool calls. The difference between a 3-second response and a 30-second one is often the harness, not the model.</li>
+    </ul>
+
+    <p><strong>The Anthropic bug postmortem is the cleanest illustration of this.</strong> In March-April 2026, Claude Code had three production bugs that lived 1-5 weeks before anyone caught them. Users widely complained that "Opus 4.6 is getting dumber." They were partly right &mdash; the system was getting worse &mdash; but the model itself wasn&rsquo;t the culprit. The harness was. When Anthropic finally fixed the bugs, performance recovered. The lesson: <em>when the harness is part of the product, the model gets blamed.</em></p>
+
+    <p><strong>Why this matters for any AI feature you build.</strong> If you ship an AI feature on top of someone else&rsquo;s model, you are <em>also</em> shipping a harness, whether you think of it that way or not. Your prompt template, your context-window management, your tool definitions, your retry logic, your caching strategy &mdash; all of that is harness. The quality of your harness will determine 30-50% of the user experience even with a frontier model behind it. Hiring "model engineers" without "harness engineers" is the most common mistake SaaS PMs make in their AI org design.</p>
+
+    <h2>The Opus 4.7 tokenizer price hike</h2>
+
+    <p>This is a small detail with large implications. Opus 4.7 ships with a new tokenizer. Anthropic discloses that the new tokenizer consumes up to <strong>35% more tokens per task</strong>. The headline per-million-token price is unchanged. The effective cost per task is up to 35% higher.</p>
+
+    <p>This is a hidden price increase, dressed as an engineering improvement (more granular tokenization theoretically helps the model). It is also, importantly, completely legitimate &mdash; the company disclosed it openly in the release notes. Most customers will not read the release notes.</p>
+
+    <p><strong>The SaaS-PM analog</strong> is the AWS-style "we&rsquo;re raising request fees, not storage fees" maneuver. Or Stripe&rsquo;s "we&rsquo;re changing how we count international transactions." Or any unit-of-pricing redefinition that lets a vendor extract more revenue without touching the headline rate card. These have happened in every metered B2B category, and they always work.</p>
+
+    <p><strong>What to do about it.</strong> If you have an AI vendor contract, you should:</p>
+    <ol>
+      <li>Track <em>tokens consumed per typical task</em>, not just headline price per million tokens. This is your real cost-per-feature metric.</li>
+      <li>Build a regression alert that pages you when tokens-per-task creeps up by more than 10% &mdash; this is your canary for tokenizer changes, model behavior changes, and harness bugs.</li>
+      <li>Negotiate contracts on cost-per-task estimates with caps, not on headline per-million pricing. Vendors will resist; the smart ones will accept eventually.</li>
+    </ol>
+
+    <h2>Benchmarks are broken (but you still need them)</h2>
+
+    <p>The history of AI benchmarks &mdash; MMLU, HellaSwag, GPQA, HLE, SWE-bench, GDPval, BrowseComp &mdash; is worth knowing in outline. The short version a SaaS PM needs:</p>
+
+    <ul>
+      <li><strong>Every benchmark has three parts:</strong> tasks (what the model is asked), evaluation (how it&rsquo;s graded), and harness (what tools the model has access to). Most public benchmark numbers obscure at least one of these.</li>
+      <li><strong>Most benchmarks have known errors.</strong> ~30% of HLE chemistry questions conflict with peer-reviewed literature. ~6% of MMLU questions contain errors. SWE-bench had so many ambiguous tasks that OpenAI quietly stopped reporting on it in February 2026 &mdash; partly because tasks were broken, partly because frontier models had memorized the answers.</li>
+      <li><strong>What labs <em>don&rsquo;t</em> report is often more useful than what they do.</strong> When GPT-5.4 launched, OpenAI included almost no head-to-head comparisons against Anthropic models. That absence told you GPT-5.4 was behind. When GPT-5.5 launched, Claude and Gemini reappeared in the benchmark table &mdash; signal that OpenAI is back at parity.</li>
+      <li><strong>Labs use closed-source harnesses for their benchmark runs.</strong> The benchmark score you see in a model release reflects the lab&rsquo;s internal harness, which is more optimized than what you&rsquo;d get from the public API. Real-world scores in your stack are typically lower.</li>
+    </ul>
+
+    <p>The practical conclusion: <strong>don&rsquo;t pick a model based on its benchmark scores. Pick it based on how it performs on your actual workflows, in your actual harness, on your actual codebase.</strong> The labs already know this is the right answer &mdash; it&rsquo;s why every release ships with a private alpha program. Your AI strategy should include an analog: a 2-week structured comparison on your real tasks, every time a major new model lands.</p>
+
+    <h2>DeepSeek V4: still ~6-12 months behind, and that matters</h2>
+
+    <p>DeepSeek V4 dropped roughly a year after V3 shocked the market. The release is technically impressive:</p>
+    <ul>
+      <li>1.6T total parameters / 49B active (Pro variant), 284B/13B (Flash).</li>
+      <li>1M-token context window, up from 128K.</li>
+      <li>90% reduction in KV cache size vs V3 &mdash; a huge inference-cost win.</li>
+      <li>Three new compression techniques (Compressed Sparse Attention, Heavily Compressed Attention, Manifold-Constrained Hyper-Connections).</li>
+      <li>Day-zero open-source support (vLLM, SGLang, TRT-LLM) and open weights.</li>
+    </ul>
+
+    <p>And yet, on real coding tasks and real agentic loops, the closed-source labs still meaningfully outperform &mdash; the heaviest professional workflows are not yet cannibalized by DeepSeek.</p>
+
+    <p><strong>Why the open-source race-to-zero is taking longer than expected.</strong> The Jevons-paradox response to DeepSeek V3 in January 2025 was supposed to commoditize intelligence. Sixteen months later, frontier closed-source has actually pulled <em>further</em> ahead on agentic tasks &mdash; partly because the labs have spent billions on RL training that open source can&rsquo;t match, partly because the harness gap matters more than the model gap, and partly because compute scarcity (see <a href="106-sd-03-where-ai-money-goes-now.html">Issue 3</a>) means even price-sensitive users pay up for premium tiers.</p>
+
+    <p><strong>What this means for your AI strategy.</strong> If your plan was "wait for open source to catch up, then self-host," 2026 is not the year. Maybe 2027. Probably 2028. For coding workloads specifically, closed-source frontier is still the right answer for most enterprise use cases. The cost-vs-quality math hasn&rsquo;t flipped yet.</p>
+
+    <h2>Wrappers are losing the war</h2>
+
+    <p>This is the most uncomfortable section for a SaaS PM, because the dynamic generalizes.</p>
+
+    <p>The wrapper companies &mdash; Cursor, Cognition (Windsurf), Replit, Vercel V0, Lovable, Base44, Kio &mdash; are all growing fast. 3x revenue in months. Real product-market fit. And they are <em>simultaneously losing share</em> to the first-party agents from the model labs.</p>
+
+    <p>The combined ARR of all the wrapper companies is in the low-to-mid single-digit billions. Anthropic alone is reportedly at ~$40B+ ARR. The complete product, the argument goes, is "harness + model." If you have only the harness (Cursor) or only the model (DeepSeek), you&rsquo;re competing against a full-stack competitor with structural advantages.</p>
+
+    <p><strong>The structural advantages of first-party agents:</strong></p>
+    <ul>
+      <li>Lower cost-to-serve (no model markup on top of model cost).</li>
+      <li>Faster iteration on harness + model co-design (Anthropic ships Claude Code features that exploit Opus-specific behaviors; Cursor can&rsquo;t).</li>
+      <li>Better distribution (Anthropic.com / OpenAI.com beat any third-party SaaS on top-of-funnel awareness).</li>
+      <li>No "wrapper margin" pressure (Cursor pays Anthropic; Anthropic pays only Nvidia).</li>
+    </ul>
+
+    <p><strong>The implication for SaaS PMs building AI features.</strong> If your AI feature is "we add a thin layer on top of Claude / GPT," you are a wrapper. Wrappers in 2026 need to either (a) get to a 10x-better workflow that the first-party agent doesn&rsquo;t have, (b) own deep distribution/integration in a specific industry, or (c) embrace being a margin-compressed commodity. The pure "ChatGPT-but-for-X" play is closing rapidly.</p>
+
+    <p>Notably: this applies to coding agents <em>today</em>. It will apply to legal, finance, healthcare, customer support, marketing &mdash; the whole vertical wrapper ecosystem &mdash; over the next 18 months as the model labs ship first-party verticals. Plan now.</p>
+
+    <h2>Anthropic vs OpenAI: the bigger story</h2>
+
+    <p>The headline claim: <strong>Anthropic has passed OpenAI in ARR.</strong> The estimate is Anthropic at ~$40B+ vs OpenAI at materially less on a like-to-like basis (after accounting for differences in how the two companies recognize cloud rev-share). This would have been inconceivable a year ago and many people still haven&rsquo;t internalized it.</p>
+
+    <p>Why Anthropic&rsquo;s lead is defensible:</p>
+    <ul>
+      <li><strong>Revenue mix.</strong> 70% of Anthropic revenue is API-driven (scales with deployment depth). 70% of OpenAI revenue is consumer (caps with seat count). API revenue compounds faster.</li>
+      <li><strong>Agentic coding dominance.</strong> Claude Code accounts for the majority of Anthropic&rsquo;s $9B&rarr;$40B run-rate explosion.</li>
+      <li><strong>Premium positioning.</strong> Opus Fast (6x price for 2.5x speed), tighter rate limits, banning third-party harnesses like OpenClaw &mdash; all push users up the premium ladder. Analysts call this the "Evian water" strategy: deliberately raise prices and reduce supply to capture higher-margin customers, accept losing low-margin ones.</li>
+    </ul>
+
+    <p>Why OpenAI&rsquo;s comeback is real:</p>
+    <ul>
+      <li><strong>GPT-5.5 is genuinely at the frontier.</strong> The first OpenAI model in 6 months that&rsquo;s a credible Claude alternative.</li>
+      <li><strong>Anthropic&rsquo;s capacity is constrained.</strong> Customers priced out of Claude (or hitting rate limits) need somewhere to go. OpenAI is the only credible alternative at frontier quality.</li>
+      <li><strong>OpenAI&rsquo;s harness gap is narrowing.</strong> Codex still lacks features like fast mode, 1M context, and remote-control plugins. But that&rsquo;s an execution gap, not a model gap. Execution gaps close.</li>
+    </ul>
+
+    <p><strong>What this means for your AI vendor strategy:</strong> the duopoly is real and is going to persist for at least 12-18 months. DeepSeek, GLM, Google Gemini, Meta Muse, xAI / SpaceXAI, Cursor Composer are all in the race for #3, but #1 and #2 are entrenched. If you depend on either one as a single vendor, you have meaningful concentration risk. Multi-vendor (Claude + GPT) is now the safe default for any serious enterprise AI deployment.</p>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Six concrete actions.</p>
+
+    <ol>
+      <li>
+        <strong>Stop comparing models. Start comparing model-plus-harness combinations.</strong>
+        Run side-by-side evaluations on your real workflows using Claude Code, Codex, Cursor, and at least one open-source option (DeepSeek V4). Track cost-per-task, success rate, and user-perceived latency. The right answer is usually a portfolio &mdash; different combinations for different sub-tasks. <em>Why this matters: "GPT-5.5 vs Opus 4.7" benchmark comparisons answer the wrong question. Your users don&rsquo;t experience models; they experience agents.</em>
+      </li>
+      <li>
+        <strong>Switch your AI cost tracking from "tokens consumed" to "cost per task."</strong>
+        Define what a "task" is for your product (a code review, a bug fix, a document draft, an email reply). Measure cost-per-task by model, by harness, by workflow. The premium model that&rsquo;s 5x per-token can be cheaper per-task. The cheap model that&rsquo;s 20x cheaper per-token can be more expensive per-task once you count retries and failures. <em>Why this matters: per-token cost is engineering-team-visible; per-task cost is CFO-visible. They behave differently.</em>
+      </li>
+      <li>
+        <strong>Audit your AI feature for "harness" investment vs "model" investment.</strong>
+        Most teams over-invest in model selection and under-invest in harness quality (context management, tool design, caching, sandboxing). The harness is 30-50% of user experience and is fully under your control, unlike the model. Hire harness engineers, not just model engineers. <em>Why this matters: Anthropic&rsquo;s three production bugs in March-April 2026 were all in the harness, and users blamed the model. The same will happen to you.</em>
+      </li>
+      <li>
+        <strong>Set up tokenizer-drift monitoring.</strong>
+        Track tokens-per-task as a time-series. When it spikes by &gt;10%, page someone. This catches tokenizer changes (like Opus 4.7&rsquo;s quiet 35% hike), context-window degradation, harness bugs, and silent model swaps. It&rsquo;s the cheapest AI quality monitor you can build. <em>Why this matters: vendors won&rsquo;t always tell you when they change tokenizers, prompt templates, or routing. Your own metrics are the only reliable signal.</em>
+      </li>
+      <li>
+        <strong>If you&rsquo;re building a wrapper, decide which of the three escape routes you&rsquo;re taking.</strong>
+        Option 1: 10x-better workflow for a specific use case (Cursor&rsquo;s original positioning, before Claude Code closed the gap). Option 2: deep distribution / integration in a specific industry (this is where vertical AI plays still have room). Option 3: accept commodity status and compete on price / brand / customer success. Standing still and being "ChatGPT-but-for-X" is the failure mode. <em>Why this matters: the wrapper category had a 2-year window. It&rsquo;s closing. Honest self-assessment now beats forced repositioning in 18 months.</em>
+      </li>
+      <li>
+        <strong>Treat Anthropic and OpenAI as a duopoly, not as two of many options.</strong>
+        For frontier-quality coding workloads, no third option is currently competitive at scale. Plan vendor diversification across the two leaders (multi-vendor failover, contract terms with both, abstraction layer in your code). Keep DeepSeek / GLM / Kimi in your backup pile, but assume they&rsquo;re 6-12 months behind on real-world coding for the foreseeable future. <em>Why this matters: most enterprise AI procurement still pretends there are 10 viable vendors. There are 2. Pricing and contract terms reflect that whether your procurement team realizes it or not.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>The coding-agent market in 2026 has two structural facts a SaaS PM should hold above all the model-release noise:</p>
+
+    <ol>
+      <li><strong>The harness is the product.</strong> The model is necessary; it is not sufficient. Users experience "Claude Code" and "Codex," not "Opus 4.7" and "GPT-5.5." Your AI feature, whether you think of it that way or not, is also a harness.</li>
+      <li><strong>Cost per task, not per token, is the unit that matters.</strong> Pricing your features, negotiating your vendor contracts, comparing models &mdash; all of these go off the rails if you anchor on the headline per-million-token rate card. Premium models are often cheaper than budget ones on the only axis that counts.</li>
+    </ol>
+
+    <p>Around those two facts, the rest sorts itself out. Anthropic and OpenAI will continue to consolidate. Wrappers will keep losing ground unless they have deep workflow or distribution moats. Open-source will get closer but not at the frontier. Benchmarks will keep being marketed and will keep being unreliable. The duopoly will keep raising premium-tier prices until customer pushback finally happens.</p>
+
+    <p>Your job is to read the dynamics underneath the press releases. The signal is in the underlying mechanics, not the headlines. Watch it.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="106-sd-03-where-ai-money-goes-now.html">&larr; Where AI Money Goes Now</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

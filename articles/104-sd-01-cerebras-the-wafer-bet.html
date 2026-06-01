@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cerebras and the $24 Billion Wafer Bet</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~4,200 words &middot; ~20 min read &middot; for SaaS PMs new to the AI hardware world</div>
+    <h1>Cerebras and the $24 Billion Wafer Bet</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 1 &mdash; the $24 billion wafer-scale bet</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> Cerebras built a chip the size of a dinner plate. For four years almost nobody wanted it. Then the AI industry discovered that speed sells better than intelligence, and OpenAI handed Cerebras a $24.6 billion contract on the way to its IPO. This is the story of why fast tokens became the product, what a &ldquo;wafer-scale&rdquo; chip actually is, where it wins, where it loses, and what any of this has to do with anyone building software.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="111-fd-01-the-physical-stack.html">The Physical Stack</a> &mdash; what a <em>wafer</em> and the <em>reticle limit</em> are. This whole article is about a chip that deliberately breaks that limit.</li>
+        <li><a href="112-fd-02-memory.html">Memory</a> &mdash; <strong>the keystone.</strong> SRAM vs HBM, bandwidth vs capacity. This single tradeoff <em>is</em> the Cerebras story.</li>
+        <li><a href="113-fd-03-compute-and-precision.html">Compute &amp; Precision</a> &mdash; dense vs sparse FLOPs and arithmetic intensity, for the "where the wafer wins" argument.</li>
+        <li><a href="114-fd-04-how-an-llm-runs-on-silicon.html">How an LLM Runs</a> &mdash; prefill/decode and the KV cache, for "where the wafer loses."</li>
+      </ol>
+      <div class="buildup-foot">New here? Climb the ladder first. Fluent already? Skim, and hover any underlined term as you read.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>In December 2025, OpenAI signed a Master Relationship Agreement with Cerebras for 750 megawatts of inference compute, deployed in tranches through 2028, with an option to expand to 2 gigawatts. The deal carries a $24.6 billion backlog. OpenAI also loaned Cerebras $1 billion (6% interest, waived if repaid in compute), and took warrants that could give it up to 12% of the company. Cerebras filed its S-1 in early 2026, and is going public on the back of this single customer relationship.</p>
+
+    <p>The thing OpenAI is paying for: a small, distilled model called <strong>GPT-5.3-Codex-Spark</strong>, running at <strong>2,000 tokens per second</strong> per user. For reference, standard Opus 4.6 in <a href="52-hw-13-how-claude-codes-agentic-loop-works.html">Claude Code</a> runs around 40 tok/sec, and even Opus Fast tops out around 70 tok/sec. Spark is roughly 30x faster.</p>
+
+    <p>Five years ago this would have been a curiosity. In 2026 it&rsquo;s a $24 billion bet that <em>speed is now the product</em>.</p>
+
+    <h2>Quick translation: how LLM economics actually work</h2>
+
+    <p>Before going further, a translation table for anyone coming from SaaS. The shape of this industry rhymes with what you already know, but with sharper edges.</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 32%;">Your SaaS world</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">The LLM world</th>
+      </tr>
+      <tr><td style="padding:8px; vertical-align:top;">API call (Twilio, Stripe, SendGrid)</td><td style="padding:8px;">Token. Roughly 4 characters of text. You pay for tokens you send in (input) plus tokens generated back (output). Output is 3&ndash;5x more expensive than input. Every word in every response is a metered event.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Per-seat license, marginal cost &asymp; $0</td><td style="padding:8px;">Per-token, usage-metered. Every request burns real compute. There is no "free user" once they activate the AI feature.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">75&ndash;85% gross margin standard</td><td style="padding:8px;">Inference gross margin 30&ndash;70%. Frontier models like Opus run 60&ndash;80%. Distilled smaller models like Spark run 30&ndash;40%. Commodity open-source models race to zero. The AI margin profile is closer to a transactional business than to classic SaaS.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">"Basic / Pro / Enterprise" tiers</td><td style="padding:8px;">"Fast / Priority / Standard / Batch" tiers. Same model weights, different speeds, different prices. <strong>Speed is now a SKU.</strong></td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Cloud bill (AWS, Azure, GCP)</td><td style="padding:8px;">Chip capex + datacenter capex + power. Power is now a hard constraint, not a line item. 1 gigawatt of datacenter capacity is roughly the new "$100M ARR."</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">"Build vs buy"</td><td style="padding:8px;">"Which model, which provider, which speed tier, which fallback." Usually a portfolio decision, not a single pick.</td></tr>
+    </table>
+
+    <p>Two implications worth holding in your head while you read the rest of this piece:</p>
+    <ul>
+      <li><strong>Speed is a paid feature now, not a benchmark footnote.</strong> When you pick a model for an AI feature, you are also picking how fast it runs and what that costs. Anthropic charges 6x for 2.5x faster Opus. Developers paid the markup willingly. That changes how you spec the feature, how you price the SKU on top, and how you negotiate your vendor contract.</li>
+      <li><strong>Hardware constraints flow directly into your roadmap.</strong> Whether a chip company like Cerebras can fit a 1M-token context on its hardware determines whether your customers&rsquo; agentic workflows hit latency walls in 2027. The chip stack is no longer "engineering's problem" &mdash; it's a leading indicator for what your product can promise.</li>
+    </ul>
+
+    <h2>Why developers started paying for speed over intelligence</h2>
+
+    <p>Until 2024, the prevailing belief was that raw capability beats latency. Andrej Karpathy said it. Most labs priced their flagship models accordingly. Then something quiet shifted.</p>
+
+    <p>Anthropic launched <strong>Opus 4.6 Fast</strong> &mdash; the same model weights, served at 2.5x the speed, for 6x the price. The result: at one heavily AI-adopting firm, 80% of AI spend (peaking at $10M annualized) went to Opus 4.6 Fast. When Opus 4.7 came out without a fast mode, many of its engineers refused to upgrade. They paid a premium <em>and</em> turned down better intelligence, just to keep their tokens fast.</p>
+
+    <p>The reason is what developers call <strong>flow state</strong>. Once AI is in your loop on every keystroke &mdash; <a href="32-dp-08-task-length-doubled-every-seven-months.html">running an agent</a>, completing code, drafting a doc &mdash; the token output speed becomes the bottleneck on how much work you actually finish. Past a certain intelligence threshold, a faster smart model beats a smarter slow one. The market has now revealed this preference with its wallet.</p>
+
+    <p>This is why every frontier lab now offers <strong>tiers</strong>: fast, priority, standard, batch. Same weights, different interactivity, different price. Analysts call the result the &ldquo;<a href="58-hw-19-why-inference-costs-dropped-100x.html">throughput-interactivity frontier</a>&rdquo; &mdash; the tradeoff that decides every inference business.</p>
+
+    <p>Cerebras&rsquo;s whole company is built around being the fastest point on that frontier.</p>
+
+    <h2>What &ldquo;wafer-scale&rdquo; actually means</h2>
+
+    <p>To understand what Cerebras built, picture how a normal chip is made. A 300mm silicon wafer comes out of a fab like a shiny pizza. A pattern called a <strong>reticle</strong> &mdash; basically a stamp &mdash; prints the same chip design across the pizza, 80&ndash;100 times. Then the wafer is sliced into individual chips, each maybe 800 mm&sup2;. A normal GPU is one of those slices. (For the full silicon journey, see <a href="72-fs-03-the-fab.html">The Fab</a> and <a href="73-fs-04-the-chip.html">The Chip</a>.)</p>
+
+    <p>Cerebras doesn&rsquo;t slice. The entire 300mm wafer <em>is</em> the chip. 84 identical reticles, all stitched together. They use the &ldquo;scribe lines&rdquo; (the keep-out zones where wafers normally get diced) as wiring between dies. The result is a single piece of silicon roughly 21.5cm x 21.5cm &mdash; the <strong>Wafer Scale Engine</strong>, currently on its third generation (WSE-3).</p>
+
+    <p>The numbers on one WSE-3:</p>
+    <ul>
+      <li>900,000 cores on one chip</li>
+      <li>44 GB of on-chip SRAM (the fastest type of memory)</li>
+      <li>21 PB/s memory bandwidth (thousands of times more than a GPU)</li>
+      <li>25 kW of power going in &mdash; the heat output of a hot tub heater, concentrated on a dinner plate</li>
+    </ul>
+
+    <p>None of this is easy. The wafer expands as it heats up. The PCB underneath it expands at a different rate. Across 21.5cm, the mismatch is enough to crack the silicon. Cerebras had to invent a four-layer &ldquo;engine block&rdquo; sandwich (cold plate, wafer, flexible connector, PCB) where the materials slide against each other while staying in thermal contact. The cooling system pushes liquid coolant at 100 liters per minute &mdash; roughly 3x what an Nvidia rack uses per kW.</p>
+
+    <p>Yield is the other miracle. A normal reticle-sized chip yields below 50%. Cerebras builds <strong>per-batch custom masks</strong> that route around defective tiles, so almost every wafer can ship. They have 970,000 cores on the silicon but only 900,000 enabled &mdash; the spares are baked in.</p>
+
+    <h2>The memory tradeoff that decides everything</h2>
+
+    <p>If you only remember one thing about AI hardware, remember this: <strong>inference speed is mostly a memory bandwidth problem, not a compute problem.</strong></p>
+
+    <p>Generating one token means reading the entire model&rsquo;s weights, plus the entire conversation history (the <a href="41-hw-02-how-prompt-caching-works.html">KV cache</a>), from memory into the compute cores. Then doing a relatively small amount of math. Then writing the result. Do this token by token, thousands of times per response. The compute cores spend most of their life <em>waiting for memory</em>. This is the <a href="74-fs-05-the-memory-wall.html">Memory Wall</a>.</p>
+
+    <p>There are two main types of memory you can attach to an AI chip:</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0;">
+      <tr><th style="text-align:left; padding:6px; border-bottom:1px solid rgba(255,255,255,0.2);">Type</th><th style="text-align:left; padding:6px; border-bottom:1px solid rgba(255,255,255,0.2);">HBM (High Bandwidth Memory)</th><th style="text-align:left; padding:6px; border-bottom:1px solid rgba(255,255,255,0.2);">SRAM (Static RAM)</th></tr>
+      <tr><td style="padding:6px;">Where it lives</td><td style="padding:6px;">Stacked next to the chip</td><td style="padding:6px;">Right on the chip itself</td></tr>
+      <tr><td style="padding:6px;">Capacity per package</td><td>~288 GB (Blackwell Ultra)</td><td>~44 GB (entire WSE-3)</td></tr>
+      <tr><td style="padding:6px;">Bandwidth</td><td>~8 TB/s</td><td>~21,000 TB/s</td></tr>
+      <tr><td style="padding:6px;">Cost per bit</td><td>Expensive</td><td>Dramatically more expensive</td></tr>
+    </table>
+
+    <p>HBM trades speed for capacity. SRAM trades capacity for speed. Almost every shipping AI chip &mdash; Nvidia GPUs, Google TPUs, Amazon Trainium &mdash; uses HBM as primary memory, with smaller amounts of SRAM as cache.</p>
+
+    <p>Cerebras and <a href="86-fs-17-groq-and-the-inference-rebels.html">Groq</a> go the other way. They build &ldquo;SRAM machines&rdquo; that put model weights and KV cache directly into SRAM. The bandwidth is roughly 2,500x higher than HBM. The capacity is roughly 6.5x smaller. For a workload that fits, the SRAM machine generates tokens at speeds physically impossible for any HBM-based chip. For a workload that doesn&rsquo;t fit, you&rsquo;re stuck.</p>
+
+    <h2>Where the wafer wins</h2>
+
+    <p>The technical name for the workloads Cerebras dominates is <strong>low arithmetic intensity</strong> kernels. In plain English: the kernels that read a lot of memory per unit of math. Decode &mdash; the token-by-token part of inference &mdash; is the canonical example.</p>
+
+    <p>On one of these kernels, a single WSE-3 wafer can realize close to its full 15.6 petaFLOPs. A Blackwell GPU on the same kernel realizes a tiny fraction of its peak, because its compute cores are sitting idle waiting for HBM. To get the equivalent decode throughput at the same per-user speed, you&rsquo;d need many racks of GPUs. This is why Cerebras can claim 2,000 tok/sec on Spark when Nvidia&rsquo;s best is in the hundreds.</p>
+
+    <p>Two more places this matters:</p>
+    <ul>
+      <li><strong>Real-time agents.</strong> Voice, live translation, agentic coding loops where every 100ms costs you flow.</li>
+      <li><strong>Reasoning models.</strong> A model that &ldquo;<a href="40-hw-01-how-thinking-tokens-work.html">thinks</a>&rdquo; before answering generates 5&ndash;100x more tokens per response. Speed compounds. (See also <a href="67-ec-08-reasoning-consumes-100x-more-compute.html">Reasoning Consumes 100x More Compute</a>.)</li>
+    </ul>
+
+    <h2>Where the wafer loses</h2>
+
+    <p>The wafer&rsquo;s 44 GB of SRAM is huge for SRAM. It is laughably small for serving a frontier model. DeepSeek V4 is 1.6 trillion parameters. Claude Sonnet is rumored at 1T, Opus at 5T. A 128K-token context for one user can consume tens of gigabytes of KV cache by itself. The math doesn&rsquo;t fit on one wafer; it doesn&rsquo;t even fit comfortably on several.</p>
+
+    <p>So Cerebras has to spread a model across many wafers. And here the wafer hits its second wall: <strong>networking</strong>. Each WSE-3 has only 1.2 Tbps (150 GB/s) of off-wafer bandwidth. A single Nvidia Blackwell GPU has 900 GB/s of scale-up bandwidth. The wafer that&rsquo;s great <em>internally</em> is starved <em>externally</em>.</p>
+
+    <p>This is structural, not a bug. It is known as &ldquo;<strong>the Island Problem</strong>&rdquo;: because every reticle on the wafer must be identical (that&rsquo;s how the stitching works), you can&rsquo;t dedicate the edge reticles to high-speed networking PHYs. Any networking circuitry has to live in every reticle, including the ones in the middle that have nowhere to plug into. The geometry of wafer-scale punishes I/O density.</p>
+
+    <p>The consequence: Cerebras is forced to use <strong>pipeline parallelism</strong> &mdash; slice the model layer-by-layer across wafers, pass small activations between stages. This works, but it works <em>against</em> the wafer&rsquo;s core advantage. The whole point of putting everything on one chip was to run fast at small batch sizes. Pipeline parallelism needs large batch sizes to keep the pipeline full.</p>
+
+    <p>You can see this in the Cerebras public cloud menu. The largest production model offered is GPT-OSS at 120B total parameters. Llama 70B and 405B were quietly deprecated. DeepSeek V3 and Kimi K2 &mdash; the two most popular frontier open-source models of 2025 &mdash; have never been offered. The economics of running them on wafers are too rough.</p>
+
+    <h2>The OpenAI deal: follow the money</h2>
+
+    <p>So why is OpenAI committing $24 billion to a chip that can&rsquo;t run their flagship model?</p>
+
+    <p>Because OpenAI isn&rsquo;t buying Cerebras to run GPT-5.3. They&rsquo;re buying it to run <strong>Spark</strong> &mdash; a 120B-parameter distilled version of GPT-5.3-Codex, sized specifically to fit on wafers. The bet is that for agentic coding workloads, a small fast model beats a big slow one, and the price premium developers pay for the speed makes the unit economics work. (For the technique behind Spark, see <a href="46-hw-07-how-distillation-changed-who-can-compete.html">How Distillation Changed Who Can Compete</a>.)</p>
+
+    <p>The deal mechanics:</p>
+    <ul>
+      <li><strong>Capacity:</strong> 750 MW deployed 2026&ndash;2028, with an option for 1.25 GW more (2 GW total).</li>
+      <li><strong>Working capital loan:</strong> $1B from OpenAI to Cerebras, 6% interest, waived if repaid through compute delivery.</li>
+      <li><strong>Warrants:</strong> Up to ~33.4M shares of Cerebras at $0.00001/share. Vesting tied to OpenAI hitting payment milestones. Could be up to 12% of the company on a fully diluted basis.</li>
+      <li><strong>Pass-through costs:</strong> Datacenter rent, power, and infrastructure are reimbursed by OpenAI &mdash; meaning Cerebras can shop expensive sites without absorbing the risk.</li>
+    </ul>
+
+    <p><strong>What $24.6B looks like in SaaS terms.</strong> That&rsquo;s roughly the size of Workday&rsquo;s full annual revenue. For one customer-vendor commitment over three years, this is unprecedented even by AI standards. The shape is closer to a long-term real-estate lease than a SaaS contract: Cerebras builds capacity; OpenAI pays whether or not it fully uses it (a "take-or-pay" structure common in energy and infrastructure, almost never in software). The warrants and the $1B working capital loan mean OpenAI is also financing Cerebras&rsquo;s growth. None of this rhymes with a normal customer relationship &mdash; this is the financial structure of an infrastructure partner.</p>
+
+    <p><strong>Why structure it this way.</strong> Cerebras is too small to fund the buildout. OpenAI cannot get this capacity from Nvidia / Google / AWS at the speeds Spark needs. So they negotiated a deal where: (1) OpenAI prepays a chunk of revenue as a "loan" Cerebras can spend immediately, (2) OpenAI gets equity upside if Cerebras succeeds, (3) Cerebras&rsquo;s downside is bounded because OpenAI pays for the datacenters either way. Both sides reduced the risk of the other failing. The result is a hybrid of supplier contract, debt, and venture investment all in one document. Expect to see more deals shaped like this between AI labs and chip companies.</p>
+
+    <p><strong>The unit economics.</strong> Detailed industry estimates put each CS-3 system at ~$478K all-in to deploy (the wafer itself is only ~$20K of raw silicon &mdash; the rest is custom power delivery, cooling, and assembly). Operating costs run ~$9.63/hour. Total cost of ownership: ~$23.35/hour/system. Cerebras rents each system to OpenAI at an implied <strong>$41.96/hour</strong>. That&rsquo;s a ~45% gross margin on hardware &mdash; well above the 15&ndash;25% IRRs you see on typical GPU cloud deals.</p>
+
+    <p><strong>Why the margin is so high:</strong> on a GPU deal, the operator pays Nvidia $30K&ndash;40K per chip and Nvidia keeps 70%+ of that as gross margin. Cerebras designs and assembles its own hardware, so there&rsquo;s no equivalent "Nvidia tax." This is the same reason Apple&rsquo;s services revenue has higher margin than handset revenue: vertical integration captures what would otherwise leak to suppliers.</p>
+
+    <p><strong>For OpenAI&rsquo;s side of the math.</strong> Detailed modeling puts the cost to serve Spark at ~$0.19 per million tokens against $0.30 in revenue. That&rsquo;s a <strong>35% inference gross margin</strong>. For comparison, Opus 4.6 Fast probably runs at 70&ndash;80% gross margin (which is why it&rsquo;s such a profitable SKU for Anthropic). 35% is below frontier-model profitability but still acceptable if (a) the premium speed lets OpenAI charge above commodity rates, and (b) algorithmic progress makes the model smarter over time without requiring more hardware. The bet is that GPT-5.5-equivalent quality will run on the same 120B form factor a year from now.</p>
+
+    <p><strong>The implication for any AI product roadmap:</strong> "fast tier" SKUs are likely to settle around 30&ndash;40% gross margin while "frontier intelligence" SKUs stay at 60&ndash;80%. The two have totally different P&amp;L shapes. If you&rsquo;re building an agentic feature that depends on speed, your margin will look more like a hardware rental business than a SaaS business. Plan accordingly.</p>
+
+    <h2>The execution risk: can Cerebras actually ship?</h2>
+
+    <p>This is where the bet gets fragile. OpenAI&rsquo;s contract requires Cerebras to deliver 250 MW each year in 2026, 2027, and 2028. Independent datacenter-capacity tracking can only account for ~180 MW of capacity Cerebras has lined up by the end of 2027. That&rsquo;s a meaningful shortfall against contracted demand.</p>
+
+    <p><strong>How to think about "MW" if you&rsquo;ve never had to.</strong> 1 megawatt is the continuous power draw of about 800 homes. The full 750 MW OpenAI committed to is roughly enough electricity for 600,000 homes &mdash; a small city &mdash; running 24/7. For one vendor partnership, to serve inference for one company. The reason AI infrastructure is described as "Manhattan Project-sized" is because individual deployments now consume the equivalent of city-scale grids. (See <a href="66-ec-07-the-manhattan-sized-data-center.html">The Manhattan-Sized Data Center</a>.) Power, not chips, is increasingly the binding constraint.</p>
+
+    <p>Worse, Cerebras can&rsquo;t use most of the existing datacenter supply. Their cooling system needs ~4 liters per minute per kW of facility water flow &mdash; roughly 3x what an Nvidia GB200 rack uses, which is what most modern liquid-cooled data centers are sized for. And the inlet water has to be chilled to ~5&deg;C, which means a chiller-heavy facility (their Oklahoma site runs a 6,000-ton chiller plant). An off-the-shelf GPU datacenter is not drop-in for Cerebras.</p>
+
+    <p><strong>The implication.</strong> Custom cooling and chilled-water requirements mean Cerebras can&rsquo;t just rent space from a Digital Realty or Equinix at the going rate. They have to find or build datacenters specifically tuned to their hardware. OpenAI is letting them pay up to $200/kW/month for capacity &mdash; well above the $130&ndash;140/kW/month going rate &mdash; because OpenAI absorbs the cost. The strategy is to take many smaller, modular sites instead of waiting for hyperscale builds. Cerebras will find capacity. Whether they find <em>enough</em> capacity at the contracted pace, before 2028, is the open question.</p>
+
+    <h2>Why this could still go wrong</h2>
+
+    <p>The $24B is real money, but the bet is fragile. Three things need to keep being true for it to pay off:</p>
+
+    <ol>
+      <li><strong>Speed has to keep commanding a premium.</strong> If Nvidia&rsquo;s next architecture closes the speed gap on commodity GPUs (Rubin in 2026, Rubin Ultra in 2027), Cerebras&rsquo;s main differentiator narrows. The wafer&rsquo;s advantage is large today, but it&rsquo;s a chip-architecture lead, not a moat. <strong>Why this matters for your roadmap:</strong> if you&rsquo;re planning a feature whose value depends on Cerebras-class speeds, you&rsquo;re betting that Nvidia doesn&rsquo;t catch up &mdash; a real bet, not a free one.</li>
+      <li><strong>Distillation has to keep delivering.</strong> Spark is a 120B distilled model that fits on wafers. If frontier intelligence in 2026&ndash;2027 (Opus 5, Sonnet 5, Gemini 3 Pro) requires multi-trillion-parameter architectures that resist distillation, Cerebras is stuck running yesterday&rsquo;s quality fast. The bet that "small + fast beats big + slow" is currently winning. It has not always. <strong>Why this matters for your roadmap:</strong> if your customers expect frontier intelligence, Cerebras is not where your tokens come from yet.</li>
+      <li><strong>Cerebras has to physically build the datacenters.</strong> The ~70 MW gap against the 2027 commitment is real. If they miss delivery dates, OpenAI&rsquo;s working capital loan accelerates (full balance plus interest, immediately), and the warrants vest differently. A timeline miss in 2027 could cascade into a financial restructuring. <strong>Why this matters for your roadmap:</strong> if you&rsquo;re a customer or potential customer of Cerebras inference, monitor capacity announcements quarterly. A capacity miss often shows up as silent speed degradation first.</li>
+    </ol>
+
+    <p>If you&rsquo;re tracking AI as a market, Cerebras is the cleanest test of the "speed-as-a-SKU" thesis. Whether they succeed or fail will tell you whether the broader bet that customers will pay 6x for 2.5x speed actually scales beyond the power-user segment that anchored the early demand.</p>
+
+    <h2>A second deal worth watching</h2>
+
+    <p>In March 2026, AWS announced it will deploy Cerebras wafers in its own datacenters to power parts of Bedrock inference. The architecture is <strong>disaggregated prefill-decode</strong>: Trainium chips (which AWS already runs at scale for Anthropic via Project Rainier) handle the prefill phase, then hand the KV cache to Cerebras wafers for decode.</p>
+
+    <p>Prefill is compute-heavy; decode is memory-heavy. Putting each phase on the chip that&rsquo;s good at that phase is the architectural shift the entire inference industry is converging on (Nvidia announced their own version at GTC after the <a href="86-fs-17-groq-and-the-inference-rebels.html">Groq</a> acquisition). If the AWS&ndash;Cerebras setup proves out, expect Anthropic to formally join the deal &mdash; and expect &ldquo;Claude Fast&rdquo; tokens served via Cerebras to become standard on Bedrock.</p>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Six concrete things to do differently if you build software that uses LLMs &mdash; or sell to companies that do.</p>
+
+    <ol>
+      <li>
+        <strong>Spec speed, not just model.</strong>
+        "Which model do we use" used to be one question. Now you also pick a speed tier and a per-token cost. Document both in your PRD. A 40 tok/sec response inside an agent loop is a different product from a 200 tok/sec response, even with identical model weights. Faster tiers tend to land at 30&ndash;40% gross margin and slower tiers at 60&ndash;80% &mdash; the choice flows directly into your P&amp;L. <em>Why this matters: most PRDs today are silent on speed and end up with whatever default the engineering team picks at integration time, which becomes load-bearing later.</em>
+      </li>
+      <li>
+        <strong>Put speed clauses in your AI vendor contracts.</strong>
+        Opus 4.6 Fast quietly degraded from ~100 tok/sec to ~70 tok/sec over a few months, and customers had no contractual recourse because nobody asked for one. If your product depends on a specific interactivity range (voice, agents, real-time coding, live collaboration), negotiate a minimum tok/sec floor the same way you&rsquo;d negotiate uptime SLAs. <em>Why this matters: AI vendor SLAs in 2026 are still mostly "the API will respond." That is no longer the right metric.</em>
+      </li>
+      <li>
+        <strong>Know whether your workload is prefill-heavy or decode-heavy.</strong>
+        Prefill = lots of context for the model to read (RAG retrieval, long system prompts, document Q&amp;A). Decode = lots of tokens to generate (agent loops, reasoning chains, code completion). These run on different chips in the 2026&ndash;2028 stack and will be priced and routed differently. Knowing which side your feature lives on lets you negotiate better and pick the right cloud. <em>Why this matters: if your feature is decode-heavy and you&rsquo;re paying frontier rates for prefill chips, you&rsquo;re overpaying by 2&ndash;5x.</em>
+      </li>
+      <li>
+        <strong>Maintain a model-menu map.</strong>
+        Cerebras&rsquo;s public cloud tops out at 120B parameters and excludes DeepSeek V3, V4, and Kimi K2. Groq&rsquo;s menu is narrower still. Nvidia&rsquo;s GPU clouds run everything. Every cloud has a different list, and the lists change every quarter. Keep a running spreadsheet of which models run where, at what speed, at what price. Treat it like a competitive feature matrix &mdash; because it is. <em>Why this matters: vendor lock-in in 2026 isn&rsquo;t about contracts, it&rsquo;s about which models can&rsquo;t physically run on your provider&rsquo;s hardware.</em>
+      </li>
+      <li>
+        <strong>Plan for silent vendor degradation.</strong>
+        The Opus Fast slowdown is the canary. As more inference moves to specialized hardware (wafers, LPUs, TPUs) and providers oversubscribe, single-vendor lock-in becomes more dangerous. Build a fallback strategy that assumes one vendor will get worse without telling you. Multi-chip / multi-provider routing is becoming a real PM responsibility, not just an infra one. <em>Why this matters: if your AI feature is the customer&rsquo;s primary surface, "our vendor got slower" is now your problem, not theirs.</em>
+      </li>
+      <li>
+        <strong>Watch for "served on X" as an enterprise differentiator by 2027.</strong>
+        The same way "we run on AWS" was a checkmark in 2014 enterprise RFPs, "sub-second response time, served on Cerebras" or "private inference on Trainium" will likely become one in 2027. Enterprise buyers are starting to ask about the inference stack, not just the model. If you sell to regulated industries (healthcare, finance, government), this conversation will hit you first. <em>Why this matters: the AI infrastructure story is becoming part of the enterprise sales motion, whether or not your sales team is ready.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>Cerebras built a chip that should not work, then spent five years getting it to work, and arrived at the exact moment when its weirdest tradeoff &mdash; trading memory capacity for memory bandwidth &mdash; turned out to be what the market wanted. They are still <em>too small a memory island</em> to run frontier models at frontier sizes, and they have not yet proven they can build datacenters fast enough to deliver on their contracts. But they are the fastest decoder per token that exists, and a $24 billion customer has decided that&rsquo;s enough.</p>
+
+    <p>The wafer-scale era is here. Now we find out if it scales.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="../books/semianalysis-decoded.html">&larr; Inside the AI Machine</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../index.html">Bookshelf &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

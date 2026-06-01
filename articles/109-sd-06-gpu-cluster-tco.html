@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why the Cheapest GPU Cluster Isn't the Cheapest</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~3,900 words &middot; ~18 min read &middot; for SaaS PMs who need to understand why two equal-priced GPU clusters cost different amounts of money</div>
+    <h1>Why the Cheapest GPU Cluster Isn&rsquo;t the Cheapest</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 6 &mdash; the real cost of a GPU cluster</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> Two GPU cloud providers can quote the same $4-per-GPU-per-hour price and have meaningfully different total cost of ownership. The hidden costs (downtime, setup, debugging, storage premiums, support tiers, network tuning) can add 10-15% to a hyperscaler&rsquo;s real bill and 15%+ to a silver-tier neocloud&rsquo;s &mdash; <em>even when the headline GPU price is identical.</em> The key idea is "Goodput" &mdash; useful work per dollar &mdash; the metric that actually matters. For SaaS PMs running AI features at scale, the punchline is sharper: a 20% increase in goodput expense can compress your inference gross margin by 8 percentage points. This is the article that turns "GPU pricing" from a procurement detail into a P&amp;L line item.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="111-fd-01-the-physical-stack.html">The Physical Stack</a> &mdash; yield: the same idea that chips fail underlies cluster failure rates (MTBF).</li>
+        <li><a href="112-fd-02-memory.html">Memory</a> &mdash; the memory hierarchy extends downward into the storage tiers the article prices.</li>
+        <li><a href="114-fd-04-how-an-llm-runs-on-silicon.html">How an LLM Runs</a> &mdash; training vs inference and prefill/decode &mdash; the three workloads have very different TCO.</li>
+        <li><a href="115-fd-05-connecting-chips.html">Connecting Chips</a> &mdash; <strong>the keystone.</strong> Datacenters, TCO, goodput, scale-up/scale-out, neoclouds &mdash; this article&rsquo;s core terms.</li>
+      </ol>
+      <div class="buildup-foot">New here? Climb the ladder first. Fluent already? Skim, and hover any underlined term as you read.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>Free public tools exist for this &mdash; a <strong>GPU Cluster TCO Calculator</strong> and a companion <strong>Goodput Calculator</strong>. You plug in your cluster size, workload type, provider, storage needs, and support tier, and they output the real cost of running that cluster &mdash; not the brochure price.</p>
+
+    <p>They then ran the calculators across three real-world workload scenarios &mdash; a large LLM pretrain, a multimodal RL research cluster, and inference endpoints &mdash; comparing three provider tiers. The findings:</p>
+
+    <ul>
+      <li><strong>For training-heavy workloads,</strong> a gold-tier neocloud (Nebius, Fluidstack, Crusoe) is roughly 10% cheaper on TCO than an equivalent hyperscaler (AWS, Azure, GCP, Oracle) and 15% cheaper than a silver-tier neocloud (Together, Lambda, Vultr), <em>even when the headline GPU price is identical.</em></li>
+      <li><strong>For multimodal RL research with cheap GPUs but high storage,</strong> the hyperscaler is 61% more expensive than the gold-tier neocloud &mdash; because the GPU discount stops applying once you add support tiers, orchestration premiums, and storage premiums.</li>
+      <li><strong>For inference endpoints with fault-tolerant frameworks,</strong> the difference between tiers nearly disappears (less than 1%) because the workload absorbs failures automatically. <em>This is why "cheap" inference providers can still be a sensible choice.</em></li>
+    </ul>
+
+    <p>The framework that ties all three findings together &mdash; and that a SaaS PM should commit to memory &mdash; is the concept of <strong>Goodput</strong>.</p>
+
+    <h2>Quick translation: the GPU cluster cost stack</h2>
+
+    <p>For anyone who buys SaaS, the GPU cluster cost structure rhymes with cloud billing &mdash; but with much sharper hidden costs and a much wider quality range between providers.</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 32%;">Your SaaS world</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">GPU cluster equivalent</th>
+      </tr>
+      <tr><td style="padding:8px; vertical-align:top;">EC2 / VM hourly rate</td><td style="padding:8px;"><strong>GPU $/hr.</strong> The headline price. $2&ndash;$5 per GPU per hour depending on tier, term, and chip. This is the only number most procurement teams look at &mdash; and it&rsquo;s 50-70% of the real TCO at best.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">S3 / Blob storage</td><td style="padding:8px;"><strong>Hot + cold tiered storage.</strong> NVMe parallel filesystems (Weka, VAST, Lustre) for "hot" training data. Object storage for "cold" archives. 2&ndash;25 TB per GPU is normal. Hot storage performance varies up to 8x between offerings even from the same provider.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Data egress fees</td><td style="padding:8px;">Same idea, much more painful. Moving training data, model weights, or checkpoints out of a hyperscaler costs real money. Neoclouds usually don&rsquo;t charge egress.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Premium support tier</td><td style="padding:8px;"><strong>3-10% uplift on the whole bill.</strong> AWS / Azure / GCP charge separately for enterprise support. Gold-tier neoclouds typically include 24x7 direct-to-engineer support in the GPU price.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Orchestration premium</td><td style="padding:8px;">10%+ surcharge on EC2-equivalent prices when you use SageMaker HyperPod or Azure CycleCloud for managed Slurm/K8s. Hyperscaler-only thing.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Production downtime cost</td><td style="padding:8px;"><strong>Goodput expense.</strong> Cluster hours you paid for but didn&rsquo;t get useful work out of. Driven by failures, MTBF, blast radius, repair time, job init time. Can be 6-21% of total cluster spend depending on tier and workload.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Implementation services / SI consulting</td><td style="padding:8px;"><strong>Setup expense.</strong> Engineering hours spent tuning NCCL + InfiniBand / EFA, configuring storage, debugging the orchestrator. On hyperscalers, this can be weeks-to-months at $200K/engineer.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Ongoing CloudOps / FinOps team</td><td style="padding:8px;"><strong>Debugging expense.</strong> Engineering time spent every month diagnosing performance issues, network flakiness, mysterious job failures. On hyperscalers, easily 1 engineer-week per month.</td></tr>
+    </table>
+
+    <p>The most important takeaway from this table: <strong>the GPU price is just the iceberg above the water.</strong> Storage discounts, support tiers, orchestration premiums, downtime, setup, and debugging are all separate buckets that swing 5-20% each in real TCO terms.</p>
+
+    <p>Three implications a SaaS PM should hold while reading the rest of this piece:</p>
+    <ul>
+      <li><strong>Procurement teams optimize the wrong variable.</strong> "We got 30% off the GPU rate" means almost nothing if storage performance is 3x slower and engineering time is 4x higher. AWS&rsquo;s 75th-percentile discount can be net-more-expensive than CoreWeave&rsquo;s list price.</li>
+      <li><strong>Workload type is the single biggest TCO driver.</strong> The same provider can be the right or wrong choice depending on whether you&rsquo;re running large training jobs, RL research, or inference endpoints. There is no universally best provider.</li>
+      <li><strong>Reliability is a margin lever, not a footnote.</strong> If you sell inference tokens, a 20% increase in your underlying goodput expense can compress your gross margin by 8 percentage points. Picking a cheaper-but-flakier provider can wipe out your profitability.</li>
+    </ul>
+
+    <h2>The 8 layers of cluster TCO</h2>
+
+    <p>GPU cluster cost breaks into eight components. Five of them show up on your monthly cloud bill. Three of them are <em>implicit</em> and are the difference between good providers and bad ones.</p>
+
+    <p><strong>On the visible bill:</strong></p>
+    <ol>
+      <li><strong>GPUs</strong> ($/GPU-hr). Headline rate after discounts, term commitments, and orchestration premiums.</li>
+      <li><strong>Storage</strong> ($/GB-mo). Hot (NVMe parallel FS), warm (block storage), cold (object). 2-25 TB per GPU.</li>
+      <li><strong>Networking</strong> ($/hr or $/GB-mo). Public IPs, load balancers, egress, data transfer.</li>
+      <li><strong>Control Plane</strong> ($/hr). Login nodes, code dev, slurmctld / Kubernetes control, data processing nodes.</li>
+      <li><strong>Support</strong> (% uplift). Enterprise tier on hyperscalers, baseline-included on neoclouds.</li>
+    </ol>
+
+    <p><strong>Implicit costs that don&rsquo;t show up on the bill but matter just as much:</strong></p>
+    <ol start="6">
+      <li><strong>Goodput Expense</strong> (% uplift). The hours you paid for but got no useful work from. Driven by failures, MTBF, blast radius, time to detect, time to repair, time to reinitialize jobs after a checkpoint. <em>This is the biggest hidden variable.</em></li>
+      <li><strong>Setup Expense</strong> ($/hr). Engineering hours spent on the initial cluster bring-up: tuning network drivers, configuring storage, validating orchestrator, hitting target throughput on collectives. Hyperscalers eat months of this; gold-tier neoclouds eat days.</li>
+      <li><strong>Debugging Expense</strong> ($/hr). Ongoing engineering hours diagnosing weird issues over the cluster&rsquo;s life. NCCL stalls, GPU "falling off the bus," mysterious EFA performance regressions, slurm queue issues.</li>
+    </ol>
+
+    <p><strong>The structural insight:</strong> traditional cloud cost modeling treats compute, storage, and networking as the cost drivers. For GPU clusters, the hidden three (goodput, setup, debugging) can equal or exceed the visible cost of compute. This is why a "30% discount" can be a net loss.</p>
+
+    <h2>Goodput: useful work, not just work</h2>
+
+    <p>This is the most important concept in the article and the one a SaaS PM should commit to memory.</p>
+
+    <p><strong>Throughput</strong> is how much compute your cluster does per hour. <strong>Goodput</strong> is how much of that compute produces <em>useful</em> output toward your actual goal.</p>
+
+    <p>If your training job runs for 24 hours and 4 of those hours are wasted on a restart from the last checkpoint (because a GPU "fell off the bus" at hour 18), your goodput is 20 hours, your throughput is 24, and your goodput rate is 83%. You paid for 24 hours of GPU time. You got 20 hours of useful output. The other 4 hours are the cost of <strong>goodput expense.</strong></p>
+
+    <p>At small cluster sizes, this is a minor inefficiency. At scale, it becomes the dominant cost driver. Here&rsquo;s why:</p>
+
+    <p><strong>Mean time between failures (MTBF) compresses as clusters grow.</strong> If a single GPU has an MTBF of 25,000 GPU-hours, a 4,096-GPU cluster has a <em>cluster-level</em> MTBF of about 6 hours. Translated: somewhere in your cluster, a GPU fails roughly every 6 hours. If your training job spans 80% of the cluster, that failure brings down the job &mdash; and you have to restart from the last checkpoint.</p>
+
+    <p><strong>Blast radius scales with job size.</strong> If 80% of your cluster runs a single pretraining job, a single GPU failure stalls 80% of your cluster, not 0.025%. The cost of one failure isn&rsquo;t one GPU-hour &mdash; it&rsquo;s thousands of GPU-hours during the restart window. Plus the wasted compute since the last checkpoint.</p>
+
+    <p><strong>Job initialization time becomes load-bearing.</strong> Restarting a large training job from a checkpoint takes 10-15 minutes (depending on storage performance). Multiply that by the number of restarts per week, multiply by the cluster size affected, and the goodput hole gets very large very fast.</p>
+
+    <p><strong>The provider quality differential is real.</strong> Gold-tier providers identify failures in 15 minutes, repair them in 15 minutes, have hot spares pre-warmed, and run clean datacenters with experienced ops teams. Silver-tier providers take an hour to detect, an hour to swap a node, may not have hot spares, and have less experience running multi-tenant clusters at scale. The gap shows up as a 3-4x goodput expense difference.</p>
+
+    <p><strong>For SaaS PMs</strong> the SaaS analog is the concept of "real availability" vs. "advertised uptime." A SaaS vendor with 99.9% advertised uptime that actually delivers 99.0% real-world availability for your specific workflow is hugely more expensive than a vendor with 99.5% advertised uptime that actually delivers 99.5%. The metric that matters is the actual experienced reliability, weighted by how much your workflow depends on it.</p>
+
+    <h2>The three provider tiers</h2>
+
+    <p>GPU cloud providers sort into three quality tiers. The mapping is real and matters for procurement.</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 16%;">Tier</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2); width: 25%;">Examples</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.2);">What you actually get</th>
+      </tr>
+      <tr><td style="padding:8px;"><strong>Gold</strong></td><td style="padding:8px;">CoreWeave, Nebius, Fluidstack, Crusoe</td><td style="padding:8px;">Aggressive volume discounts (25th-percentile pricing). Strong storage performance baked in. Network tuned out-of-the-box. 24x7 direct-to-engineer support included. Hot spares pre-warmed in a 2-6% capacity reserve. Free POCs. Health checks and monitoring dashboards configured by default.</td></tr>
+      <tr><td style="padding:8px;"><strong>Hyperscaler</strong></td><td style="padding:8px;">AWS, Azure, GCP, Oracle</td><td style="padding:8px;">50-75th-percentile pricing on volume contracts. Storage requires extra fees for good performance. Network tuning takes weeks-months of engineering. Support is a separate 3-10% line item. POCs cost money. Health checks need configuration. Capacity guarantees usually available. Hot spare pools exist.</td></tr>
+      <tr><td style="padding:8px;"><strong>Silver</strong></td><td style="padding:8px;">Together, Lambda, Vultr, Voltage Park, Gcore</td><td style="padding:8px;">25th- to 50th-percentile pricing, sometimes lower. Storage performance varies by provider. InfiniBand / RoCE generally works. Support included but rarely 24x7-direct-to-engineer. Monitoring and health checks rarely configured by default. Cold spares typical (provider waits for OEM to repair).</td></tr>
+    </table>
+
+    <p><strong>The aggressive-discount warning.</strong> Very low silver-tier pricing is itself a quality signal: buyers should be wary of aggressive discounts, which often signal low quality. The SaaS analog: if a vendor is offering 60% below market on a critical workflow, ask what they&rsquo;re cutting to get there. The answer is usually "the things you don&rsquo;t see until production breaks."</p>
+
+    <h2>Three scenarios, three different answers</h2>
+
+    <p>Now the practical part. Three real-world workload scenarios, run through the TCO calculator, give findings that are remarkably scenario-specific.</p>
+
+    <h3>Scenario 1: Large LLM pretrain (5,184 GPUs, 80% of cluster on one job)</h3>
+
+    <p>Workload: a 4,096-GPU training run, big enough that a single failure has a huge blast radius. Equal $4/GPU-hr pricing across all three tiers.</p>
+
+    <p><strong>Result: Gold (1.00x) vs Hyperscaler (1.10x) vs Silver (1.15x).</strong></p>
+
+    <p>The 10% hyperscaler premium comes mostly from support tiers and the setup cost of tuning EFA networking to InfiniBand-equivalent performance. The 15% silver-tier premium comes from worse MTBF (more failures), longer time to detect/repair, slower storage (longer restart time), and the engineering hours required to compensate.</p>
+
+    <p>The goodput expense alone differs by 3x between tiers: 6.14% for gold, 10.53% for hyperscaler, 20.91% for silver. Each percentage point compresses the realized hourly cost of useful work proportionally.</p>
+
+    <h3>Scenario 2: Multimodal RL research (2,048 GPUs, many small jobs, high storage)</h3>
+
+    <p>Workload: small RL jobs, lots of storage (12 TB/GPU), no fault tolerance in the code. Pricing differs: $2.40 for gold and silver, $3.10 for hyperscaler.</p>
+
+    <p><strong>Result: Gold (1.00x) vs Hyperscaler (1.61x!) vs Silver (1.15x).</strong></p>
+
+    <p>The hyperscaler is 61% more expensive even though the headline GPU rate is only 29% higher. Where does the rest come from? Orchestration premium (10% of GPU cost), poor storage performance requiring expensive tier upgrades, support fees, and setup time on EFA tuning.</p>
+
+    <p>Notably, in this scenario the goodput expense difference is small &mdash; 0.23% to 0.96% &mdash; because the jobs are small (64 GPUs each, ~3% of the cluster). When a job fails, the blast radius is tiny. Reliability matters less when jobs are small.</p>
+
+    <h3>Scenario 3: Inference endpoints (512 GPUs, fault-tolerant framework)</h3>
+
+    <p>Workload: 8-GPU inference jobs (1.5% of cluster each) served via modern load-balanced frameworks (llm-d, SGLang OME). Pricing: $2.40 for gold and silver, $3.10 for hyperscaler.</p>
+
+    <p><strong>Result: Gold and Silver are within 1% of each other. Hyperscaler is 59% more expensive.</strong></p>
+
+    <p>This is the most interesting result for a SaaS PM. <strong>For fault-tolerant inference workloads, the tier of your underlying compute provider barely matters.</strong> Modern inference frameworks (llm-d, SGLang OME, kserve) automatically reroute failed requests to healthy nodes. The downtime cost essentially disappears.</p>
+
+    <p>This is why inference providers can rent capacity from lower-tier providers anywhere in the world and still operate profitably. The fault tolerance is in the software layer, not the infrastructure layer.</p>
+
+    <h2>Fault tolerance: where the future of training is going</h2>
+
+    <p>The training scenarios above assume your code restarts from a checkpoint when a node fails. That&rsquo;s the default for most teams today. But a new generation of fault-tolerant training frameworks is changing the math:</p>
+
+    <ul>
+      <li><strong>TorchFT</strong> (open source, Meta-led). Lets training jobs survive node failures by maintaining replica groups. Tradeoff: ~10% performance overhead because it uses CPU-based collectives across replica groups. Works on Kubernetes or Slurm.</li>
+      <li><strong>AWS SageMaker HyperPod Checkpointless Training</strong> (December 2025). AWS-only. Stores redundant model state across GPUs so failures don&rsquo;t require restarts. AWS claims 1m45s recovery vs 15m for traditional checkpoint restart. Tradeoff: ~5% memory overhead, locks you into AWS.</li>
+      <li><strong>TorchPass</strong> (commercial, from clockwork.io). Just-in-time state migration. Same training performance as a non-fault-tolerant job. Tradeoff: license cost + idle GPUs for hot spares.</li>
+    </ul>
+
+    <p><strong>Why this matters for SaaS PMs:</strong> if you build AI features that depend on long training runs (custom models, fine-tunes), the fault-tolerance choice is now a real product decision. Your provider, your framework, and your code all need to be compatible. The wrong combination wastes 10-20% of your compute budget on goodput leaks. The right combination essentially eliminates that loss.</p>
+
+    <p>The blunt conclusion: fault-tolerant training is a secret sauce, available to frontier labs or to those willing to pay for a software license. If you&rsquo;re running anything bigger than a 1,000-GPU job, fault tolerance is now part of the product spec, not just the infrastructure spec.</p>
+
+    <h2>The inference margin sensitivity: the SaaS-PM money chart</h2>
+
+    <p>This is the single most important paragraph in the article for a SaaS PM running an AI feature with metered pricing.</p>
+
+    <p>Model inference-endpoint margins as a function of underlying goodput expense, and the result is alarming:</p>
+
+    <ul>
+      <li>At $3 per million tokens (blended price), $1.90/hr/GPU goodput expense yields ~28% gross margin.</li>
+      <li>A 20% increase in goodput expense to $2.10/hr/GPU compresses margins to ~20% &mdash; an 8-percentage-point hit.</li>
+      <li>A 63% increase to $3.10/hr/GPU (hyperscaler-equivalent) compresses margins to <strong>negative 18%.</strong></li>
+    </ul>
+
+    <p>Translation: if you serve inference at $3/M tokens and pick a slightly-worse provider, your gross margin drops by a third. If you pick a much-worse provider, your business loses money on every token you serve.</p>
+
+    <p><strong>The structural insight:</strong> inference margins are extremely sensitive to underlying goodput expense because you can&rsquo;t easily reprice tokens. Your customers pay a fixed $/M tokens. Your underlying cost has more variance than your revenue. Every percentage point of goodput leak compresses margin proportionally &mdash; not linearly, because fixed costs amplify the effect.</p>
+
+    <p>This is why provider tier is a unit-economics decision, not a procurement one &mdash; choosing a better provider produces clear unit-economic benefits. The 1.59x hyperscaler premium that looks like a small line-item in procurement becomes a 46-point gross-margin swing in the actual business.</p>
+
+    <h2>Why this matters for your AI roadmap</h2>
+
+    <p>Six concrete implications:</p>
+
+    <ol>
+      <li><strong>The provider you pick is a product decision, not a procurement decision.</strong> If you build an inference feature, the underlying compute provider directly determines whether the feature is profitable. This isn&rsquo;t a "let the infra team handle it" question &mdash; it&rsquo;s a product P&amp;L lever.</li>
+      <li><strong>Hidden costs dominate visible costs at scale.</strong> The eight TCO components mean that "we got a great GPU rate" is meaningless without storage performance, support tier, goodput, setup, and debugging accounting. Budget the implicit costs alongside the explicit ones.</li>
+      <li><strong>Match the provider tier to the workload.</strong> Large training jobs need gold-tier (or hyperscaler with capacity guarantees). Inference endpoints with fault-tolerance work fine on silver-tier. RL research depends on storage performance and engineering bandwidth. There is no universal answer.</li>
+      <li><strong>Fault tolerance is now a product spec.</strong> If your training jobs are big enough to span more than 1,000 GPUs, your code needs to be fault-tolerant. Otherwise you pay a 10-20% goodput tax that compounds your costs.</li>
+      <li><strong>Inference gross margin lives or dies on reliability.</strong> A 20% increase in underlying cluster cost can compress your inference GM by 8 percentage points. If you sell inference tokens, your provider relationship is a margin-defining business decision, not an engineering detail.</li>
+      <li><strong>The "AWS discount" can be a trap.</strong> The 75th-percentile hyperscaler discount looks like a win on the GPU line. After storage premiums, support fees, orchestration premiums, and setup costs, the gold-tier neocloud with no discount can be 10-15% cheaper. Procurement teams trained on traditional cloud cost optimization can systematically pick the more expensive option.</li>
+    </ol>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Six concrete actions.</p>
+
+    <ol>
+      <li>
+        <strong>Build a real TCO model, not a per-hour GPU comparison.</strong>
+        Use a public GPU-cluster TCO calculator, or build your own with the same eight components. Compare providers on real TCO, not headline rate. The gap can be 10-15% and it will compound across every quarter of your AI feature&rsquo;s P&amp;L. <em>Why this matters: most enterprise AI cost models in 2026 are wrong because they only count GPU hours. The right model counts goodput-adjusted useful work.</em>
+      </li>
+      <li>
+        <strong>Make provider tier a P&amp;L decision, not an infra decision.</strong>
+        If you build inference features priced on per-token or per-task economics, your underlying compute tier directly determines your gross margin. Pull this into your product OKR conversation. A 20% goodput expense increase = 8 GM points. <em>Why this matters: this is the kind of decision that usually lives 3 levels below the PM and ends up costing the company more than any feature scope change.</em>
+      </li>
+      <li>
+        <strong>Add goodput-rate monitoring to your AI infrastructure dashboards.</strong>
+        Track useful-compute-hours / paid-compute-hours as a time-series. Page someone when it drops below your threshold (typically 90-95% for production training, 99%+ for inference). Most teams track GPU utilization. Almost none track goodput rate. Goodput rate is the metric that maps to your actual cost. <em>Why this matters: a 5% drop in goodput rate is a 5% increase in your AI feature&rsquo;s real cost. Most cost-monitoring systems don&rsquo;t even surface this.</em>
+      </li>
+      <li>
+        <strong>Match provider to workload deliberately, document the choice.</strong>
+        Large pretrain &rarr; gold-tier or hyperscaler with hot spares. RL research with small jobs &rarr; almost any tier works, optimize for storage performance and engineering bandwidth. Inference with fault-tolerant frameworks &rarr; silver-tier is genuinely fine. Write the rationale into your architecture doc. <em>Why this matters: the right provider for your workload is workload-specific. A team that picks one provider for everything is leaving 10-30% on the table.</em>
+      </li>
+      <li>
+        <strong>Make fault tolerance part of your training-feature roadmap.</strong>
+        If you build features that depend on training (custom models, agent fine-tunes, domain adaptation), the fault-tolerance choice (TorchFT, HyperPod Checkpointless, TorchPass, or checkpoint-restart) is a feature decision. Get the engineering team to commit to one. Otherwise you pay 10-20% in goodput tax on every training run. <em>Why this matters: most teams treat fault tolerance as "engineering best practices" instead of "product cost decision." It&rsquo;s the latter.</em>
+      </li>
+      <li>
+        <strong>If your inference business has compressing margins, audit your goodput expense before you audit anything else.</strong>
+        Before cutting features, raising prices, or laying off engineers: check whether your underlying cluster goodput rate has degraded. A 5-percentage-point degradation in goodput expense can explain a 4-point GM compression all by itself. Provider switches are usually the cheapest fix in the list of available levers. <em>Why this matters: AI inference businesses with margin compression often have a single fixable root cause &mdash; provider quality &mdash; that&rsquo;s invisible in the standard SaaS COGS waterfall.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>The headline GPU rental rate is the cloud-billing equivalent of a car&rsquo;s sticker price &mdash; visible, prominently advertised, and a small fraction of the real cost of ownership. The actual TCO of a GPU cluster has eight components, three of which never show up on the invoice. Workload type determines which components dominate. Provider tier determines how big the hidden components are.</p>
+
+    <p>For SaaS PMs running AI features at scale, the practical conclusion is that <strong>compute-provider quality is a P&amp;L lever you can pull from your seat.</strong> Not a procurement question. Not an infra-team question. A product-financial question that translates directly into your inference gross margin and your training-run cost.</p>
+
+    <p>This framework gives you a way to make that decision with real numbers. The eight components are well-defined. The goodput concept generalizes to any scaled cloud workload, including ones that aren&rsquo;t even AI yet.</p>
+
+    <p>The cheapest GPU isn&rsquo;t the cheapest. The most reliable GPU isn&rsquo;t always the right answer either. The right answer is the one that maximizes useful work per dollar across your specific workload, your specific scale, and your specific tolerance for engineering pain. Build the model. Make the call. Track goodput.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="108-sd-05-microsoft-pause.html">&larr; How Microsoft Lost the AI Race</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

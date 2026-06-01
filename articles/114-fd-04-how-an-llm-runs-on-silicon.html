@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foundations 4: How an LLM Actually Runs on Silicon</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">Foundations &middot; Primer 4 of 5 &middot; ~14 min read</div>
+    <h1>How an LLM Actually Runs on Silicon</h1>
+    <div class="article-subtitle">Inside the AI Machine &mdash; Foundations. Primer 4 of 5. Where the hardware story and the model story finally meet.</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>What this primer gives you:</strong> the bridge. Primers 1&ndash;3 were hardware. This one connects that hardware to the AI running on it. After this you will understand what a token really is, the two phases of answering a request and why one is compute-bound and the other memory-bound, what the KV cache is and why it eats memory, and the handful of architecture words &mdash; attention, FFN, MoE &mdash; that the issues assume you know. This is the primer that turns hardware facts into AI understanding.</p>
+
+    <h2>Tokens: the unit of everything</h2>
+
+    <p>An LLM does not read letters or words. It reads <strong>tokens</strong> &mdash; chunks of text, each roughly four characters. "Understanding" might be one token; "tokenization" might be three. A page of text is perhaps 500 tokens.</p>
+
+    <p>Tokens are the unit of <em>everything</em> in this industry. The model reads tokens in and writes tokens out. You are billed per token in (input) and per token out (output). When the articles say "cost per million tokens" or "tokens per second," tokens are the currency, the speedometer, and the workload all at once. If Primer 1&rsquo;s atom was the transistor, Primer 4&rsquo;s atom is the token.</p>
+
+    <h2>The model is just numbers in memory</h2>
+
+    <p>From Primer 2: a model is billions of <strong>parameters</strong> &mdash; also called <strong>weights</strong> &mdash; which are simply numbers. A "1.6 trillion parameter" model is 1.6 trillion numbers. Those numbers, stored in memory, <em>are</em> the model. They encode everything it learned.</p>
+
+    <p>This is why model size and memory are the same conversation. A bigger model is more numbers, which need more memory to hold and more memory-bandwidth to read. Primer 2&rsquo;s capacity-vs-bandwidth tradeoff and Primer 3&rsquo;s precision lever both exist because of this: the model is numbers, and numbers live in memory.</p>
+
+    <h2>Training vs inference: two completely different jobs</h2>
+
+    <p>There are two things you do with a model, and conflating them is a common mistake.</p>
+
+    <p><strong>Training</strong> is <em>building</em> the model &mdash; starting from random numbers and adjusting all the parameters, over and over, across an enormous body of text, until the numbers encode useful capability. Training is done once per model. It is staggeringly compute-heavy and costs tens to hundreds of millions of dollars. The first and largest stage is <strong>pretraining</strong>; later, smaller stages (often using reinforcement learning) refine it. A brand-new "pretrain" is a major event for an AI lab &mdash; the coding issue treats OpenAI&rsquo;s "Spud" pretrain as headline news.</p>
+
+    <p><strong>Inference</strong> is <em>using</em> the finished model &mdash; running it to answer a request. Inference happens billions of times a day. It is where ongoing cost lives, where revenue is earned, and where almost all the hardware drama in these issues plays out. When you hear "serving tokens," that is inference.</p>
+
+    <p>Rough analogy: training is writing the textbook; inference is a student using it to answer a question. The writing is a huge one-time effort; the using happens constantly. Most of this series &mdash; Cerebras, Groq, the value-capture economics &mdash; is about inference.</p>
+
+    <h2>The two phases of inference: prefill and decode</h2>
+
+    <p>Here is the most important mechanism in the primer, and the one that makes the Cerebras and Nvidia articles legible. Answering a single request has <em>two distinct phases</em>, and they behave so differently that the industry now runs them on different chips.</p>
+
+    <p><strong>Phase 1 &mdash; prefill.</strong> The model reads your entire prompt. Everything you sent &mdash; the question, the pasted document, the system instructions, the conversation history &mdash; is processed in one big parallel gulp. Because it&rsquo;s one large batch of math done all at once, prefill has <em>high arithmetic intensity</em> (Primer 3): lots of math per byte of memory touched. Prefill is <strong>compute-bound</strong>. It suits GPUs, which have abundant FLOPS. Prefill determines your "time to first token" &mdash; the wait before the answer starts.</p>
+
+    <p><strong>Phase 2 &mdash; decode.</strong> Now the model writes the answer &mdash; but it can only produce <em>one token at a time</em>. To write each token, it must read the model&rsquo;s entire set of parameters out of memory, do a modest amount of math, produce one token, and repeat. A 500-token answer is 500 repetitions of "read all the weights, do a little math." That is <em>low arithmetic intensity</em>: lots of memory traffic, little math per byte. Decode is <strong>memory-bound</strong>. Its speed is set by memory bandwidth, not FLOPS.</p>
+
+    <p>Read those two paragraphs again, because everything clicks here:</p>
+    <ul>
+      <li>Decode being memory-bound is <em>exactly why</em> SRAM machines (Cerebras, Groq) are fast &mdash; their enormous memory bandwidth tears through the memory-bound decode phase.</li>
+      <li>It is why the industry now does <strong>disaggregation</strong>: run compute-bound prefill on GPUs, run memory-bound decode on a bandwidth-optimized chip. The Nvidia GTC article&rsquo;s "Attention&ndash;FFN Disaggregation" and the AWS&ndash;Cerebras "prefill on Trainium, decode on the wafer" deal are both this idea.</li>
+      <li>It is why "fast tokens" is a hardware story: token speed = decode speed = memory bandwidth.</li>
+    </ul>
+
+    <h2>The KV cache: the conversation&rsquo;s memory</h2>
+
+    <p>During decode, the model writes token 1, then token 2, and so on. To write token 200, it needs the context of tokens 1 through 199. It would be insanely wasteful to re-read and re-process all 199 every single time.</p>
+
+    <p>So the model keeps a running scratchpad of everything processed so far. That scratchpad is the <strong>KV cache</strong> ("key-value cache" &mdash; the name doesn&rsquo;t matter). It is the conversation&rsquo;s working memory.</p>
+
+    <p>Two facts about the KV cache drive a lot of the issues:</p>
+    <ul>
+      <li><strong>It grows.</strong> The longer the conversation &mdash; the longer the prompt, the longer the answer, the more turns &mdash; the bigger the KV cache. A long-context agentic session can have a KV cache of many gigabytes.</li>
+      <li><strong>It lives in memory, competing with the model.</strong> The chip&rsquo;s memory has to hold both the model&rsquo;s parameters <em>and</em> every active user&rsquo;s KV cache. This is the squeeze. It is why Cerebras&rsquo;s tiny 44GB struggles with long context &mdash; weights eat most of it, leaving little for KV cache. It is why DeepSeek V4&rsquo;s "90% smaller KV cache" was a big deal. It is why "context memory storage" is becoming its own product category.</li>
+    </ul>
+
+    <p>Related term: the <strong>context window</strong> is the maximum amount of text (in tokens) a model can hold in mind at once &mdash; its working-memory ceiling. A "1M-token context window" can hold a long book. Bigger context is more useful but costs more KV-cache memory.</p>
+
+    <h2>Inside a model: attention and FFN</h2>
+
+    <p>You don&rsquo;t need the deep math, but two words recur and you should know what they point at. Every modern LLM is a <strong>transformer</strong>, built from a stack of identical layers. Each layer has two parts:</p>
+
+    <p><strong>Attention.</strong> The part that lets each token look at all the other tokens and decide what&rsquo;s relevant &mdash; how a word relates to the rest of the sentence and document. Crucially, attention is the part that reads the KV cache. So attention is <em>memory-heavy</em>: its performance is bounded by loading that cache.</p>
+
+    <p><strong>FFN &mdash; Feed-Forward Network.</strong> The part that processes each token on its own, applying the bulk of the model&rsquo;s learned knowledge. The FFN is <em>stateless</em> (it doesn&rsquo;t depend on other tokens or the cache) and <em>compute-heavy</em>.</p>
+
+    <p>Two parts, two personalities: attention is stateful and memory-bound, FFN is stateless and compute-heavy. That difference is the entire basis of the Nvidia GTC article&rsquo;s "Attention&ndash;FFN Disaggregation" &mdash; put memory-bound attention on GPUs with lots of memory, put compute-bound FFN on a deterministic chip like an LPU. You now know why that split is even possible.</p>
+
+    <h2>MoE: why models got "sparse"</h2>
+
+    <p>One more architecture word, because it&rsquo;s everywhere: <strong>MoE</strong>, Mixture of Experts.</p>
+
+    <p>An older "dense" model used every one of its parameters for every token &mdash; expensive. An MoE model is split into many specialist sub-networks called <strong>experts</strong>, and each token is routed to only a few of them. So the model can have a huge <em>total</em> parameter count (lots of knowledge) while only <em>activating</em> a small fraction for any given token (modest cost to run).</p>
+
+    <p>This is why the articles always cite two numbers, like "DeepSeek V4: 1.6T total / 49B active." Total is how big the model is; active is how much it actually uses per token. MoE is how models keep getting bigger without getting proportionally more expensive &mdash; and it&rsquo;s why each expert is small (hundreds of megabytes), a fact the Nvidia disaggregation story relies on.</p>
+
+    <h2>Serving many users: throughput vs interactivity</h2>
+
+    <p>A real inference service handles many users at once. The chip processes them in a <strong>batch</strong> &mdash; the <strong>batch size</strong> is how many requests it serves simultaneously. This creates the central tradeoff of inference economics:</p>
+
+    <ul>
+      <li><strong>Throughput</strong> &mdash; total tokens per second across <em>all</em> users on the chip. Big batches raise throughput.</li>
+      <li><strong>Interactivity</strong> &mdash; tokens per second delivered to <em>one</em> user. Big batches lower interactivity, because the chip&rsquo;s attention is divided.</li>
+    </ul>
+
+    <p>It is the bus-versus-Ferrari tradeoff: serve many people slowly (the bus &mdash; high throughput) or one person fast (the Ferrari &mdash; high interactivity). You move along this curve mostly by changing batch size. Every "fast tier," "priority tier," and SRAM-machine pitch in this series is a position on this one curve. (Issue 1, Cerebras, is built around it.)</p>
+
+    <h2>A few more words you&rsquo;ll meet</h2>
+
+    <ul>
+      <li><strong>Speculative decoding</strong> &mdash; a speed trick: a small fast model guesses the next few tokens, the big model verifies them in a single pass. Right guesses mean more tokens per step.</li>
+      <li><strong>Distillation</strong> &mdash; training a small model to imitate a big one, yielding a cheaper model with much of the quality. (How GPT-5.3-Codex-Spark was made.)</li>
+      <li><strong>Reasoning model</strong> &mdash; a model that generates hidden "thinking" tokens (chain-of-thought) before answering. Far better on hard problems, but burns 5&ndash;100x more tokens.</li>
+      <li><strong>Harness</strong> &mdash; the software wrapped around the model: context management, tools, memory, sandboxing. Claude Code is a harness. Issue 4 argues the harness matters as much as the model.</li>
+      <li><strong>Agent</strong> &mdash; an AI that runs a multi-step loop on its own (read, plan, act, verify) instead of answering one prompt. The subject of Issue 7.</li>
+    </ul>
+
+    <h2>Vocabulary check</h2>
+
+    <ul>
+      <li><strong>Token</strong> &mdash; ~4 characters; the unit of input, output, and billing.</li>
+      <li><strong>Parameter / weights</strong> &mdash; the billions of numbers that are the model.</li>
+      <li><strong>Training vs inference</strong> &mdash; building the model (once, costly) vs using it (constantly).</li>
+      <li><strong>Prefill</strong> &mdash; reading the prompt; compute-bound; suits GPUs.</li>
+      <li><strong>Decode</strong> &mdash; writing the answer token by token; memory-bound; suits high-bandwidth chips.</li>
+      <li><strong>KV cache</strong> &mdash; the conversation&rsquo;s running memory; grows with length; competes with the model for memory.</li>
+      <li><strong>Context window</strong> &mdash; the model&rsquo;s working-memory ceiling, in tokens.</li>
+      <li><strong>Attention / FFN</strong> &mdash; the two halves of a transformer layer; memory-heavy vs compute-heavy.</li>
+      <li><strong>MoE</strong> &mdash; many experts, few used per token; total vs active parameters.</li>
+      <li><strong>Throughput vs interactivity</strong> &mdash; total tokens/sec vs per-user tokens/sec; the bus-vs-Ferrari curve.</li>
+    </ul>
+
+    <h2>Where this shows up in the issues</h2>
+
+    <ul>
+      <li><a href="104-sd-01-cerebras-the-wafer-bet.html">Issue 1 (Cerebras)</a> &mdash; prefill/decode, KV cache pressure, throughput-vs-interactivity is the whole frame.</li>
+      <li><a href="107-sd-04-coding-agents-the-harness-is-the-product.html">Issue 4 (Coding Agents)</a> &mdash; tokens, distillation, reasoning models, the harness.</li>
+      <li><a href="110-sd-07-claude-code-inflection-point.html">Issue 7 (Claude Code)</a> &mdash; agents, token efficiency, why long context degrades.</li>
+    </ul>
+
+    <p>Next, the final primer: <a href="115-fd-05-connecting-chips.html">Connecting Chips &mdash; Scale-Up, Scale-Out, and the Datacenter</a>. One chip is never enough. Primer 5 covers how thousands of them are wired together into a rack, a cluster, a datacenter &mdash; and the economics layer on top.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; primer 4 of 5 &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="113-fd-03-compute-and-precision.html">&larr; Primer 3: Compute &amp; Precision</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="115-fd-05-connecting-chips.html">Primer 5: Connecting Chips &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

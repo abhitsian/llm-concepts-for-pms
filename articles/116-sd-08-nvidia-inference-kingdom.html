@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nvidia's Inference Kingdom: Eating the Whole AI Stack</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~4,000 words &middot; ~19 min read &middot; the densest issue &mdash; read the Foundations primers first</div>
+    <h1>Nvidia&rsquo;s Inference Kingdom: Eating the Whole AI Stack</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 8 &mdash; Nvidia and the whole inference stack</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> At its GTC 2026 conference, Nvidia revealed a company no longer content to sell the GPU. It is absorbing the Groq inference chip, building its own CPU-only racks and storage racks, and re-architecting how chips connect across entire datacenters. The strategy: own the <em>whole inference system</em> &mdash; compute, memory, networking, storage &mdash; not just the most valuable chip in it. For a SaaS PM, this is the clearest picture yet of how the AI hardware layer is consolidating under one company, and what that means for the cost and capability of every AI feature you ship.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up &middot; the densest issue, all five primers</div>
+      <ol>
+        <li><a href="111-fd-01-the-physical-stack.html">The Physical Stack</a> &mdash; process nodes and TSMC vs Samsung, for why the Groq chip&rsquo;s factory choice matters.</li>
+        <li><a href="112-fd-02-memory.html">Memory</a> &mdash; SRAM machines: what the Groq LPU is and why Nvidia wanted it.</li>
+        <li><a href="113-fd-03-compute-and-precision.html">Compute &amp; Precision</a> &mdash; LPU, ASIC, FLOPs &mdash; the chip types in play.</li>
+        <li><a href="114-fd-04-how-an-llm-runs-on-silicon.html">How an LLM Runs</a> &mdash; attention vs FFN, the seam that AFD splits the model along. Essential.</li>
+        <li><a href="115-fd-05-connecting-chips.html">Connecting Chips</a> &mdash; <strong>the keystone.</strong> Scale-up, SerDes, CPO, racks, world sizes &mdash; most of this article.</li>
+      </ol>
+      <div class="buildup-foot">This is the hardest issue in the series. If you read only one primer set before it, read all five &mdash; or hover every underlined term as you go.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>GTC is Nvidia&rsquo;s annual conference. At GTC 2026, three things stood out, and all three point the same direction.</p>
+
+    <ul>
+      <li><strong>Nvidia absorbed Groq.</strong> It paid $20B to license Groq&rsquo;s LPU technology and hire most of the team &mdash; structured as an IP license and acqui-hire, not a formal acquisition (more on why below). Less than four months later, the Groq chip is already being built into Nvidia&rsquo;s product line.</li>
+      <li><strong>Nvidia announced racks that aren&rsquo;t about GPUs.</strong> A CPU-only rack (Vera ETL256). A storage rack (STX). A context-memory platform (CMX). Nvidia is now selling the parts of the datacenter that surround the GPU.</li>
+      <li><strong>Nvidia laid out a multi-year plan to connect ever-larger pools of chips</strong> &mdash; "world sizes" growing from 72 chips to over 1,000 &mdash; using a roadmap that shifts from copper wiring to optics.</li>
+    </ul>
+
+    <p>The common thread: Nvidia is expanding from "we make the best AI chip" to "we make the entire AI inference machine." The inference kingdom is expanding.</p>
+
+    <h2>Quick translation: what Nvidia now sells</h2>
+
+    <p>The simplest way to see the strategy is to compare what Nvidia sold a few years ago to what it sells now.</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3); width: 33%;">Layer of the inference machine</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">Nvidia&rsquo;s position</th>
+      </tr>
+      <tr><td style="padding:8px;">The AI accelerator (GPU)</td><td style="padding:8px;">Owned for years. The core franchise.</td></tr>
+      <tr><td style="padding:8px;">A second, specialized inference chip</td><td style="padding:8px;"><strong>New.</strong> Absorbed Groq&rsquo;s LPU for the latency-sensitive parts of decode.</td></tr>
+      <tr><td style="padding:8px;">Scale-up networking (chip-to-chip)</td><td style="padding:8px;">Owned via NVLink. Now extending it across racks with optics.</td></tr>
+      <tr><td style="padding:8px;">The CPU</td><td style="padding:8px;"><strong>Expanding.</strong> A dedicated CPU-only rack (Vera ETL256).</td></tr>
+      <tr><td style="padding:8px;">Storage</td><td style="padding:8px;"><strong>New.</strong> A reference storage rack (STX) and a context-memory tier (CMX).</td></tr>
+      <tr><td style="padding:8px;">The rack, the cooling, the system design</td><td style="padding:8px;">Increasingly Nvidia-specified end to end.</td></tr>
+    </table>
+
+    <p>Three things to hold while reading on:</p>
+    <ul>
+      <li><strong>This is vertical integration.</strong> The more of the inference machine Nvidia designs, the more of each datacenter dollar it captures &mdash; and the harder it is for a customer to assemble an alternative from other vendors.</li>
+      <li><strong>It is also a response to a real technical shift.</strong> Inference is splitting into specialized phases (you&rsquo;ll see why below), and a single general-purpose GPU is no longer the whole answer. Nvidia is buying and building the specialized pieces.</li>
+      <li><strong>The constraint underneath everything is data movement.</strong> Almost every announcement &mdash; the Groq chip, the CPO optics roadmap, the rack designs &mdash; is ultimately about moving data between chips fast enough. That is the memory wall (Primer 2) playing out at datacenter scale.</li>
+    </ul>
+
+    <h2>The Groq move: why Nvidia bought a rival&rsquo;s chip</h2>
+
+    <p>Issue 1 introduced SRAM machines &mdash; chips like Cerebras and Groq that trade memory capacity for extreme memory bandwidth and speed. Groq&rsquo;s chip is the <strong>LPU</strong>. On its own, the standalone Groq LPU is uneconomical for serving tokens at scale &mdash; too little memory capacity. But it can serve tokens <em>very fast</em>, and speed commands a price premium.</p>
+
+    <p>So why did Nvidia pay $20B for it? Because the LPU is the perfect complement to the GPU. Recall from Primer 4 that decode &mdash; writing the answer token by token &mdash; is memory-bound and latency-sensitive. The LPU&rsquo;s huge on-chip SRAM bandwidth is built precisely for low-latency work. Nvidia&rsquo;s plan: use GPUs for the memory-capacity-hungry parts of inference, and use LPUs for the latency-critical parts. Best of both chips.</p>
+
+    <p>Two structural details worth noting, because they echo themes from earlier issues:</p>
+
+    <ul>
+      <li><strong>The deal was structured as an IP license plus acqui-hire, not an acquisition.</strong> The likely reason: a formal acquisition of Groq by Nvidia &mdash; given Nvidia&rsquo;s market share &mdash; would probably fail antitrust review. Licensing the IP and hiring the team gets Nvidia the same result without the regulatory gauntlet. This is the same antitrust-avoidance instinct Issue 3 described in Nvidia&rsquo;s pricing restraint, and the same creative deal-structuring Issue 1 described in the Cerebras&ndash;OpenAI warrants. Watch for this pattern: when a company is dominant, deals get structured around regulators.</li>
+      <li><strong>The LPU runs on Samsung&rsquo;s factory, not TSMC&rsquo;s.</strong> As Primer 1 explained, TSMC&rsquo;s capacity is the chokepoint. Because the Groq chip is made at Samsung, Nvidia can ramp LPU production without spending its scarce TSMC allocation. It is genuinely incremental capacity &mdash; supply nobody else can tap.</li>
+    </ul>
+
+    <h2>AFD: the most important idea in this article</h2>
+
+    <p>Here is the genuinely new technical concept, and your Foundations reading pays off completely here. It is called <strong>Attention&ndash;FFN Disaggregation</strong> (AFD).</p>
+
+    <p>Recall the chain of ideas from the primers:</p>
+    <ul>
+      <li>Primer 4: a transformer layer has two parts &mdash; <strong>attention</strong> (memory-heavy, must read the KV cache, stateful) and the <strong>FFN</strong> (compute-heavy, stateless).</li>
+      <li>Primer 3: memory-heavy work suits a high-bandwidth chip; compute-heavy work suits a high-FLOPS chip.</li>
+      <li>Issue 1: the industry already does prefill/decode disaggregation &mdash; running the two phases of inference on different chips.</li>
+    </ul>
+
+    <p>AFD takes the disaggregation idea one level deeper. Instead of splitting inference into prefill and decode, it splits each layer into <em>attention</em> and <em>FFN</em>, and runs them on the chips each is suited to:</p>
+
+    <ul>
+      <li><strong>Attention runs on GPUs.</strong> Attention must load the KV cache, so it needs lots of memory capacity, and its workload is dynamic. GPUs, with abundant HBM, handle that well. Better still: a GPU doing <em>only</em> attention can dedicate its entire HBM to KV cache, which means it can hold more users&rsquo; conversations at once.</li>
+      <li><strong>FFN runs on LPUs.</strong> The FFN is stateless and compute-heavy, and each expert in a MoE model is small (hundreds of megabytes &mdash; Primer 4). That static, predictable workload fits the LPU&rsquo;s deterministic, SRAM-fast design.</li>
+    </ul>
+
+    <p>This is hardware-software co-design at its purest: take the model apart along its natural seam, and put each half on the silicon built for it. The LPU&rsquo;s job inside Nvidia&rsquo;s system is to be the FFN engine in an AFD setup. That is the entire reason Nvidia paid $20B.</p>
+
+    <p>One caveat is worth flagging, and it&rsquo;s a familiar one: when you split a model across two chip types, the data shuttling between them &mdash; routing tokens from the GPUs to the LPUs and back &mdash; can itself become the bottleneck. The whole design is a bet that the gain from specialization beats the cost of the extra data movement. It usually does, but not always, and not for every workload.</p>
+
+    <h2>Copper, optics, and the race to bigger "world sizes"</h2>
+
+    <p>The second big GTC theme is connecting more chips together. Primer 5 gave you the vocabulary: <strong>scale-up</strong> links chips tightly into one pool; the size of that pool is the <strong>world size</strong> (NVL72 = 72 GPUs acting as one); and <strong>SerDes</strong> over copper has hard limits on how far and how fast it can carry data.</p>
+
+    <p>Nvidia&rsquo;s roadmap pushes world size up over several chip generations &mdash; from 72 chips, to 144, to 576, to over 1,150. Why bother? Because a bigger scale-up pool can hold a bigger model with less of the slow cross-pool traffic. More chips acting as one = a bigger "one."</p>
+
+    <p>But you cannot wire unlimited chips with copper. Past a certain distance and bandwidth, copper signal degrades, and you must switch to <strong>optics</strong> &mdash; and specifically to <strong>CPO</strong> (co-packaged optics), where the light-based link sits right next to the chip. The single sentence that decodes Nvidia&rsquo;s entire optics roadmap, quoted in the article: <em>"use copper where they can, optics where they must."</em></p>
+
+    <p>In practice that means:</p>
+    <ul>
+      <li><strong>Inside a rack</strong> &mdash; short distances &mdash; stays copper. Cheap, reliable, good enough.</li>
+      <li><strong>Between racks</strong>, for the giant world-size systems (NVL576 and beyond) &mdash; longer distances, more bandwidth &mdash; moves to CPO optics.</li>
+    </ul>
+
+    <p>You do not need the rack-by-rack detail (the source article is exhaustive about which generation uses what). You need the principle: <strong>the size of the pool of chips that can act as one is limited by physics, copper is the cheap default, and optics is the expensive escape hatch the industry is being forced toward as models and clusters grow.</strong> That is the whole CPO story. The far-out parts of this roadmap (the 1,152-chip "Feynman" generation) are years away and highly likely to shift &mdash; so hold the specifics loosely; hold the principle firmly.</p>
+
+    <h2>Nvidia is now selling the whole rack</h2>
+
+    <p>The third theme: Nvidia is building and selling the parts of the datacenter that aren&rsquo;t the GPU.</p>
+
+    <p><strong>A CPU-only rack (Vera ETL256).</strong> AI doesn&rsquo;t run on accelerators alone &mdash; ordinary CPUs handle data preparation, orchestration, and (increasingly) running the simulations and code-checking that reinforcement-learning training needs. As GPUs scale faster than CPUs, CPUs become a bottleneck. Nvidia&rsquo;s answer is a rack that packs 256 CPUs together, densely enough that cheap copper can wire them all &mdash; the same "pack it tight so copper reaches" logic as the GPU racks.</p>
+
+    <p><strong>A storage rack (STX) and a context-memory tier (CMX).</strong> Remember from Primer 4 that the KV cache &mdash; the conversation&rsquo;s working memory &mdash; grows with context length and consumes large amounts of memory. For long-context and agentic workloads, the KV cache outgrows even HBM. CMX is Nvidia&rsquo;s answer: an extra tier of fast storage (built on flash drives) to hold overflow KV cache, slotting into the memory hierarchy below HBM and DRAM. STX is the reference design for the storage rack that houses it. Candidly, CMX is, underneath, mostly a re-brand of storage servers &mdash; the genuinely new thing is less the technology than the fact that <em>Nvidia is now specifying the storage layer too.</em></p>
+
+    <p>The pattern: every announcement extends Nvidia&rsquo;s spec sheet outward from the GPU &mdash; to the second chip, the CPU, the storage, the networking, the cooling. Nvidia has captured the compute and network layers, and is actively moving into the storage, software, and infrastructure-operations layers over time.</p>
+
+    <h2>The strategy underneath: own the system, not the chip</h2>
+
+    <p>Step back from the individual announcements and the logic is clean. Nvidia&rsquo;s historical moat was the GPU plus CUDA (Primer 3) &mdash; the best accelerator, wrapped in the best software. That moat is still strong, but it has two pressures on it:</p>
+
+    <ol>
+      <li><strong>The hyperscalers are building their own chips</strong> (Google&rsquo;s TPU, Amazon&rsquo;s Trainium &mdash; Issue 3 and Issue 5) specifically to escape Nvidia&rsquo;s ~75% GPU margin.</li>
+      <li><strong>Inference is fragmenting into specialized phases</strong> &mdash; prefill vs decode, attention vs FFN &mdash; and a single general-purpose GPU is no longer the entire answer.</li>
+    </ol>
+
+    <p>Nvidia&rsquo;s response to both is the same: <strong>compete at the level of the whole system, not the chip.</strong> If a customer buys an integrated, co-designed Nvidia inference machine &mdash; GPU plus LPU plus CPU plus storage plus networking, all tuned to work together &mdash; then a competitor&rsquo;s standalone chip, however good, is competing against an entire optimized system. That is a much harder thing to displace. It is the same playbook the Microsoft article (Issue 5) described as "vertical integration" &mdash; except Nvidia is executing it from a position of strength, and across the layers it already dominates.</p>
+
+    <p>The deep takeaway, connecting to Issue 7&rsquo;s "the harness is the product": at the model layer, the system around the model began to matter as much as the model. At the hardware layer, the <em>same thing is happening</em> &mdash; the system around the chip is starting to matter as much as the chip. Nvidia sees it and is moving to own the system.</p>
+
+    <h2>Why this matters for your AI roadmap</h2>
+
+    <p>Five implications for a SaaS PM whose product runs on this hardware.</p>
+
+    <ol>
+      <li><strong>Inference is specializing &mdash; and that is mostly good for you.</strong> AFD, prefill/decode disaggregation, the GPU+LPU hybrid: all of it squeezes more performance and lower cost out of the same silicon. The cost-per-token decline that Issue 3 described is partly powered by exactly these architecture tricks. Your inference costs benefit even though you never see the plumbing.</li>
+      <li><strong>The hardware layer is consolidating under Nvidia.</strong> Issue 3 said the AI labs are capturing the value today. This issue is the counter-current: Nvidia is methodically expanding its grip on the hardware system. The long-run question of who captures AI&rsquo;s value is genuinely unsettled, and Nvidia&rsquo;s system-level expansion is a strong move in that game.</li>
+      <li><strong>"Co-designed system" beats "best chip" &mdash; at every layer.</strong> The lesson repeats: model labs win with model+harness, Nvidia wins with chip+system. If you build AI products, the generalizable principle is that an integrated, co-designed offering beats a great standalone component. Apply it to your own product.</li>
+      <li><strong>Watch for disaggregation language in vendor announcements.</strong> "AFD," "PD-disagg," "prefill/decode" &mdash; when your AI vendor or cloud talks this way, they are telling you inference is being split across specialized hardware. That usually means better price-performance is coming. It also means the stack is getting more complex and more Nvidia-shaped.</li>
+      <li><strong>Roadmap specifics are soft; directions are hard.</strong> The far-out parts of Nvidia&rsquo;s roadmap will shift. Treat specific future products (chip names, dates, world sizes) as provisional. Treat the <em>directions</em> &mdash; more specialization, more optics, more Nvidia system ownership &mdash; as reliable. Plan against directions, not dates.</li>
+    </ol>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Five concrete actions.</p>
+
+    <ol>
+      <li>
+        <strong>Stop modeling AI cost as "GPU price."</strong>
+        The unit of AI infrastructure is now a co-designed system &mdash; GPU plus LPU plus CPU plus storage plus networking. When you forecast inference cost, model the system and its improvement trajectory, not a single chip&rsquo;s price. <em>Why this matters: architecture tricks like AFD cut cost without changing the GPU price tag. A GPU-price-only model misses most of the cost curve.</em>
+      </li>
+      <li>
+        <strong>Treat Nvidia&rsquo;s system expansion as a vendor-concentration signal.</strong>
+        The more of the inference stack Nvidia owns, the more your AI vendors&rsquo; cost structure is shaped by one company. That is a strategic dependency worth naming explicitly in your planning &mdash; the same way you&rsquo;d name a single-cloud dependency. <em>Why this matters: concentration risk upstream of your vendors eventually becomes concentration risk for you.</em>
+      </li>
+      <li>
+        <strong>Use the Foundations primers as a team-onboarding tool.</strong>
+        If this article was readable, the five primers did their job. They are a reusable asset: hand them to anyone on your team who needs to get fluent in AI infrastructure fast. Fluency in this vocabulary is now a baseline PM skill, not a specialist one. <em>Why this matters: PMs who can read a dense infrastructure analysis make better roadmap and vendor calls than PMs who can&rsquo;t. The foundation is now built &mdash; reuse it.</em>
+      </li>
+      <li>
+        <strong>Know which phase your workload stresses.</strong>
+        Issue 4 said know if you&rsquo;re prefill-heavy or decode-heavy. AFD sharpens that: attention-heavy (long context, big KV cache) and FFN-heavy (lots of generation) workloads will increasingly be priced and served differently. Knowing your workload&rsquo;s shape is now a real lever in vendor negotiation. <em>Why this matters: as inference disaggregates further, generic pricing gives way to phase-specific pricing. The PM who knows their workload shape gets the better deal.</em>
+      </li>
+      <li>
+        <strong>Apply the system-beats-component lesson to your own product.</strong>
+        Nvidia at the hardware layer, the model labs at the model layer, are teaching the same lesson Issue 7 taught: integrated, co-designed systems beat great standalone components. Audit your own product &mdash; are you shipping a great component someone else will wrap into their system, or are you the system? <em>Why this matters: this is the single most repeated strategic pattern across all eight issues of this series. It is the one to internalize.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>GTC 2026 showed a Nvidia that has redefined what it sells. Not a chip &mdash; a kingdom. The GPU is still the crown, but the company is now annexing the territory around it: a second specialized chip (Groq&rsquo;s LPU, for the FFN half of an AFD setup), the CPUs, the storage, the context-memory tier, and the optical networking that will lash ever-larger pools of chips into a single machine.</p>
+
+    <p>Underneath the dense vocabulary, the logic is simple and you now have every concept to follow it. Inference is splitting into specialized phases because of the memory wall. Specialized phases want specialized chips. Specialized chips have to be wired together, and wiring has physical limits that force the slow march from copper to optics. And the company that designs the <em>whole</em> integrated system &mdash; rather than the best single chip &mdash; is the hardest to displace. Nvidia sees all of it, and is building accordingly.</p>
+
+    <p>If you read this article and the mechanics made sense &mdash; AFD, CPO, world sizes, the GPU+LPU split &mdash; then the Foundations did their work. You are no longer reading AI hardware coverage for the gist. You are reading it like someone who understands the machine. That was the whole point.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="115-fd-05-connecting-chips.html">&larr; Foundations Primer 5</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

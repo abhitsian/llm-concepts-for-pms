@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foundations 3: Compute & Precision — What Makes a Chip Fast</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">Foundations &middot; Primer 3 of 5 &middot; ~13 min read</div>
+    <h1>Compute &amp; Precision: What Makes a Chip Fast</h1>
+    <div class="article-subtitle">Inside the AI Machine &mdash; Foundations. Primer 3 of 5. How to read a chip spec sheet and tell a real number from a marketing one.</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>What this primer gives you:</strong> the compute side of the picture. After this you will know what a FLOP is, what "FP8" and "FP4" mean and why AI keeps moving to smaller numbers, how to spot the marketing trick in a chip&rsquo;s headline speed, the difference between a GPU and an ASIC and an LPU, and the one concept &mdash; arithmetic intensity &mdash; that decides which chip is right for which job. Primer 2 said memory is usually the bottleneck; this primer is the other half of the equation.</p>
+
+    <h2>What a FLOP is</h2>
+
+    <p>The compute transistors on a chip do arithmetic. The basic unit of that arithmetic is the <strong>FLOP</strong> &mdash; a Floating-Point Operation. One FLOP is one piece of math: one multiplication, or one addition, of two numbers. (A "floating-point" number is just a number with a decimal point &mdash; the kind of number neural networks are made of.)</p>
+
+    <p>Running an AI model is, underneath, a staggering number of FLOPs &mdash; mostly multiplying big grids of numbers together. So a chip&rsquo;s compute power is measured in <strong>FLOPS</strong>: FLOPs <em>per second</em>. The capital S is "per second." You will see it scaled up:</p>
+    <ul>
+      <li><strong>TFLOPS</strong> &mdash; teraFLOPS &mdash; a trillion operations per second.</li>
+      <li><strong>PFLOPS</strong> &mdash; petaFLOPS &mdash; a quadrillion (a thousand trillion) per second.</li>
+    </ul>
+    <p>When the Cerebras article says the WSE-3 does "125 PFLOPs" or a GPU does "13.5 PFLOPs," that is the headline compute-speed number. But &mdash; as Primer 2 warned &mdash; a big FLOPS number is only useful if memory can feed it. Hold that thought; we&rsquo;ll close the loop at the end.</p>
+
+    <h2>Precision: what FP32, FP16, FP8, FP4 mean</h2>
+
+    <p>Here is a concept that sounds technical but is genuinely simple and genuinely important. Every number inside an AI model is stored using a certain number of <strong>bits</strong>. More bits means the number is more precise &mdash; more decimal places, more exactness. Fewer bits means the number is coarser, blurrier.</p>
+
+    <p>The formats you&rsquo;ll see, from most precise to least:</p>
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">Format</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">Bits</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">In plain terms</th>
+      </tr>
+      <tr><td style="padding:8px;">FP32</td><td style="padding:8px;">32</td><td style="padding:8px;">Full precision. Old default. Exact, but heavy.</td></tr>
+      <tr><td style="padding:8px;">FP16 / BF16</td><td style="padding:8px;">16</td><td style="padding:8px;">Half precision. The training workhorse for years.</td></tr>
+      <tr><td style="padding:8px;">FP8</td><td style="padding:8px;">8</td><td style="padding:8px;">Eighth precision. Common for inference in 2025.</td></tr>
+      <tr><td style="padding:8px;">FP4 / NVFP4</td><td style="padding:8px;">4</td><td style="padding:8px;">Very coarse. Where most 2026 inference is heading.</td></tr>
+    </table>
+
+    <p>Why does the industry keep moving to fewer bits? Two compounding wins:</p>
+    <ul>
+      <li><strong>Smaller numbers take less memory.</strong> Switching a model from 16-bit to 4-bit numbers makes it roughly 4x smaller. Given Primer 2 &mdash; memory is the bottleneck &mdash; that is an enormous gain. It is also why "compressing a model to a lower precision," called <strong>quantization</strong>, is such a common move.</li>
+      <li><strong>Smaller numbers compute faster.</strong> A chip can do far more 4-bit operations per second than 16-bit ones. Nvidia&rsquo;s newer chips roughly double their FLOPS each time the precision halves.</li>
+    </ul>
+
+    <p>The cost is exactness &mdash; a 4-bit number is blurry. The surprising, important discovery of recent years is that neural networks mostly tolerate the blur. A model running in FP4 is a little less precise but usually nearly as capable, for a fraction of the memory and a multiple of the speed. That is why the Cerebras and Nvidia articles obsess over FP8 and FP4: precision is a lever, and the industry is pulling it.</p>
+
+    <p>One catch this creates: when comparing two chips, <strong>you must compare the same precision.</strong> "Chip A does 15 PFLOPS" and "Chip B does 13 PFLOPS" mean nothing until you know A&rsquo;s number is FP16 and B&rsquo;s is FP4. The Cerebras issue makes exactly this point &mdash; comparing the wafer&rsquo;s FP16 number against a GPU&rsquo;s FP4 number is apples-to-oranges, and you have to normalize.</p>
+
+    <h2>The marketing trick: dense vs sparse</h2>
+
+    <p>Now the number you should be suspicious of. A chip&rsquo;s real, honest compute number is its <strong>dense</strong> FLOPS &mdash; every operation actually performed.</p>
+
+    <p>But chip marketing often quotes a <strong>sparse</strong> number instead. "Sparse" assumes that many of the numbers in the calculation are zeros, and multiplying by zero can be skipped &mdash; so the chip can claim a higher effective rate. Sometimes that&rsquo;s a fair assumption; often it&rsquo;s optimistic.</p>
+
+    <p>The Cerebras issue calls this out memorably. Cerebras markets "125 PFLOPs" for the WSE-3, but that assumes 8-to-1 sparsity. The honest dense number &mdash; what a developer actually gets &mdash; is one-eighth of that: about 15.6 PFLOPs. The article nicknames the inflation "Feldman&rsquo;s Formula," and notes Nvidia plays a milder version (a 2:1 assumption) it calls "Jensen Math."</p>
+
+    <p>The practical rule, and it is a real expert habit: <strong>when you see a FLOPS number, ask two questions &mdash; what precision, and dense or sparse?</strong> A number without those two qualifiers is a billboard, not a spec.</p>
+
+    <h2>The kinds of chips</h2>
+
+    <p>"AI chip" is a category, not a thing. The issues name several types, and the differences are strategic.</p>
+
+    <p><strong>GPU &mdash; Graphics Processing Unit.</strong> Originally built to render video-game graphics, GPUs turned out to be brilliant at the massively parallel math AI needs. A GPU is <em>general-purpose</em>: flexible, programmable, good at almost any AI workload. Nvidia&rsquo;s GPUs are the default. Their real moat is not just the silicon &mdash; it&rsquo;s <strong>CUDA</strong>, two decades of mature software, libraries, and tooling for programming Nvidia GPUs. A competitor can match the chip; matching the software ecosystem is far harder. (Book 5&rsquo;s <a href="82-fs-13-why-cuda-always-wins.html">Why CUDA Always Wins</a> goes deeper.)</p>
+
+    <p><strong>ASIC &mdash; Application-Specific Integrated Circuit.</strong> An ASIC is a chip custom-built for one job. Less flexible than a GPU, but cheaper and more efficient at the specific thing it&rsquo;s designed for. Google&rsquo;s <strong>TPU</strong> and Amazon&rsquo;s <strong>Trainium</strong> are AI ASICs &mdash; the hyperscalers build them to avoid paying Nvidia&rsquo;s ~75% margin. ("XPU" is a catch-all for "GPU or ASIC, some kind of accelerator.")</p>
+
+    <p><strong>LPU &mdash; Language Processing Unit.</strong> Groq&rsquo;s chip, built around a huge amount of on-chip SRAM (Primer 2). It is specialized for fast inference at small batch sizes. Nvidia found it valuable enough to license the design for $20B.</p>
+
+    <p>The common word for all of these &mdash; GPU, TPU, Trainium, LPU &mdash; is <strong>accelerator</strong>: "the expensive chip doing the actual AI work," as opposed to the ordinary CPU that runs the rest of the system. The strategic theme across the issues is the tension between the flexible generalist (Nvidia&rsquo;s GPU, protected by CUDA) and the cheaper specialists (everyone&rsquo;s ASICs, trying to claw back Nvidia&rsquo;s margin).</p>
+
+    <h2>Arithmetic intensity: the concept that ties it together</h2>
+
+    <p>Now we connect this primer to Primer 2, and this is the idea that makes you sound like you actually understand the space.</p>
+
+    <p>Every AI workload has a property called <strong>arithmetic intensity</strong>: how much math it does for every byte of data it pulls from memory. FLOPs per byte. It sorts every workload onto a spectrum:</p>
+
+    <ul>
+      <li><strong>High arithmetic intensity</strong> &mdash; lots of math per byte fetched. The chip&rsquo;s compute is the limit; memory keeps up fine. We call this <strong>compute-bound</strong>. Here, raw FLOPS is what matters.</li>
+      <li><strong>Low arithmetic intensity</strong> &mdash; little math per byte fetched; the chip is constantly waiting on memory. We call this <strong>memory-bound</strong>. Here, memory bandwidth is what matters and a big FLOPS number is wasted.</li>
+    </ul>
+
+    <p>This is the missing piece. A chip is not simply "fast" or "slow." A chip is fast <em>for workloads of a certain arithmetic intensity.</em> Match the workload to the chip:</p>
+    <ul>
+      <li>A GPU stuffed with HBM and tensor cores is great for <em>compute-bound</em> work &mdash; lots of FLOPS, plenty of memory capacity.</li>
+      <li>An SRAM machine like Cerebras or Groq is great for <em>memory-bound</em> work &mdash; spectacular bandwidth lets it scream through low-intensity jobs that leave a GPU&rsquo;s compute starving and idle.</li>
+    </ul>
+
+    <p>When the Cerebras article spends pages on "the optimal arithmetic intensity of 0.74" and rooflines and GEMM shapes, it is doing exactly one thing: figuring out which workloads sit in the memory-bound zone where the wafer wins, and which sit in the compute-bound zone where a GPU wins. You now have the concept to follow that entire argument. (One more term you&rsquo;ll meet: a <strong>GEMM</strong> is a "general matrix multiply" &mdash; multiplying two grids of numbers. It is the single most common operation in AI, and "what GEMM shapes run well" is just "what arithmetic intensities run well.")</p>
+
+    <h2>Vocabulary check</h2>
+
+    <ul>
+      <li><strong>FLOP / FLOPS</strong> &mdash; one math operation; FLOPs per second is compute speed (TFLOPS, PFLOPS).</li>
+      <li><strong>Precision</strong> &mdash; bits per number. FP32 &rarr; FP16/BF16 &rarr; FP8 &rarr; FP4: fewer bits, smaller and faster, slightly blurrier.</li>
+      <li><strong>Quantization</strong> &mdash; compressing a model to lower precision.</li>
+      <li><strong>Dense vs sparse</strong> &mdash; dense is the honest FLOPS number; sparse is the optimistic marketing one. Always ask which.</li>
+      <li><strong>GPU</strong> &mdash; flexible general-purpose accelerator; Nvidia&rsquo;s, protected by the CUDA software moat.</li>
+      <li><strong>ASIC</strong> &mdash; custom single-purpose chip; TPU and Trainium are AI ASICs.</li>
+      <li><strong>LPU</strong> &mdash; Groq&rsquo;s SRAM-heavy inference chip.</li>
+      <li><strong>Accelerator</strong> &mdash; the umbrella term for any AI chip.</li>
+      <li><strong>Arithmetic intensity</strong> &mdash; FLOPs per byte; sorts work into <strong>compute-bound</strong> (FLOPS matters) vs <strong>memory-bound</strong> (bandwidth matters).</li>
+    </ul>
+
+    <h2>Where this shows up in the issues</h2>
+
+    <ul>
+      <li><a href="104-sd-01-cerebras-the-wafer-bet.html">Issue 1 (Cerebras)</a> &mdash; dense-vs-sparse FLOPS, FP16-vs-FP4 comparison, arithmetic intensity and "where the wafer wins."</li>
+      <li><a href="106-sd-03-where-ai-money-goes-now.html">Issue 3 (AI Value Capture)</a> &mdash; the move down the precision ladder (FP8 &rarr; FP4) as a source of cost decline.</li>
+      <li><a href="107-sd-04-coding-agents-the-harness-is-the-product.html">Issue 4 (Coding Agents)</a> &mdash; the GPU-vs-ASIC competition shaping who can serve tokens cheaply.</li>
+    </ul>
+
+    <p>Next, Primer 4: <a href="114-fd-04-how-an-llm-runs-on-silicon.html">How an LLM Actually Runs on Silicon</a>. You now know the hardware &mdash; transistors, memory, compute. Primer 4 connects it to the AI: tokens, prefill and decode, KV cache, attention. This is where the hardware story and the model story finally meet.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; primer 3 of 5 &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="112-fd-02-memory.html">&larr; Primer 2: Memory</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="114-fd-04-how-an-llm-runs-on-silicon.html">Primer 4: How an LLM Runs &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>

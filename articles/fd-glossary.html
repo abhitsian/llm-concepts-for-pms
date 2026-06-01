@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glossary — Inside the AI Machine</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+  <style>
+    .gloss-wrap { max-width: 720px; margin: 0 auto; background: var(--color-card); padding: 48px 72px 64px; box-shadow: var(--color-shadow); }
+    .gloss-search { width: 100%; padding: 10px 14px; font-family: var(--font-mono); font-size: 13px;
+      background: var(--color-code-bg); color: var(--color-text); border: 1px solid var(--color-border);
+      border-radius: 4px; margin: 8px 0 12px; }
+    .gloss-group-title { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--color-accent); margin: 40px 0 4px; }
+    .gloss-entry { padding: 14px 0; border-bottom: 1px solid var(--color-border); }
+    .gloss-entry h3 { font-family: var(--font-mono); font-size: 13px; font-weight: 500;
+      color: var(--color-text); margin: 0 0 4px; }
+    .gloss-entry p { font-size: 14px; line-height: 1.6; color: var(--color-text-80); margin: 0; }
+    .gloss-entry a { font-family: var(--font-mono); font-size: 10px; color: var(--color-accent);
+      text-decoration: none; }
+    .gloss-entry a:hover { text-decoration: underline; }
+    .gloss-count { font-family: var(--font-mono); font-size: 10px; color: var(--color-text-50); }
+  </style>
+</head>
+<body class="glossary-index-page">
+  <div class="gloss-wrap">
+    <div class="article-meta">Inside the AI Machine &middot; Reference</div>
+    <h1>Glossary</h1>
+    <div class="article-subtitle">Every term used across Inside the AI Machine and its five Foundations primers. Hover any underlined term inside an article for this same definition. Search below, or read the <a href="111-fd-01-the-physical-stack.html">Foundations primers</a> for the full build-up.</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <input type="text" class="gloss-search" id="gsearch" placeholder="filter terms… (e.g. HBM, decode, scale-up)" autocomplete="off">
+    <div class="gloss-count" id="gcount"></div>
+    <div id="gloss-body"></div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="../books/semianalysis-decoded.html">&larr; Inside the AI Machine</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="111-fd-01-the-physical-stack.html">Foundations &rarr;</a>
+  </nav>
+
+  <script src="../js/glossary.js?v=1774957616"></script>
+  <script>
+    (function () {
+      var G = window.GLOSSARY || {};
+      var PRIMERS = {
+        "111-fd-01-the-physical-stack.html": "Primer 1 — The Physical Stack",
+        "112-fd-02-memory.html": "Primer 2 — Memory",
+        "113-fd-03-compute-and-precision.html": "Primer 3 — Compute & Precision",
+        "114-fd-04-how-an-llm-runs-on-silicon.html": "Primer 4 — How an LLM Runs on Silicon",
+        "115-fd-05-connecting-chips.html": "Primer 5 — Connecting Chips & Datacenters"
+      };
+      var ORDER = Object.keys(PRIMERS);
+      var body = document.getElementById("gloss-body");
+      var search = document.getElementById("gsearch");
+      var count = document.getElementById("gcount");
+
+      var terms = Object.keys(G).map(function (k) {
+        return { term: k, def: G[k].s, primer: G[k].p, aliases: (G[k].aliases || []) };
+      });
+
+      function render(filter) {
+        body.innerHTML = "";
+        filter = (filter || "").toLowerCase().trim();
+        var shown = 0;
+        ORDER.forEach(function (primerFile) {
+          var group = terms.filter(function (t) {
+            if (t.primer !== primerFile) return false;
+            if (!filter) return true;
+            if (t.term.toLowerCase().indexOf(filter) !== -1) return true;
+            if (t.def.toLowerCase().indexOf(filter) !== -1) return true;
+            return t.aliases.some(function (a) { return a.toLowerCase().indexOf(filter) !== -1; });
+          });
+          group.sort(function (a, b) { return a.term.toLowerCase() < b.term.toLowerCase() ? -1 : 1; });
+          if (!group.length) return;
+          var h = document.createElement("div");
+          h.className = "gloss-group-title";
+          h.textContent = PRIMERS[primerFile];
+          body.appendChild(h);
+          group.forEach(function (t) {
+            shown++;
+            var e = document.createElement("div");
+            e.className = "gloss-entry";
+            var aliasNote = t.aliases.length ? ' <span class="gloss-count">also: ' + t.aliases.join(", ") + "</span>" : "";
+            e.innerHTML = "<h3>" + t.term + aliasNote + "</h3><p>" + t.def +
+              ' <a href="' + t.primer + '">read the primer &rarr;</a></p>';
+            body.appendChild(e);
+          });
+        });
+        count.textContent = shown + " term" + (shown === 1 ? "" : "s") + (filter ? " matching “" + filter + "”" : " across 5 primers");
+      }
+
+      render("");
+      search.addEventListener("input", function () { render(search.value); });
+    })();
+  </script>
+  <script src="../js/nav.js?v=1774957616"></script>
+</body>
+</html>

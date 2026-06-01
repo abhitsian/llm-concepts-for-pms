@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foundations 5: Connecting Chips — Scale-Up, Scale-Out, and the Datacenter</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">Foundations &middot; Primer 5 of 5 &middot; ~14 min read</div>
+    <h1>Connecting Chips: Scale-Up, Scale-Out, and the Datacenter</h1>
+    <div class="article-subtitle">Inside the AI Machine &mdash; Foundations. Primer 5 of 5. One chip is never enough. This is how thousands of them become one machine.</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>What this primer gives you:</strong> the last layer. A single chip, however good, can&rsquo;t hold a frontier model or serve millions of users. So the industry wires thousands of chips together &mdash; and <em>how</em> they&rsquo;re wired is now one of the most contested parts of AI hardware. After this you will understand scale-up vs scale-out, what NVLink and SerDes and CoWoS are, what "NVL72" means, why a datacenter is measured in megawatts, and the economics vocabulary that sits on top. This primer makes the Nvidia GTC article &mdash; the densest in the series &mdash; readable.</p>
+
+    <h2>Why one chip is never enough</h2>
+
+    <p>Two reasons, both from earlier primers.</p>
+
+    <p><strong>Models are too big for one chip.</strong> A frontier model is over a trillion parameters (Primer 4). Even the largest memory on a single chip package (~288GB of HBM) can&rsquo;t comfortably hold a big model <em>plus</em> everyone&rsquo;s KV cache. The model has to be spread across many chips.</p>
+
+    <p><strong>Demand is too big for one chip.</strong> Serving millions of users at once needs far more chips than any model requires. An AI datacenter is hundreds of thousands of chips.</p>
+
+    <p>So the real unit of AI compute is not a chip &mdash; it is a <em>cluster</em> of chips wired together. And the wiring is hard, because the moment a model is split across chips, those chips must constantly shuttle data to each other. A chip waiting on <em>another chip</em> is just the memory wall again, one level up. The whole game of this primer is moving data between chips fast enough that the cluster behaves like one big machine instead of many small ones stuck in traffic.</p>
+
+    <h2>Scale-up vs scale-out: the two ways to connect</h2>
+
+    <p>There are two fundamentally different ways to wire chips together, and keeping them straight is the key to this whole topic.</p>
+
+    <p><strong>Scale-up</strong> &mdash; connect a modest number of chips <em>very tightly</em>, with extremely fast links, so they behave as close to a single giant chip as possible. Scale-up is short-range, expensive per link, and blazing fast. It happens inside a server or a single rack. Nvidia&rsquo;s scale-up technology is called <strong>NVLink</strong>.</p>
+
+    <p><strong>Scale-out</strong> &mdash; connect many of those scale-up groups together <em>more loosely</em>, over standard datacenter networking, into a cluster of thousands or hundreds of thousands of chips. Scale-out is longer-range, cheaper per link, and slower than scale-up. The technologies are <strong>InfiniBand</strong>, <strong>Ethernet</strong>, and RoCE.</p>
+
+    <p>The mental model: scale-up is a small team in one room, talking instantly. Scale-out is many rooms connected by hallways &mdash; still one organization, but communication across rooms is slower. A modern AI cluster is both at once: tight scale-up pods, wired together by scale-out networking.</p>
+
+    <p>This distinction quietly drives much of the coverage in these issues. When the Cerebras article says the wafer is brilliant <em>internally</em> but "starved" for off-wafer bandwidth &mdash; that is the claim that Cerebras has wonderful on-chip data movement but weak scale-up/scale-out, so it struggles to combine wafers. When the Nvidia GTC article obsesses over NVL72, NVL576, and racks &mdash; that is all scale-up engineering: how many GPUs can be made to act as one.</p>
+
+    <h2>SerDes: how data physically crosses between chips</h2>
+
+    <p>Whenever data leaves one chip for another, it goes through a <strong>SerDes</strong> &mdash; "serializer/deserializer." Don&rsquo;t let the name intimidate you. A SerDes is the circuitry that takes data inside a chip, squeezes it into a fast one-bit-after-another stream, fires it down a wire, and reassembles it at the other end.</p>
+
+    <p>SerDes performance is measured per <strong>lane</strong>, in gigabits per second &mdash; you&rsquo;ll see "112G" or "224G" SerDes (112 or 224 gigabits per second per lane). A chip has many lanes; total chip-to-chip bandwidth is lanes &times; speed-per-lane. When the Nvidia article counts "90 lanes of 112Gbps" or the Groq chapter mentions a SerDes that "couldn&rsquo;t hit its advertised 112G speed and caused the design to malfunction" &mdash; SerDes is simply the plumbing that moves data between chips, and its speed is a hard limit on how tightly chips can be coupled.</p>
+
+    <p>The recurring tension: SerDes over copper wire is cheap and reliable but limited in speed and distance. Push past those limits and you must switch to <strong>optics</strong> &mdash; sending data as light down a fiber. More on that shortly.</p>
+
+    <h2>Advanced packaging: many dies, one chip</h2>
+
+    <p>Primer 1 gave us the reticle limit &mdash; a single die can&rsquo;t exceed ~858mm². <strong>Advanced packaging</strong> is the set of techniques for combining multiple dies into one package that behaves like a bigger chip. Since Moore&rsquo;s Law slowed, this is where much of the progress comes from.</p>
+
+    <ul>
+      <li><strong>Chiplets</strong> &mdash; instead of one big die, build the chip from several smaller dies ("chiplets") placed side by side in one package and wired tightly together. Better yield (Primer 1), and you escape the reticle limit. Nearly every high-end AI chip is now multi-chiplet.</li>
+      <li><strong>CoWoS</strong> &mdash; "Chip-on-Wafer-on-Substrate," TSMC&rsquo;s packaging method that mounts the compute die and its HBM memory stacks together on a shared silicon base. CoWoS capacity is one of the chronic bottlenecks limiting how many AI chips can be built &mdash; you&rsquo;ll see it cited alongside HBM and N3 as a supply constraint.</li>
+      <li><strong>Hybrid bonding</strong> &mdash; an even more advanced method that fuses dies with extremely dense vertical connections, allowing chips to be <em>stacked</em>. It&rsquo;s how you put memory or extra logic directly on top of a compute die. The Cerebras article&rsquo;s "hybrid bonded DRAM" and "photonic wafer" ideas are this, at the hardest possible scale.</li>
+    </ul>
+
+    <p>The throughline: when you can&rsquo;t make one die bigger or its transistors smaller, you assemble and stack dies instead. Packaging is the new frontier.</p>
+
+    <h2>The rack and "world size"</h2>
+
+    <p>Now scale up from chips to the box they live in. A <strong>rack</strong> is a cabinet of servers. In AI, a rack is engineered so that all the chips inside it are joined by scale-up links into one tightly-coupled system.</p>
+
+    <p>This is what Nvidia&rsquo;s "<strong>NVL72</strong>" means: 72 GPUs in one rack, connected by NVLink so they act as a single enormous accelerator. The number after "NVL" is how many GPUs are in the scale-up domain &mdash; the "<strong>world size</strong>." Nvidia&rsquo;s roadmap pushes this number up: NVL72, then NVL144, then NVL576, then NVL1152. Each step connects more chips into one scale-up pool, which is valuable because a bigger pool can hold a bigger model with less of the slow cross-pool traffic.</p>
+
+    <p>But bigger world sizes are hard, because of SerDes and copper limits. You can only wire so many chips with copper before the distances get too long and the signal degrades. That ceiling is exactly why the Nvidia GTC article spends so much time on copper-vs-optics: NVL72 and NVL144 stay all-copper; the giant NVL576 and NVL1152 must bring in optics to reach across multiple racks.</p>
+
+    <h2>CPO: when copper isn&rsquo;t enough</h2>
+
+    <p>Copper wire is cheap, reliable, and the default for moving data short distances. But copper has hard limits on how much bandwidth it can carry how far. Past those limits you must use <strong>optics</strong> &mdash; converting the electrical signal to light and sending it down a glass fiber, which carries far more bandwidth far further.</p>
+
+    <p>Traditionally the optical conversion happens in a <em>pluggable</em> module at the edge of the system. <strong>CPO &mdash; Co-Packaged Optics</strong> &mdash; moves that optical engine right next to the compute chip itself, in the same package. It&rsquo;s harder to build but enables much higher bandwidth between chips that are far apart.</p>
+
+    <p>Nvidia&rsquo;s stated philosophy, which the GTC article quotes, is "<em>use copper where they can, optics where they must.</em>" That one sentence decodes the entire CPO roadmap: copper inside a rack (short distances), CPO between racks (long distances) for the giant world-size systems. You don&rsquo;t need the rack-by-rack detail &mdash; you need the principle: copper is the cheap default, optics/CPO is the expensive necessity when distance and bandwidth demand it.</p>
+
+    <h2>The datacenter: where power becomes the constraint</h2>
+
+    <p>Racks live in a <strong>datacenter</strong> &mdash; the building. And here a new constraint takes over: <strong>power</strong>.</p>
+
+    <p>AI chips are extraordinarily power-hungry. A single high-end GPU can draw more electricity than a home. A rack draws as much as a small neighborhood. A full datacenter draws as much as a town. So AI datacenter capacity is measured not in square feet but in <strong>megawatts</strong> (MW) and gigawatts (GW) of electricity. One megawatt is roughly the draw of 800 homes. (Book 5&rsquo;s <a href="76-fs-07-the-data-center.html">The Data Center</a> covers the building itself.)</p>
+
+    <p>This is why so much of the coverage in these issues is really about power and buildings. The OpenAI&ndash;Cerebras deal is "750 MW." The Microsoft article&rsquo;s "Big Pause" is about gigawatts of datacenter capacity paused and lost. Power, transmission, and cooling &mdash; not just chips &mdash; are now the gating constraints on how fast AI can grow. When you read "the industry is compute constrained," it means all of: TSMC capacity, HBM supply, CoWoS packaging, <em>and</em> megawatts of power.</p>
+
+    <h2>The economics layer on top</h2>
+
+    <p>Finally, the vocabulary that sits above the hardware &mdash; the words the value-capture and TCO articles use.</p>
+
+    <p><strong>The players.</strong> Chips are made by TSMC, designed by Nvidia/AMD/Google/Amazon. The chips are operated by two kinds of company: <strong>hyperscalers</strong> (AWS, Microsoft Azure, Google Cloud &mdash; giant clouds that build their own datacenters and increasingly their own chips) and <strong>neoclouds</strong> (CoreWeave, Nebius, Crusoe, Lambda &mdash; newer companies that exist specifically to rent out GPUs). On top sit the <strong>AI labs</strong> (Anthropic, OpenAI) that train the models and sell the tokens.</p>
+
+    <p><strong>TCO &mdash; Total Cost of Ownership.</strong> The real all-in cost of running compute: not just the chip, but power, cooling, networking, downtime, setup, support. Issue 6 is built entirely on the gap between headline price and true TCO.</p>
+
+    <p><strong>Goodput.</strong> The <em>useful</em> work a cluster produces &mdash; total output minus everything wasted on failures and restarts. Throughput is how much the cluster does; goodput is how much of it counted.</p>
+
+    <p><strong>Tokens to revenue.</strong> The chips produce tokens; the tokens are sold; the gap between cost-to-produce and price is the margin. The entire AI economy, from a megawatt of power to a dollar of revenue, is the chain: <em>power &rarr; chips &rarr; tokens &rarr; revenue.</em> That chain is what the "AI Value Capture" article maps.</p>
+
+    <h2>Vocabulary check</h2>
+
+    <ul>
+      <li><strong>Scale-up</strong> &mdash; tight, fast, short-range links within a rack (NVLink).</li>
+      <li><strong>Scale-out</strong> &mdash; looser, longer-range networking across racks (InfiniBand, Ethernet).</li>
+      <li><strong>SerDes</strong> &mdash; the circuitry that streams data chip-to-chip; measured per lane in Gbps.</li>
+      <li><strong>Advanced packaging</strong> &mdash; combining multiple dies into one package: <strong>chiplets</strong> (side by side), <strong>CoWoS</strong> (chip + HBM on a shared base), <strong>hybrid bonding</strong> (stacked, fused dies).</li>
+      <li><strong>Rack / NVL72</strong> &mdash; a cabinet of chips wired into one scale-up system; the number is the "world size."</li>
+      <li><strong>CPO</strong> &mdash; co-packaged optics; light-based links for when copper can&rsquo;t carry enough bandwidth far enough.</li>
+      <li><strong>Datacenter / megawatt</strong> &mdash; the building; capacity measured in MW of power; power is now a binding constraint.</li>
+      <li><strong>Hyperscaler / neocloud</strong> &mdash; the giant clouds vs the GPU-rental specialists.</li>
+      <li><strong>TCO / goodput</strong> &mdash; true all-in cost; and the useful work after waste.</li>
+    </ul>
+
+    <h2>You&rsquo;re ready</h2>
+
+    <p>That is the foundation. Five primers: the physical chip, memory, compute, how a model runs, and how chips connect into datacenters. You now hold every load-bearing concept the issues use.</p>
+
+    <p>You can read the series in any order, but the densest one &mdash; <a href="116-sd-08-nvidia-inference-kingdom.html">Issue 8, the Nvidia GTC deep dive</a> &mdash; leans hardest on this primer: SerDes, CPO, racks, world sizes, scale-up vs scale-out, AFD. If a term ever slips, hover it for the definition, or open the <a href="fd-glossary.html">full glossary</a>.</p>
+
+    <p>The terminology was never the hard part. It was just unfamiliar. Now it&rsquo;s familiar &mdash; go read the issues, and read them like someone who knows the space.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; foundations complete &mdash; 5 of 5 &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="114-fd-04-how-an-llm-runs-on-silicon.html">&larr; Primer 4: How an LLM Runs</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>
