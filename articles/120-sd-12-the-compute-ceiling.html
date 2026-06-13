@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Compute Ceiling: Why AI Is Looking at Orbit — and What It Says About Your Cost Floor</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark")})()</script>
+  <link rel="stylesheet" href="../css/style.css?v=1774957616">
+</head>
+<body>
+  <div class="article-card">
+    <div class="article-meta">~3,200 words &middot; ~15 min read &middot; the supply stack under every token</div>
+    <h1>The Compute Ceiling: Why AI Is Looking at Orbit</h1>
+    <div class="article-subtitle">Inside the AI Machine &middot; Issue 12 &mdash; the supply stack under every token, from the grid to space</div>
+    <div class="divider">&#x2508;&#x2508;&#x2508;&#x2508;</div>
+    <hr />
+
+    <p><strong>The one-line version:</strong> The serious people who run AI infrastructure are now modeling how to put datacenters <em>in orbit</em>. The reason is not that space has free solar or free cooling &mdash; it doesn&rsquo;t. The reason is that the supply of compute on Earth is a stack of finite layers, and a credible demand curve runs straight through the top of it. For a PM, the space-datacenter debate is the clearest available map of <strong>the cost floor under every AI feature you ship</strong> &mdash; what sets the price of a token today, what will set it in three years, and how far the industry is willing to go to keep that price falling. The short version of the answer: the binding constraint right now is chips, not power; the price of compute will fall slower than you hope in the near term and faster than you fear in the long term; and &ldquo;datacenters in space&rdquo; is really a statement about how little headroom is left on the ground.</p>
+
+    <div class="buildup">
+      <div class="buildup-title">Build up to this article &mdash; bottom up</div>
+      <ol>
+        <li><a href="07-01-tokens-are-the-new-api-calls.html">Tokens Are the New API Calls</a> &mdash; <strong>the keystone.</strong> A token is the unit your AI cost is denominated in. Everything in this article is, ultimately, about what one token will cost.</li>
+        <li><a href="117-sd-09-the-great-gpu-shortage.html">The Great GPU Shortage</a> &mdash; the rental market that sets your cost floor in the short term.</li>
+        <li><a href="118-sd-10-the-silicon-shortage.html">The Silicon Shortage</a> &mdash; why the constraint moved from power to chips. This article is what happens when you follow that constraint all the way up.</li>
+      </ol>
+      <div class="buildup-foot">Issues 9 and 10 were about why compute got scarce and expensive. This one is about the ceiling above all of it &mdash; the point where Earth runs out of room and the cost question becomes a physics question.</div>
+    </div>
+
+    <h2>What just happened</h2>
+
+    <p>The people who build rockets have started talking about datacenters, and the people who build datacenters have started doing the orbital math. The headline claims are enormous: a goal, stated in a public filing, of launching <strong>100 gigawatts of compute to orbit per year</strong> &mdash; roughly a fifth of all US power generation &mdash; with the explicit justification that it would &ldquo;massively increase AI compute scale while improving token economics.&rdquo; That last phrase is the tell. This is not a space story. It is a <em>cost-of-compute</em> story that happens to end in orbit.</p>
+
+    <p>Around that headline, a familiar cloud of casual arguments has formed: space has free 24-hour solar, space is cold so cooling is free, latency through vacuum is low, and there&rsquo;s no permitting up there. Most of these are wrong or backwards (a vacuum is an <em>insulator</em> &mdash; you can only shed heat by radiating it, slowly, which makes cooling in space <em>harder</em>, not free). The real case for orbital compute has nothing to do with any of them. It rests on a single idea that is directly useful to a PM: <strong>compute on Earth is a stack of finite supply layers, and you can forecast when demand punches through the top.</strong></p>
+
+    <h2>Quick translation: the compute supply stack in SaaS-PM terms</h2>
+
+    <p>You will never launch a satellite. But the structure underneath this debate is the structure underneath your AI feature&rsquo;s gross margin, so it&rsquo;s worth holding the map in PM terms.</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.94em;">
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3); width: 33%;">Infrastructure term</th>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(128,128,128,0.3);">What it means, in SaaS-PM terms</th>
+      </tr>
+      <tr><td style="padding:8px; vertical-align:top;">The supply stack (grid &rarr; behind-the-meter &rarr; new build &rarr; chips &rarr; space)</td><td style="padding:8px;">The layers that have to exist before your AI feature can run a single inference. You consume the <em>top</em> of this stack; its cost sets your token price.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Accelerator-constrained (vs power-constrained)</td><td style="padding:8px;">The bottleneck is now the chips themselves, not electricity. Translation: more datacenters won&rsquo;t lower your token cost in the near term &mdash; only more wafers will.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">TCO &mdash; total cost of ownership ($/GPU-hr)</td><td style="padding:8px;">The all-in cost of one GPU running for one hour: hardware amortized over its life, plus the building, plus power and ops. The raw cost behind your per-token price.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">LCOC &mdash; levelized cost of compute</td><td style="padding:8px;">TCO <em>plus the cost of reliability</em> &mdash; the redundant capacity you must buy to hit an SLA when hardware fails. The number that actually lands in your bill.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Useful life (15 years vs 5 years)</td><td style="padding:8px;">How long the asset earns before it&rsquo;s written off. Shorter life = higher monthly cost for the same box. The single biggest reason orbital compute is expensive today.</td></tr>
+      <tr><td style="padding:8px; vertical-align:top;">Reaching cost parity (~2040)</td><td style="padding:8px;">When a new, harder-to-build supply source becomes as cheap as the incumbent. Until parity, it&rsquo;s a release-valve for scarcity, not a cost saver.</td></tr>
+    </table>
+
+    <p>Three implications to hold while reading on:</p>
+    <ul>
+      <li><strong>Your token cost is set by the most expensive layer demand forces you onto.</strong> When cheap grid power is full, the next inference runs on more expensive supply &mdash; and your unit economics move with it, whether or not your pricing does.</li>
+      <li><strong>The near-term constraint is chips, not power or buildings.</strong> Plans that assume inference gets cheap fast because &ldquo;datacenters are being built everywhere&rdquo; are reading the wrong layer.</li>
+      <li><strong>&ldquo;Compute in space&rdquo; is a demand signal, not a tech story.</strong> Serious orbital math only pencils out in a world where AI demand exceeds <em>everything buildable on the ground</em>. That someone is modeling it tells you how steep the demand curve is assumed to be.</li>
+    </ul>
+
+    <h2>The real argument: Earth has a finite number of supply layers</h2>
+
+    <p>Strip away the free-solar talk and the case for orbital compute is an argument about exhausting terrestrial supply, one layer at a time. There are four layers of incremental power on the ground, and you can think of them as the order in which an AI buildout reaches for capacity:</p>
+
+    <ol>
+      <li><strong>Grid-connected supply.</strong> The cheapest and first to go &mdash; plug into existing power. Finite, and increasingly spoken for.</li>
+      <li><strong>Converted crypto-mining sites and already-powered land.</strong> Re-use existing interconnects and substations. A one-time bonus, quickly absorbed.</li>
+      <li><strong>Behind-the-meter generation.</strong> Build your own power next to the datacenter (gas turbines, etc.) because the grid can&rsquo;t connect you fast enough.</li>
+      <li><strong>Industrial capacity and manpower to build <em>more</em> power infrastructure.</strong> Now you&rsquo;re constrained by how many turbines can be manufactured and how many people can build substations. This is the slow, hard top of the stack.</li>
+    </ol>
+
+    <p>There is a fifth layer that sits underneath all four and applies whether the datacenter is in Nevada or in orbit: <strong>the chips themselves.</strong> You can have all the power and all the buildings in the world; if there aren&rsquo;t enough accelerators to fill them, none of it produces a token. And that is exactly where the industry is today &mdash; it has moved from <em>power-constrained</em> to <em>accelerator-constrained</em>. Datacenter capacity and power now run ahead of the supply of chips to fill them, because leading-edge wafer capacity and high-bandwidth memory can&rsquo;t expand fast enough.</p>
+
+    <p><strong>The PM translation:</strong> this is the supply chain under your gross margin, and the order matters. As an AI workload grows, it climbs this stack &mdash; from cheap grid power toward expensive new-build &mdash; and the marginal cost of compute rises as it climbs. The token price your vendor quotes you is a snapshot of which layer the industry is currently buying at the margin. <em>Why this matters for your roadmap:</em> a feature whose unit economics only work at today&rsquo;s token price is implicitly betting that supply stays on a cheap layer. If demand (yours or the market&rsquo;s) pushes the industry up a layer, your margin erodes without anyone changing your contract.</p>
+
+    <h2>The actual economics: TCO, and the cost of reliability</h2>
+
+    <p>The way infrastructure people compare any two ways of buying compute is the same discipline you should apply to any AI feature: total cost of ownership per unit of work. For a single contemporary GPU cluster, the all-in cost of ownership today works out to roughly <strong>$2.37 per GPU-hour on the ground</strong> versus <strong>$8.64 per GPU-hour in orbit</strong> &mdash; about 3.6&times; more expensive in space, using current technology.</p>
+
+    <p>Two drivers explain almost the entire gap, and both are useful lenses for your own features:</p>
+
+    <ul>
+      <li><strong>Up-front capital, amortized over a short life.</strong> Putting the hardware in orbit costs several times more to deploy (launch alone is about half the build cost), and an orbital datacenter is assumed to last ~5 years versus ~15 on the ground. Same box, one-third the earning life, so the monthly capital cost is many times higher. <em>The PM analog:</em> a feature&rsquo;s real cost is its build cost divided by how long it keeps earning before it&rsquo;s rebuilt or churns out. A clever feature with a 6-month shelf life can be more expensive per unit of value than a boring one that runs for years.</li>
+      <li><strong>The cost of reliability.</strong> TCO is the cost of the hardware running perfectly. The number that actually hits the bill is <strong>levelized cost of compute</strong> &mdash; TCO plus the redundancy you must buy to keep hitting an SLA when hardware fails. On the ground, failures are common but a technician swaps the part, so reliability adds only ~5% on top of TCO. In orbit, nobody can walk over to reseat a server, so you over-provision heavily and the reliability surcharge is ~26%. <em>The PM analog:</em> the cost of an AI feature is never just the model call. It&rsquo;s the model call plus retries, plus fallbacks, plus the eval and guard-rail overhead you run to hit a quality bar. Quote yourself the &ldquo;LCOC&rdquo; of your feature &mdash; the cost <em>including</em> the machinery that makes it reliable &mdash; not the happy-path token cost.</li>
+    </ul>
+
+    <p><em>Why this matters for token economics:</em> when you model the gross margin of an AI feature, the two numbers that move it most are rarely the headline price-per-token. They&rsquo;re the same two as the orbital math &mdash; <strong>how long the thing earns before you rebuild it, and how much you spend making it reliable enough to ship.</strong> Most AI-feature business cases under-count both.</p>
+
+    <h2>The constraint is chips, not power &mdash; and that sets your near term</h2>
+
+    <p>The most decision-relevant conclusion in the whole debate is also the least glamorous: for the next few years, the binding constraint on AI compute is semiconductor production. Buildings and power are, for the moment, ahead of demand. Leading-edge chips and the memory that goes with them are not. Everyone&rsquo;s deployment is gated by the same wafer line.</p>
+
+    <p>This is why even the boldest space plans are paired with an equally bold <em>chip</em> plan (the &ldquo;build a giant new fab&rdquo; ambitions you&rsquo;ve seen floated): there is no point launching compute to orbit, or building it in the desert, if there are no accelerators to put inside. The constraint is universal &mdash; it binds on Earth and in space identically.</p>
+
+    <p><strong>The PM translation:</strong> the price of inference is downstream of a wafer constraint you have zero control over and a roughly two-year lead time to fix. <em>Why this matters for your roadmap:</em></p>
+    <ul>
+      <li><strong>Don&rsquo;t plan a margin recovery on the assumption that token prices keep falling on the old curve.</strong> The historical &ldquo;inference gets 10&times; cheaper every year&rdquo; trend ran during a power-and-buildings constraint. While chips are the bottleneck, expect that curve to flatten &mdash; price cuts come from model efficiency and smaller specialized chips, not from abundant capacity.</li>
+      <li><strong>Efficiency is the lever you actually hold.</strong> If the supply side can&rsquo;t lower your cost on schedule, the only token economics you control are the ones inside your product: smaller models where they suffice, caching, shorter contexts, fewer redundant calls. In a chip-constrained world, prompt and architecture efficiency <em>is</em> your cost-down roadmap.</li>
+      <li><strong>Specialized silicon is coming, and it favors the focused use case.</strong> The orbital math assumes the chips that eventually fly won&rsquo;t be general-purpose flagship GPUs but smaller, efficient, <em>specialized</em> ones. The same is happening on the ground. Features built around a narrow, well-defined task will ride that cost-down; sprawling general-purpose AI features won&rsquo;t benefit as much.</li>
+    </ul>
+
+    <h2>The timeline: scarce-and-pricey now, abundant later</h2>
+
+    <p>Put the cost trajectory on a calendar and you get a two-act story that maps directly onto how you should sequence AI bets.</p>
+
+    <p><strong>Act one (now &rarr; early 2030s): scarcity.</strong> Orbital compute starts at more than 4&times; the cost of terrestrial. Launch, radiators, and solar arrays all have to come down a lot &mdash; launch cost alone is projected to fall ~80% as bigger reusable rockets come online &mdash; before the gap closes. On the ground, the chip constraint holds. This is a world where compute is a real, binding cost, and where the winners are the teams that get the most value out of the fewest tokens.</p>
+
+    <p><strong>Act two (~2040, or early 2030s in the aggressive case): parity, then inversion.</strong> If the cost-downs land and reliability is solved, orbital compute reaches cost parity with Earth around 2040 and keeps falling below it after. In the aggressive scenario &mdash; where terrestrial buildout stalls on permitting and input costs while chip supply races ahead &mdash; space stops being optional and becomes the only place left to add capacity, with a market measured in <em>hundreds of gigawatts a year</em>. Either way, the end state is compute abundance.</p>
+
+    <p><strong>The PM translation:</strong> sequence your roadmap to the two acts. <em>Why this matters:</em> features whose value depends on compute being cheap and unlimited (run a big model over everything, continuously, for every user) are <strong>act-two products in an act-one world</strong> &mdash; build the thin version now, design the architecture so it gets cheaper automatically as the cost curve bends, and don&rsquo;t bet this year&rsquo;s margin on next decade&rsquo;s prices. Conversely, features that wring obvious value out of <em>scarce</em> compute &mdash; targeted, high-leverage, token-frugal &mdash; are exactly right for the next several years, and they don&rsquo;t stop working when compute gets cheap; they just get more profitable.</p>
+
+    <h2>What this changes for you, as a PM</h2>
+
+    <p>Five concrete moves.</p>
+
+    <ol>
+      <li>
+        <strong>Quote yourself the LCOC of every AI feature, not the token price.</strong>
+        The happy-path model call is the smallest part. Add the retries, fallbacks, evals, and guard-rails that make it shippable &mdash; that&rsquo;s your real cost of a unit of reliable output. <em>Why this matters: the orbital case is dominated by the reliability surcharge and the asset&rsquo;s short life, not the hardware sticker price &mdash; and so is yours.</em>
+      </li>
+      <li>
+        <strong>Treat the token price as a floating cost set by a layer you don&rsquo;t control.</strong>
+        Know which way the supply stack is pointing (right now: chip-constrained, so flat-to-up in the near term) and pressure-test your margin against the token price rising, not just falling. <em>Why this matters: a feature that only pencils out at today&rsquo;s price is making an unhedged bet on someone else&rsquo;s wafer supply.</em>
+      </li>
+      <li>
+        <strong>Make efficiency your cost-down roadmap, because the supply side won&rsquo;t be.</strong>
+        While chips are the bottleneck, the price cuts you can count on are the ones you engineer: right-sized models, caching, context discipline, fewer redundant calls. Own a per-feature &ldquo;tokens per unit of value&rdquo; metric and drive it down. <em>Why this matters: in a constrained regime, internal efficiency is the only token-economics lever fully in your hands.</em>
+      </li>
+      <li>
+        <strong>Design for the cost curve bending, not for it having already bent.</strong>
+        Build the architecture so the expensive version switches on automatically when compute gets cheap (model tier as a config, not a rewrite). Ship the frugal version now. <em>Why this matters: the trajectory is scarce-now, abundant-later &mdash; you want to capture the abundance without betting the business on its timing.</em>
+      </li>
+      <li>
+        <strong>Read &ldquo;compute in space&rdquo; as the market&rsquo;s demand forecast, and calibrate ambition to it.</strong>
+        Serious people modeling orbital datacenters means the credible demand curve exceeds everything buildable on Earth &mdash; the ceiling on AI ambition is high and the constraint is supply, not imagination. <em>Why this matters: it tells you the limiting factor on your AI roadmap for years won&rsquo;t be model capability or user appetite &mdash; it&rsquo;ll be the cost and availability of the compute underneath, so plan around the cost, not the capability.</em>
+      </li>
+    </ol>
+
+    <h2>The honest summary</h2>
+
+    <p>Datacenters in orbit sound like science fiction, and the casual reasons given for them &mdash; free solar, free cooling &mdash; are mostly wrong. The real reason is sober and useful: compute on Earth is a finite stack of supply layers, the demand curve runs through the top of it, and the chips at the bottom of the stack are the binding constraint for years to come. Space is the release valve that opens only when the ground is full &mdash; expensive now (more than 4&times;), at parity maybe around 2040, cheaper after.</p>
+
+    <p>For a SaaS PM, none of that requires caring about rockets. It requires internalizing three things about the ground under your AI features. The cost of a token is set by the most expensive supply layer demand has reached &mdash; today, a chip constraint you can&rsquo;t fix and shouldn&rsquo;t bet against. The real cost of your feature is its reliability-inclusive cost over its earning life, not its happy-path token price. And the trajectory is scarce-now, abundant-later &mdash; so build frugal features that win while compute is tight, design them to ride the cost curve down, and treat the eventual abundance as upside rather than as a number in this year&rsquo;s plan.</p>
+
+    <p>The people doing the orbital math are really answering one question: how much compute will the world need, and what will it cost to make? That is the same question sitting under every AI feature you own. You just get to answer it without leaving the atmosphere.</p>
+
+    <div class="end-mark">&#x2508;&#x2508; end &#x2508;&#x2508;</div>
+  </div>
+
+  <nav class="article-nav">
+    <a href="119-sd-11-dark-output-the-invisible-half.html">&larr; Dark Output</a>
+    <a class="nav-index" href="../index.html">Index</a>
+    <a href="../books/semianalysis-decoded.html">Inside the AI Machine &rarr;</a>
+  </nav>
+
+  <script src="../js/nav.js?v=1774957616"></script>
+  <script src="../js/glossary.js?v=1774957616"></script>
+</body>
+</html>
